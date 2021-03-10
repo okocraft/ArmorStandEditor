@@ -1,0 +1,8 @@
+name: "ArmorStandEditor"
+main: net.okocraft.armorstandeditor.ArmorStandEditorPlugin
+version: ${project.version}
+author: "Siroshun09"
+api-version: "1.16"
+commands:
+  armorstandeditor:
+    aliases: ["ase", "aseditor"]

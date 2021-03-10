@@ -1,0 +1,102 @@
+armorstandeditor:
+  prefix: "* "
+  disable-manipulation:
+    line-1: "防具立てへの右クリックによる装備の変更は無効化されています。"
+    line-2: "防具立てに視点を合わせて /ase equipment を実行してください。"
+  menu:
+    equipment:
+      title: "装備編集メニュー"
+      icon:
+        helmet: "ヘルメット"
+        chest-plate: "チェストプレート"
+        leggings: "レギンス"
+        boots: "ブーツ"
+        right-hand: "右手"
+        left-hand: "左手"
+    selection:
+      title: "編集モード選択メニュー"
+      icon:
+        x-axis:
+          name: "X軸"
+          description: "X軸方向に回転させる"
+        y-axis:
+          name: "Y軸"
+          description: "Y軸方向に回転させる"
+        z-axis:
+          name: "Z軸"
+          description: "Z軸方向に回転させる"
+        coarse:
+          name: "粗く調整"
+          description: "1編集あたり移動は 1 ブロック, 回転は 20° になります"
+        fine:
+          name: "細かく調整"
+          description: "1編集あたり移動は 0.1 ブロック, 回転は 2° になります"
+        rotation:
+          name: "本体を回転"
+          description: "防具立ての向きを調整する"
+        movement:
+          name: "本体を移動"
+          description: "防具立ての位置を調整する"
+        head-pose:
+          name: "頭の向きを調整"
+          description: ""
+        body-pose:
+          name: "胴体の向きを調整"
+          description: ""
+        right-arm-pose:
+          name: "右腕の向きを調整"
+          description: ""
+        left-arm-pose:
+          name: "左腕の向きを調整"
+          description: ""
+        right-leg-pose:
+          name: "右足の向きを調整"
+          description: ""
+        left-leg-pose:
+          name: "左足の向きを調整"
+          description: ""
+        reset-pose:
+          name: "すべての部位の向きをリセット"
+          description: ""
+        show-arms:
+          name: "腕の表示を変更"
+          description: ""
+        visible:
+          name: "本体の表示を変更"
+          description: ""
+        size:
+          name: "サイズを変更"
+          description: ""
+        equipment:
+          name: "装備を編集"
+          description: ""
+        gravity:
+          name: "重力の影響の有無を変更"
+          description: ""
+        base-plate:
+          name: "土台の表示を変更"
+          description: ""
+        copy:
+          name: "コピー"
+          description: ""
+        paste:
+          name: "貼り付け"
+          description: "クリエイティブモードでなければ装備は貼り付けられません"
+        copy-slot-1:
+          name: "コピースロット 1"
+          description: ""
+        copy-slot-2:
+          name: "コピースロット 2"
+          description: ""
+        copy-slot-3:
+          name: "コピースロット 3"
+          description: ""
+        copy-slot-4:
+          name: "コピースロット 4"
+          description: ""
+        removal:
+          name: "防具立てを撤去"
+          description: "撤去すると防具立てと装備がインベントリに戻ります"
+        help:
+          name: "ヘルプ"
+          description: "クリックでヘルプを表示する"
