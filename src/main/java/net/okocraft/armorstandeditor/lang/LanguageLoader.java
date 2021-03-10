@@ -34,6 +34,11 @@ public final class LanguageLoader {
         GlobalTranslator.get().addSource(REGISTRY);
     }
 
+    public static void reload(@NotNull ArmorStandEditorPlugin plugin) throws IOException {
+        GlobalTranslator.get().removeSource(REGISTRY);
+        load(plugin);
+    }
+
     private static void loadDefault(@NotNull ArmorStandEditorPlugin plugin, @NotNull Path directory) throws IOException {
         var defaultLocale = Locale.JAPAN;
         var defaultFile = directory.resolve(defaultLocale.toString() + ".yml");
