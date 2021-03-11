@@ -17,4 +17,10 @@ public final class Placeholders {
                     .matchLiteral("%axis%")
                     .replacement(Component.text(s).color(NamedTextColor.AQUA))
                     .build();
+
+    public static final Function<String, TextReplacementConfig> MODE =
+            s -> TextReplacementConfig.builder()
+                    .matchLiteral("%mode%")
+                    .replacement(Component.text(s).color(NamedTextColor.AQUA))
+                    .build();
 }
