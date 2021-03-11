@@ -18,6 +18,9 @@ public final class Messages {
     public static final Component COMMAND_ONLY_PLAYER =
             Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.only-player", RED));
 
+    public static final Component COMMAND_ARGUMENT_NOT_ENOUGH =
+            Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.argument-not-enough", RED));
+
     public static final Component COMMAND_ARMOR_STAND_NOT_FOUND =
             Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.armor-stand-not-found", RED));
 
@@ -26,4 +29,10 @@ public final class Messages {
 
     public static final Component COMMAND_RELOAD_FAILURE =
             Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.reload.failure", GRAY));
+
+    public static final Component COMMAND_AXIS_INVALID_ARGUMENT =
+            Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.axis.invalid-argument", RED));
+
+    public static final Component COMMAND_AXIS_CHANGE =
+            Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.axis.change", GRAY));
 }
