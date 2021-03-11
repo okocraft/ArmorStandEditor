@@ -1,5 +1,8 @@
 package net.okocraft.armorstandeditor;
 
+import com.github.siroshun09.mccommand.bukkit.BukkitCommandFactory;
+import com.github.siroshun09.mccommand.bukkit.paper.AsyncTabCompleteListener;
+import net.okocraft.armorstandeditor.command.ArmorStandEditorCommand;
 import net.okocraft.armorstandeditor.lang.LanguageLoader;
 import net.okocraft.armorstandeditor.listener.ArmorStandListener;
 import net.okocraft.armorstandeditor.listener.InventoryListener;
@@ -9,6 +12,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
+import java.util.Optional;
 import java.util.logging.Level;
 
 public final class ArmorStandEditorPlugin extends JavaPlugin {
@@ -30,6 +34,14 @@ public final class ArmorStandEditorPlugin extends JavaPlugin {
         manager.registerEvents(new ArmorStandListener(), this);
         manager.registerEvents(new InventoryListener(), this);
         manager.registerEvents(new PlayerListener(), this);
+
+        var command = new ArmorStandEditorCommand(this);
+
+        Optional.ofNullable(getCommand("armorstandeditor"))
+                .ifPresent(target -> {
+                    BukkitCommandFactory.register(target, command);
+                    AsyncTabCompleteListener.register(this, command);
+                });
     }
 
     @Override
