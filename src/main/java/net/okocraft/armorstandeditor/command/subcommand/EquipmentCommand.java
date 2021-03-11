@@ -45,7 +45,7 @@ public class EquipmentCommand extends AbstractCommand {
 
             return CommandResult.SUCCESS;
         } else {
-            sender.sendMessage(Messages.COMMAND_ARMOR_STAND_NOT_FOUND);
+            sender.sendMessage(Messages.COMMAND_EQUIPMENT_ARMOR_STAND_NOT_FOUND);
 
             return CommandResult.STATE_ERROR;
         }

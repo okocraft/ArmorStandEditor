@@ -24,8 +24,8 @@ public final class Messages {
     public static final Component COMMAND_SUB_COMMAND_NOT_FOUND =
             Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.sub-command-not-found", RED));
 
-    public static final Component COMMAND_ARMOR_STAND_NOT_FOUND =
-            Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.armor-stand-not-found", RED));
+    public static final Component COMMAND_EQUIPMENT_ARMOR_STAND_NOT_FOUND =
+            Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.equipment.armor-stand-not-found", RED));
 
     public static final Component COMMAND_RELOAD_SUCCESS =
             Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.reload.success", GRAY));
