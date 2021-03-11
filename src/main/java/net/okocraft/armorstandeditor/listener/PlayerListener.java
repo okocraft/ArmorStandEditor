@@ -38,17 +38,12 @@ public class PlayerListener implements Listener {
             event.setCancelled(true);
 
             var player = event.getPlayer();
+            var target = player.getTargetEntity(5);
 
-            var target =  player.getTargetEntity(5);
-
-            if (target instanceof ArmorStand) {
-                var editor = PlayerEditorProvider.getEditor(player);
-                editor.getMode().edit(editor, (ArmorStand) target, action == Action.RIGHT_CLICK_AIR);
-                return;
+            if (!(target instanceof ArmorStand)) {
+                var menu = new SelectionMenu(event.getPlayer());
+                player.openInventory(menu.getInventory());
             }
-
-            var menu = new SelectionMenu(event.getPlayer());
-            player.openInventory(menu.getInventory());
         }
     }
 

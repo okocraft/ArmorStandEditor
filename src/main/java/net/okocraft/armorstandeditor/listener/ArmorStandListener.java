@@ -3,7 +3,6 @@ package net.okocraft.armorstandeditor.listener;
 import net.kyori.adventure.text.Component;
 import net.okocraft.armorstandeditor.editor.PlayerEditorProvider;
 import net.okocraft.armorstandeditor.lang.Components;
-import net.okocraft.armorstandeditor.menu.SelectionMenu;
 import net.okocraft.armorstandeditor.util.EditItemChecker;
 import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
@@ -46,15 +45,12 @@ public class ArmorStandListener implements Listener {
         }
 
         event.setCancelled(true);
-/*        var entity = event.getEntity();
+        var entity = event.getEntity();
 
         if (entity instanceof ArmorStand) {
             var editor = PlayerEditorProvider.getEditor(player);
             editor.getMode().edit(editor, (ArmorStand) entity, false);
-        } else {
-            var menu = new SelectionMenu(player);
-            player.openInventory(menu.getInventory());
-        }*/
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -65,7 +61,7 @@ public class ArmorStandListener implements Listener {
 
         var entity = event.getRightClicked();
 
-       if (!(entity instanceof ArmorStand)) {
+        if (!(entity instanceof ArmorStand)) {
             return;
         }
 
@@ -73,12 +69,12 @@ public class ArmorStandListener implements Listener {
 
         var itemInMainHand = player.getInventory().getItemInMainHand();
 
- /*       if (EditItemChecker.check(itemInMainHand)) {
+        if (EditItemChecker.check(itemInMainHand)) {
             event.setCancelled(true);
             var editor = PlayerEditorProvider.getEditor(player);
             editor.getMode().edit(editor, (ArmorStand) entity, true);
             return;
-        }*/
+        }
 
         if (itemInMainHand.getType().equals(Material.NAME_TAG)) {
             event.setCancelled(true);
