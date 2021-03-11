@@ -53,7 +53,7 @@ public class ModeCommand extends AbstractCommand {
             mode = Mode.valueOf(secondArgument.toUpperCase());
         } catch (IllegalArgumentException e) {
             sender.sendMessage(
-                    Messages.COMMAND_AXIS_INVALID_ARGUMENT
+                    Messages.COMMAND_MODE_INVALID_ARGUMENT
                             .replaceText(Placeholders.MODE.apply(secondArgument))
             );
             return CommandResult.INVALID_ARGUMENTS;
@@ -63,7 +63,7 @@ public class ModeCommand extends AbstractCommand {
         editor.setMode(mode);
 
         sender.sendMessage(
-                Messages.COMMAND_AXIS_CHANGE
+                Messages.COMMAND_MODE_CHANGE
                         .replaceText(Placeholders.MODE.apply(mode.getName()))
         );
 

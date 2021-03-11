@@ -35,4 +35,10 @@ public final class Messages {
 
     public static final Component COMMAND_AXIS_CHANGE =
             Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.axis.change", GRAY));
+
+    public static final Component COMMAND_MODE_INVALID_ARGUMENT =
+            Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.mode.invalid-argument", RED));
+
+    public static final Component COMMAND_MODE_CHANGE =
+            Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.mode.change", GRAY));
 }
