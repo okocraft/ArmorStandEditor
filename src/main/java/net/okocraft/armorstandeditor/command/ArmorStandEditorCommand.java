@@ -39,7 +39,7 @@ public class ArmorStandEditorCommand extends AbstractCommand {
     public @NotNull CommandResult onExecution(@NotNull CommandContext context) {
         var sender = context.getSender();
 
-        if (!context.getSender().hasPermission(getPermission())) {
+        if (!sender.hasPermission(getPermission())) {
             sender.sendMessage(Messages.COMMAND_NO_PERMISSION);
             return CommandResult.NO_PERMISSION;
         }
