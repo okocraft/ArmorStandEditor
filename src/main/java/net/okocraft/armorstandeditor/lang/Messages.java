@@ -41,4 +41,10 @@ public final class Messages {
 
     public static final Component COMMAND_MODE_CHANGE =
             Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.mode.change", GRAY));
+
+    public static final Component COMMAND_ITEM_SUCCESS =
+            Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.item.success", GRAY));
+
+    public static final Component COMMAND_ITEM_FAILURE =
+            Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.item.failure", GRAY));
 }
