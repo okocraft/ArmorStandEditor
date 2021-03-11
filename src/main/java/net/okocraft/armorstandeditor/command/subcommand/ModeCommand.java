@@ -54,7 +54,7 @@ public class ModeCommand extends AbstractCommand {
         } catch (IllegalArgumentException e) {
             sender.sendMessage(
                     Messages.COMMAND_MODE_INVALID_ARGUMENT
-                            .replaceText(Placeholders.MODE.apply(secondArgument))
+                            .replaceText(Placeholders.MODE_STRING.apply(secondArgument))
             );
             return CommandResult.INVALID_ARGUMENTS;
         }
@@ -64,7 +64,7 @@ public class ModeCommand extends AbstractCommand {
 
         sender.sendMessage(
                 Messages.COMMAND_MODE_CHANGE
-                        .replaceText(Placeholders.MODE.apply(mode.getName()))
+                        .replaceText(Placeholders.MODE.apply(mode))
         );
 
         return CommandResult.SUCCESS;
