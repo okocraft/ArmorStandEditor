@@ -15,8 +15,7 @@ import java.util.Locale;
 
 public final class LanguageLoader {
 
-    private static final TranslationRegistry REGISTRY =
-            TranslationRegistry.create(Key.key("armorstandeditor", "language"));
+    private static TranslationRegistry REGISTRY;
 
     private LanguageLoader() {
         throw new UnsupportedOperationException();
@@ -28,6 +27,8 @@ public final class LanguageLoader {
         if (!Files.exists(directory)) {
             Files.createDirectories(directory);
         }
+
+        REGISTRY = TranslationRegistry.create(Key.key("armorstandeditor", "language"));
 
         loadDefault(plugin, directory);
         REGISTRY.defaultLocale(Locale.JAPAN);
