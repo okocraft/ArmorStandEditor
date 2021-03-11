@@ -31,7 +31,7 @@ public final class Messages {
             Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.reload.success", GRAY));
 
     public static final Component COMMAND_RELOAD_FAILURE =
-            Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.reload.failure", GRAY));
+            Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.reload.failure", RED));
 
     public static final Component COMMAND_AXIS_INVALID_ARGUMENT =
             Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.axis.invalid-argument", RED));
