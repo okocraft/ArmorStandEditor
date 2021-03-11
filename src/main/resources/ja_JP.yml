@@ -100,3 +100,42 @@ armorstandeditor:
         help:
           name: "ヘルプ"
           description: "クリックでヘルプを表示する"
+  command:
+    no-permission: "そのコマンドを実行する権限がありません。"
+    only-player: "そのコマンドはプレイヤーのみ実行できます。"
+    argument-not-enough: "引数が足りません。"
+    sub-command-not-found: "指定されたサブコマンドはありません。"
+    equipment:
+      armor-stand-not-found: "視線の先に防具立てはありませんでした。"
+    reload:
+      success: "言語ファイルを再読み込みしました。"
+      failure: "言語ファイルの再読み込みに失敗しました。"
+    axis:
+      invalid-argument: "指定された軸 %axis% は存在しません。"
+      change: "軸を %axis% に変更しました。"
+    mode:
+      invalid-argument: "指定された編集モード %mode% は存在しません。"
+      change: "編集モードを %mode% に変更しました。"
+    item:
+      success: "防具立ての編集アイテムを付与しました。"
+      failure: "防具たての編集アイテムの付与に失敗しました。"
+  mode:
+    base-plate: "土台の表示"
+    body-pose: "胴体の向き"
+    copy: "コピー"
+    equipment: "装備の編集"
+    gravity: "重力の影響の有無"
+    head-pose: "頭の向き"
+    left-arm-pose: "左腕の向き"
+    left-leg-pose: "左足の向き"
+    movement: "本体の移動"
+    none: "指定なし"
+    paste: "貼り付け"
+    removal: "撤去"
+    reset-pose: "体勢のリセット"
+    right-arm-pose: "右腕の向き"
+    right-leg-pose: "右足の向き"
+    rotation: "本体の回転"
+    show-arms: "腕の表示"
+    size: "本体のサイズ"
+    visible: "本体の表示"
