@@ -49,5 +49,5 @@ public final class Messages {
             Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.item.success", GRAY));
 
     public static final Component COMMAND_ITEM_FAILURE =
-            Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.item.failure", GRAY));
+            Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.item.failure", RED));
 }
