@@ -21,6 +21,9 @@ public final class Messages {
     public static final Component COMMAND_ARGUMENT_NOT_ENOUGH =
             Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.argument-not-enough", RED));
 
+    public static final Component COMMAND_SUB_COMMAND_NOT_FOUND =
+            Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.sub-command-not-found", RED));
+
     public static final Component COMMAND_ARMOR_STAND_NOT_FOUND =
             Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.armor-stand-not-found", RED));
 
