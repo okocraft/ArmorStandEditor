@@ -37,6 +37,9 @@ class Paste extends AbstractEditMode {
             EntityEquipment armorStandEquipment = armorStand.getEquipment();
             EntityEquipment originalEquipment = original.getEquipment();
 
+            armorStand.setCustomNameVisible(original.isCustomNameVisible());
+            armorStand.customName(original.customName());
+
             if (armorStandEquipment != null && originalEquipment != null) {
                 armorStandEquipment.setHelmet(originalEquipment.getHelmet());
                 armorStandEquipment.setChestplate(originalEquipment.getChestplate());
