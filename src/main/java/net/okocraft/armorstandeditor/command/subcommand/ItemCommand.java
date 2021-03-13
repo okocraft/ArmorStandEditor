@@ -4,6 +4,7 @@ import com.github.siroshun09.mccommand.common.AbstractCommand;
 import com.github.siroshun09.mccommand.common.CommandResult;
 import com.github.siroshun09.mccommand.common.context.CommandContext;
 import net.okocraft.armorstandeditor.lang.Messages;
+import net.okocraft.armorstandeditor.permission.Permissions;
 import net.okocraft.armorstandeditor.util.EditItemChecker;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -17,7 +18,7 @@ import java.util.Set;
 public class ItemCommand extends AbstractCommand {
 
     public ItemCommand() {
-        super("item", "armorstandeditor.command.item", Set.of("i"));
+        super("item", Permissions.COMMAND_PREFIX + "item", Set.of("i"));
     }
 
     @Override

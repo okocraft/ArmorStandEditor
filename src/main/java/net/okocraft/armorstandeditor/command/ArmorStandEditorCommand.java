@@ -12,6 +12,7 @@ import net.okocraft.armorstandeditor.command.subcommand.ItemCommand;
 import net.okocraft.armorstandeditor.command.subcommand.ModeCommand;
 import net.okocraft.armorstandeditor.command.subcommand.ReloadCommand;
 import net.okocraft.armorstandeditor.lang.Messages;
+import net.okocraft.armorstandeditor.permission.Permissions;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -24,7 +25,7 @@ public class ArmorStandEditorCommand extends AbstractCommand {
     private final SubCommandHolder holder;
 
     public ArmorStandEditorCommand(@NotNull ArmorStandEditorPlugin plugin) {
-        super("armorstandeditor", "armorstandeditor.command", Set.of("ase", "aseditor"));
+        super("armorstandeditor", Permissions.COMMAND, Set.of("ase", "aseditor"));
 
         holder = SubCommandHolder.of(
                 new AxisCommand(),

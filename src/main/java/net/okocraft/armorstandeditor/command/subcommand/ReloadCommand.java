@@ -6,6 +6,7 @@ import com.github.siroshun09.mccommand.common.context.CommandContext;
 import net.okocraft.armorstandeditor.ArmorStandEditorPlugin;
 import net.okocraft.armorstandeditor.lang.LanguageLoader;
 import net.okocraft.armorstandeditor.lang.Messages;
+import net.okocraft.armorstandeditor.permission.Permissions;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -17,7 +18,7 @@ public class ReloadCommand extends AbstractCommand {
     private final ArmorStandEditorPlugin plugin;
 
     public ReloadCommand(@NotNull ArmorStandEditorPlugin plugin) {
-        super("reload", "armorstandeditor.command.reload", Collections.emptySet());
+        super("reload", Permissions.COMMAND_PREFIX + "reload", Collections.emptySet());
         this.plugin = plugin;
     }
 

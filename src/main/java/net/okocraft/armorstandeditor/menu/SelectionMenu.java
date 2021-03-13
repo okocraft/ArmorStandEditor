@@ -9,6 +9,7 @@ import net.okocraft.armorstandeditor.editmode.Mode;
 import net.okocraft.armorstandeditor.editor.PlayerEditor;
 import net.okocraft.armorstandeditor.editor.PlayerEditorProvider;
 import net.okocraft.armorstandeditor.lang.Components;
+import net.okocraft.armorstandeditor.permission.Permissions;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -141,11 +142,10 @@ public class SelectionMenu implements ArmorStandEditorMenu {
 
     private static class Icon {
 
-        private static final String PERMISSION_PREFIX = "armorstandeditor.mode.";
         private static final String KEY_PREFIX = "armorstandeditor.menu.selection.icon.";
         private static final String DISPLAY_NAME_SUFFIX = ".name";
         private static final String LORE_SUFFIX = ".description";
-        private static final String VISIBLE = "visible";
+        // private static final String VISIBLE = "visible";
         private static final ItemStack AIR = new ItemStack(Material.AIR);
 
         private final String permission;
@@ -156,7 +156,7 @@ public class SelectionMenu implements ArmorStandEditorMenu {
         private final TranslatableComponent lore;
 
         private Icon(@NotNull Material material, @NotNull String name, Consumer<PlayerEditor> onClick) {
-            this.permission = PERMISSION_PREFIX + name;
+            this.permission = Permissions.ICON_PREFIX + name;
             //  this.icon = new ItemStack(material);
             this.material = material;
             this.onClick = onClick;

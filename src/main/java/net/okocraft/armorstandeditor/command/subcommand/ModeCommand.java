@@ -7,6 +7,7 @@ import net.okocraft.armorstandeditor.editmode.Mode;
 import net.okocraft.armorstandeditor.editor.PlayerEditorProvider;
 import net.okocraft.armorstandeditor.lang.Messages;
 import net.okocraft.armorstandeditor.lang.Placeholders;
+import net.okocraft.armorstandeditor.permission.Permissions;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
 public class ModeCommand extends AbstractCommand {
 
     public ModeCommand() {
-        super("mode", "armorstandeditor.command.mode", Set.of("m"));
+        super("mode", Permissions.COMMAND_PREFIX + "mode", Set.of("m"));
     }
 
     @Override
@@ -57,6 +58,11 @@ public class ModeCommand extends AbstractCommand {
                             .replaceText(Placeholders.MODE_STRING.apply(secondArgument))
             );
             return CommandResult.INVALID_ARGUMENTS;
+        }
+
+        if (!player.hasPermission(mode.getPermission())) {
+            player.sendMessage(Messages.COMMAND_MODE_NO_PERMISSION);
+            return CommandResult.NO_PERMISSION;
         }
 
         var editor = PlayerEditorProvider.getEditor(player);

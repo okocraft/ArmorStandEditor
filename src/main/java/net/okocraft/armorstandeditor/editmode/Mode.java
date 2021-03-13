@@ -1,6 +1,7 @@
 package net.okocraft.armorstandeditor.editmode;
 
 import net.okocraft.armorstandeditor.editor.PlayerEditor;
+import net.okocraft.armorstandeditor.lang.Messages;
 import org.bukkit.entity.ArmorStand;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,7 +36,15 @@ public enum Mode {
         return editMode.getName();
     }
 
+    public @NotNull String getPermission() {
+        return editMode.getPermission();
+    }
+
     public void edit(@NotNull PlayerEditor editor, @NotNull ArmorStand armorStand, boolean reverse) {
-        editMode.edit(editor, armorStand, reverse);
+        if (editor.getPlayer().hasPermission(getPermission())) {
+            editMode.edit(editor, armorStand, reverse);
+        } else {
+            editor.getPlayer().sendMessage(Messages.EDIT_MODE_NO_PERMISSION);
+        }
     }
 }

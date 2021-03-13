@@ -6,3 +6,93 @@ api-version: "1.16"
 commands:
   armorstandeditor:
     aliases: ["ase", "aseditor"]
+
+permissions: 
+  armorstandeditor.edit:
+    default: op
+  armorstandeditor.rename:
+    default: op
+  armorstandeditor.command:
+    default: op
+  armorstandeditor.command.axis:
+    default: op
+  armorstandeditor.command.equipment:
+    default: op
+  armorstandeditor.command.item:
+    default: op
+  armorstandeditor.command.mode:
+    default: op
+  armorstandeditor.command.reload:
+    default: op
+  armorstandeditor.mode.base-plate:
+    default: op
+  armorstandeditor.mode.body-pose:
+    default: op
+  armorstandeditor.mode.copy:
+    default: op
+  armorstandeditor.mode.equipment:
+    default: op
+  armorstandeditor.mode.gravity:
+    default: op
+  armorstandeditor.mode.head-pose:
+    default: op
+  armorstandeditor.mode.left-arm-pose:
+    default: op
+  armorstandeditor.mode.left-leg-pose:
+    default: op
+  armorstandeditor.mode.movement:
+    default: op
+  armorstandeditor.mode.paste:
+    default: op
+  armorstandeditor.mode.removal:
+    default: op
+  armorstandeditor.mode.reset-pose:
+    default: op
+  armorstandeditor.mode.right-arm-pose:
+    default: op
+  armorstandeditor.mode.right-leg-pose:
+    default: op
+  armorstandeditor.mode.rotation:
+    default: op
+  armorstandeditor.mode.show-arms:
+    default: op
+  armorstandeditor.mode.size:
+    default: op
+  armorstandeditor.mode.visible:
+    default: op
+  armorstandeditor.menu.icon.base-plate:
+    default: op
+  armorstandeditor.menu.icon.body-pose:
+    default: op
+  armorstandeditor.menu.icon.copy:
+    default: op
+  armorstandeditor.menu.icon.equipment:
+    default: op
+  armorstandeditor.menu.icon.gravity:
+    default: op
+  armorstandeditor.menu.icon.head-pose:
+    default: op
+  armorstandeditor.menu.icon.left-arm-pose:
+    default: op
+  armorstandeditor.menu.icon.left-leg-pose:
+    default: op
+  armorstandeditor.menu.icon.movement:
+    default: op
+  armorstandeditor.menu.icon.paste:
+    default: op
+  armorstandeditor.menu.icon.removal:
+    default: op
+  armorstandeditor.menu.icon.reset-pose:
+    default: op
+  armorstandeditor.menu.icon.right-arm-pose:
+    default: op
+  armorstandeditor.menu.icon.right-leg-pose:
+    default: op
+  armorstandeditor.menu.icon.rotation:
+    default: op
+  armorstandeditor.menu.icon.show-arms:
+    default: op
+  armorstandeditor.menu.icon.size:
+    default: op
+  armorstandeditor.menu.icon.visible:
+    default: op

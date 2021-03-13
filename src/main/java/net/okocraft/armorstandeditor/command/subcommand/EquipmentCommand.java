@@ -5,6 +5,7 @@ import com.github.siroshun09.mccommand.common.CommandResult;
 import com.github.siroshun09.mccommand.common.context.CommandContext;
 import net.okocraft.armorstandeditor.lang.Messages;
 import net.okocraft.armorstandeditor.menu.EquipmentMenuProvider;
+import net.okocraft.armorstandeditor.permission.Permissions;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +17,7 @@ import java.util.Set;
 public class EquipmentCommand extends AbstractCommand {
 
     public EquipmentCommand() {
-        super("equipment", "armorstamdeditor.command.equipment", Set.of("eq"));
+        super("equipment", Permissions.COMMAND_PREFIX + "equipment", Set.of("eq"));
     }
 
     @Override

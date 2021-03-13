@@ -34,7 +34,7 @@ public class PlayerListener implements Listener {
 
         var action = event.getAction();
 
-        if (EditItemChecker.check(event.getItem()) && CLICK_ACTIONS.contains(action)) {
+        if (CLICK_ACTIONS.contains(action) && EditItemChecker.check(event.getItem())) {
             event.setCancelled(true);
 
             var player = event.getPlayer();

@@ -18,6 +18,15 @@ public final class Messages {
     public static final Component DISABLE_MANIPULATION_2 =
             Components.PREFIX.append(Component.translatable(KEY_PREFIX + "disable-manipulation.line-2"));
 
+    public static final Component EDIT_NO_PERMISSION =
+            Components.PREFIX.append(Component.translatable(KEY_PREFIX + "edit.no-permission", RED));
+
+    public static final Component EDIT_MODE_NO_PERMISSION =
+            Components.PREFIX.append(Component.translatable(KEY_PREFIX + "edit.mode-no-permission", RED));
+
+    public static final Component RENAME_NO_PERMISSION =
+            Components.PREFIX.append(Component.translatable(KEY_PREFIX + "rename.no-permission", RED));
+
     public static final Component COMMAND_NO_PERMISSION =
             Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.no-permission", RED));
 
@@ -50,6 +59,9 @@ public final class Messages {
 
     public static final Component COMMAND_MODE_CHANGE =
             Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.mode.change", GRAY));
+
+    public static final Component COMMAND_MODE_NO_PERMISSION =
+            Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.mode.no-permission", GRAY));
 
     public static final Component COMMAND_ITEM_SUCCESS =
             Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.item.success", GRAY));

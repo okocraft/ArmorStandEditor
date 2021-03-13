@@ -3,6 +3,11 @@ armorstandeditor:
   disable-manipulation:
     line-1: "防具立てへの右クリックによる装備の変更は無効化されています。"
     line-2: "防具立てに視点を合わせて /ase equipment を実行してください。"
+  edit:
+    no-permission: "防具立てを編集する権限がありません。"
+    mode-no-permission: "そのモードで防具立てを編集する権限がありません。"
+  rename:
+    no-permission: "防具立ての名前を変更する権限がありません。"
   menu:
     equipment:
       title: "装備編集メニュー"
@@ -120,6 +125,7 @@ armorstandeditor:
       success: "防具立ての編集アイテムを付与しました。"
       failure: "防具たての編集アイテムの付与に失敗しました。"
   mode:
+    no-permission: "そのモードに変更する権限がありません。"
     base-plate: "土台の表示"
     body-pose: "胴体の向き"
     copy: "コピー"

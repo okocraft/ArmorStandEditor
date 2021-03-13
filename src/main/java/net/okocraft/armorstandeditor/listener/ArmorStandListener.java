@@ -2,7 +2,8 @@ package net.okocraft.armorstandeditor.listener;
 
 import net.kyori.adventure.text.Component;
 import net.okocraft.armorstandeditor.editor.PlayerEditorProvider;
-import net.okocraft.armorstandeditor.lang.Components;
+import net.okocraft.armorstandeditor.lang.Messages;
+import net.okocraft.armorstandeditor.permission.Permissions;
 import net.okocraft.armorstandeditor.util.EditItemChecker;
 import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
@@ -22,8 +23,8 @@ public class ArmorStandListener implements Listener {
     @EventHandler
     public void onManipulate(@NotNull PlayerArmorStandManipulateEvent event) {
         event.setCancelled(true);
-        event.getPlayer().sendMessage(Components.DISABLE_MANIPULATION_1);
-        event.getPlayer().sendMessage(Components.DISABLE_MANIPULATION_2);
+        event.getPlayer().sendMessage(Messages.DISABLE_MANIPULATION_1);
+        event.getPlayer().sendMessage(Messages.DISABLE_MANIPULATION_2);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -41,6 +42,11 @@ public class ArmorStandListener implements Listener {
         var player = (Player) damager;
 
         if (!EditItemChecker.check(player.getInventory().getItemInMainHand())) {
+            return;
+        }
+
+        if (!player.hasPermission(Permissions.ARMOR_STAND_EDIT)) {
+            player.sendMessage(Messages.EDIT_NO_PERMISSION);
             return;
         }
 
@@ -70,13 +76,24 @@ public class ArmorStandListener implements Listener {
         var itemInMainHand = player.getInventory().getItemInMainHand();
 
         if (EditItemChecker.check(itemInMainHand)) {
+            if (!player.hasPermission(Permissions.ARMOR_STAND_EDIT)) {
+                player.sendMessage(Messages.EDIT_NO_PERMISSION);
+                return;
+            }
+
             event.setCancelled(true);
+
             var editor = PlayerEditorProvider.getEditor(player);
             editor.getMode().edit(editor, (ArmorStand) entity, true);
             return;
         }
 
         if (itemInMainHand.getType().equals(Material.NAME_TAG)) {
+            if (!player.hasPermission(Permissions.ARMOR_STAND_RENAME)) {
+                player.sendMessage(Messages.RENAME_NO_PERMISSION);
+                return;
+            }
+
             event.setCancelled(true);
 
             var meta = itemInMainHand.getItemMeta();

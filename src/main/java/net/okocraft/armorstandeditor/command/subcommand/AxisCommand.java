@@ -7,6 +7,7 @@ import net.okocraft.armorstandeditor.editor.PlayerEditor;
 import net.okocraft.armorstandeditor.editor.PlayerEditorProvider;
 import net.okocraft.armorstandeditor.lang.Messages;
 import net.okocraft.armorstandeditor.lang.Placeholders;
+import net.okocraft.armorstandeditor.permission.Permissions;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
 public class AxisCommand extends AbstractCommand {
 
     public AxisCommand() {
-        super("axis", "armorstandeditor.command.axis", Set.of("e"));
+        super("axis", Permissions.COMMAND_PREFIX + "axis", Set.of("e"));
     }
 
     @Override
