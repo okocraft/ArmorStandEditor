@@ -10,12 +10,6 @@ public final class Components {
     public static final Component PREFIX =
             Component.translatable("armorstandeditor.prefix").color(NamedTextColor.GRAY);
 
-    public static final Component DISABLE_MANIPULATION_1 =
-            PREFIX.append(Component.translatable(KEY_PREFIX + "disable-manipulation.line-1"));
-
-    public static final Component DISABLE_MANIPULATION_2 =
-            PREFIX.append(Component.translatable(KEY_PREFIX + "disable-manipulation.line-2"));
-
     public static final Component EQUIPMENT_MENU_TITLE =
             Component.translatable(KEY_PREFIX + "menu.equipment.title").color(NamedTextColor.BLACK);
 
