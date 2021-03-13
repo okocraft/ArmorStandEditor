@@ -3,6 +3,7 @@ package net.okocraft.armorstandeditor.menu;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.translation.GlobalTranslator;
 import net.okocraft.armorstandeditor.editmode.Mode;
 import net.okocraft.armorstandeditor.editor.PlayerEditor;
@@ -172,8 +173,8 @@ public class SelectionMenu implements ArmorStandEditorMenu {
             var meta = item.getItemMeta();
 
             if (meta != null) {
-                var translatedName = GlobalTranslator.render(name, player.locale());
-                var translatedLore = GlobalTranslator.render(lore, player.locale());
+                var translatedName = GlobalTranslator.render(name, player.locale()).decoration(TextDecoration.ITALIC, false);
+                var translatedLore = GlobalTranslator.render(lore, player.locale()).decoration(TextDecoration.ITALIC, false);
 
                 meta.displayName(translatedName);
                 meta.lore(List.of(translatedLore));

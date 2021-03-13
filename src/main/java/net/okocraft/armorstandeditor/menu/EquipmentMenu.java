@@ -2,6 +2,7 @@ package net.okocraft.armorstandeditor.menu;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.okocraft.armorstandeditor.lang.Components;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -21,7 +22,7 @@ import java.util.Set;
 public class EquipmentMenu implements ArmorStandEditorMenu {
 
     private static final Set<Integer> EDITABLE_SLOTS = Set.of(9, 10, 11, 12, 15, 16);
-  //  private static final String ICON_KEY_PREFIX = "armorstandeditor.menu.equipment.icon.";
+    //  private static final String ICON_KEY_PREFIX = "armorstandeditor.menu.equipment.icon.";
 
     private static final ItemStack AIR = new ItemStack(Material.AIR);
     private static final ItemStack HELMET = new ItemStack(Material.LEATHER_HELMET);
@@ -142,7 +143,7 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
         if (name.isEmpty()) {
             component = Component.empty();
         } else {
-            component = Component.text(name).color(NamedTextColor.GOLD);
+            component = Component.text(name).color(NamedTextColor.GOLD).decoration(TextDecoration.ITALIC, false);
         }
 
         meta.displayName(component);
