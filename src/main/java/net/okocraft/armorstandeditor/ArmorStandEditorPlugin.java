@@ -1,7 +1,7 @@
 package net.okocraft.armorstandeditor;
 
-import com.github.siroshun09.mccommand.bukkit.BukkitCommandFactory;
-import com.github.siroshun09.mccommand.bukkit.paper.AsyncTabCompleteListener;
+import com.github.siroshun09.mccommand.paper.PaperCommandFactory;
+import com.github.siroshun09.mccommand.paper.listener.AsyncTabCompleteListener;
 import net.okocraft.armorstandeditor.command.ArmorStandEditorCommand;
 import net.okocraft.armorstandeditor.lang.LanguageLoader;
 import net.okocraft.armorstandeditor.listener.ArmorStandListener;
@@ -39,7 +39,7 @@ public final class ArmorStandEditorPlugin extends JavaPlugin {
 
         Optional.ofNullable(getCommand("armorstandeditor"))
                 .ifPresent(target -> {
-                    BukkitCommandFactory.register(target, command);
+                    PaperCommandFactory.register(target, command);
                     AsyncTabCompleteListener.register(this, command);
                 });
     }
