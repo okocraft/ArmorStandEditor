@@ -4,14 +4,9 @@ import net.okocraft.armorstandeditor.editor.PlayerEditor;
 import net.okocraft.armorstandeditor.lang.Messages;
 import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Map;
 
 class Removal extends AbstractEditMode {
 
@@ -24,11 +19,11 @@ class Removal extends AbstractEditMode {
 
     @Override
     public void edit(@NotNull PlayerEditor editor, @NotNull ArmorStand armorStand, boolean reverse) {
-        Player player = editor.getPlayer();
-        PlayerInventory pi = player.getInventory();
-        Map<Integer, ItemStack> returned = pi.addItem(ARMOR_STAND);
+        var player = editor.getPlayer();
+        var pi = player.getInventory();
+        var returned = pi.addItem(ARMOR_STAND);
 
-        EntityEquipment e = armorStand.getEquipment();
+        var e = armorStand.getEquipment();
         if (e != null) {
             returned.putAll(
                     pi.addItem(
@@ -43,7 +38,7 @@ class Removal extends AbstractEditMode {
         }
 
         if (!returned.isEmpty()) {
-            for (ItemStack item : returned.values()) {
+            for (var item : returned.values()) {
                 if (!item.getType().isAir()) {
                     player.getWorld().dropItem(player.getLocation(), item);
                 }

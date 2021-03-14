@@ -2,7 +2,6 @@ package net.okocraft.armorstandeditor.editmode;
 
 import net.okocraft.armorstandeditor.editor.PlayerEditor;
 import net.okocraft.armorstandeditor.util.LocationCalculator;
-import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,7 +13,7 @@ class Movement extends AbstractEditMode {
 
     @Override
     public void edit(@NotNull PlayerEditor editor, @NotNull ArmorStand armorStand, boolean reverse) {
-        Location location = LocationCalculator.calculate(
+        var location = LocationCalculator.calculate(
                 armorStand.getLocation(),
                 editor.getMovingDistance(),
                 editor.getAxis(),

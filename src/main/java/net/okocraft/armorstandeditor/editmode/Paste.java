@@ -6,7 +6,6 @@ import net.okocraft.armorstandeditor.editor.PlayerEditor;
 import net.okocraft.armorstandeditor.lang.Messages;
 import org.bukkit.GameMode;
 import org.bukkit.entity.ArmorStand;
-import org.bukkit.inventory.EntityEquipment;
 import org.jetbrains.annotations.NotNull;
 
 class Paste extends AbstractEditMode {
@@ -17,7 +16,7 @@ class Paste extends AbstractEditMode {
 
     @Override
     public void edit(@NotNull PlayerEditor editor, @NotNull ArmorStand armorStand, boolean reverse) {
-        ArmorStand original = editor.getSelectedArmorStand();
+        var original = editor.getSelectedArmorStand();
 
         if (original == null) {
             return;
@@ -37,8 +36,8 @@ class Paste extends AbstractEditMode {
         armorStand.setGlowing(original.isGlowing());
 
         if (editor.getPlayer().getGameMode().equals(GameMode.CREATIVE)) {
-            EntityEquipment armorStandEquipment = armorStand.getEquipment();
-            EntityEquipment originalEquipment = original.getEquipment();
+            var armorStandEquipment = armorStand.getEquipment();
+            var originalEquipment = original.getEquipment();
 
             armorStand.setCustomNameVisible(original.isCustomNameVisible());
             armorStand.customName(original.customName());

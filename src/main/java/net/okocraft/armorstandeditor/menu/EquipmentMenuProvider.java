@@ -16,8 +16,8 @@ public final class EquipmentMenuProvider {
     }
 
     public static @NotNull EquipmentMenu getMenu(@NotNull ArmorStand armorStand) {
-        UUID uuid = armorStand.getUniqueId();
-        EquipmentMenu menu = MENU_MAP.get(uuid);
+        var uuid = armorStand.getUniqueId();
+        var menu = MENU_MAP.get(uuid);
 
         if (menu == null) {
             menu = new EquipmentMenu(armorStand);

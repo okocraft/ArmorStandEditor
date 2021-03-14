@@ -7,8 +7,6 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.logging.Logger;
-
 public final class EditItemChecker {
 
     private static final byte VALUE = 1;
@@ -33,7 +31,7 @@ public final class EditItemChecker {
             return false;
         }
 
-        Byte b = meta.getPersistentDataContainer().get(KEY, PersistentDataType.BYTE);
+        var b = meta.getPersistentDataContainer().get(KEY, PersistentDataType.BYTE);
 
         return b != null && b == VALUE;
     }

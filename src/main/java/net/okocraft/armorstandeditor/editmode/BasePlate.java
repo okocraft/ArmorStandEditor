@@ -13,7 +13,7 @@ class BasePlate extends AbstractEditMode {
 
     @Override
     public void edit(@NotNull PlayerEditor editor, @NotNull ArmorStand armorStand, boolean reverse) {
-        boolean current = armorStand.hasBasePlate();
+        var current = armorStand.hasBasePlate();
 
         armorStand.setBasePlate(!current);
 

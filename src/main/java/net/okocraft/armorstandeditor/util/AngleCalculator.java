@@ -22,7 +22,7 @@ public final class AngleCalculator {
 
     private static @NotNull EulerAngle add(@NotNull EulerAngle original,
                                            double angleChangeQuantity, @NotNull PlayerEditor.Axis axis) {
-        double rad = angleChangeQuantity * RADIAN;
+        var rad = angleChangeQuantity * RADIAN;
 
         switch (axis) {
             case X:
@@ -38,7 +38,7 @@ public final class AngleCalculator {
 
     private static @NotNull EulerAngle subtract(@NotNull EulerAngle original,
                                                 double angleChangeQuantity, @NotNull PlayerEditor.Axis axis) {
-        double rad = angleChangeQuantity * RADIAN;
+        var rad = angleChangeQuantity * RADIAN;
 
         switch (axis) {
             case X:

@@ -13,7 +13,7 @@ class Size extends AbstractEditMode {
 
     @Override
     public void edit(@NotNull PlayerEditor editor, @NotNull ArmorStand armorStand, boolean reverse) {
-        boolean current = armorStand.isSmall();
+        var current = armorStand.isSmall();
 
         armorStand.setSmall(!current);
 

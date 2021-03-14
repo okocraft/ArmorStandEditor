@@ -13,7 +13,7 @@ class Gravity extends AbstractEditMode {
 
     @Override
     public void edit(@NotNull PlayerEditor editor, @NotNull ArmorStand armorStand, boolean reverse) {
-        boolean current = armorStand.hasGravity();
+        var current = armorStand.hasGravity();
 
         armorStand.setGravity(!current);
 

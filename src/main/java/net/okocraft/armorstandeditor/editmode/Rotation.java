@@ -1,7 +1,6 @@
 package net.okocraft.armorstandeditor.editmode;
 
 import net.okocraft.armorstandeditor.editor.PlayerEditor;
-import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,7 +12,7 @@ class Rotation extends AbstractEditMode {
 
     @Override
     public void edit(@NotNull PlayerEditor editor, @NotNull ArmorStand armorStand, boolean reverse) {
-        Location location = armorStand.getLocation().clone();
+        var location = armorStand.getLocation().clone();
 
         float yaw;
 

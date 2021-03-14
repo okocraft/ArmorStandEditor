@@ -13,7 +13,7 @@ class ShowArms extends AbstractEditMode {
 
     @Override
     public void edit(@NotNull PlayerEditor editor, @NotNull ArmorStand armorStand, boolean reverse) {
-        boolean current = armorStand.hasArms();
+        var current = armorStand.hasArms();
 
         armorStand.setArms(!current);
 

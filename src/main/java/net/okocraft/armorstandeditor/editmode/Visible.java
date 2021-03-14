@@ -13,7 +13,7 @@ class Visible extends AbstractEditMode {
 
     @Override
     public void edit(@NotNull PlayerEditor editor, @NotNull ArmorStand armorStand, boolean reverse) {
-        boolean current = armorStand.isVisible();
+        var current = armorStand.isVisible();
 
         armorStand.setVisible(!current);
 
