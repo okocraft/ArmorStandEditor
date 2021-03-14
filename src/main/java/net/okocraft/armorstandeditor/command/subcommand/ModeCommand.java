@@ -3,10 +3,12 @@ package net.okocraft.armorstandeditor.command.subcommand;
 import com.github.siroshun09.mccommand.common.AbstractCommand;
 import com.github.siroshun09.mccommand.common.CommandResult;
 import com.github.siroshun09.mccommand.common.context.CommandContext;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.okocraft.armorstandeditor.editmode.Mode;
 import net.okocraft.armorstandeditor.editor.PlayerEditorProvider;
+import net.okocraft.armorstandeditor.lang.Components;
 import net.okocraft.armorstandeditor.lang.Messages;
-import net.okocraft.armorstandeditor.lang.Placeholders;
 import net.okocraft.armorstandeditor.permission.Permissions;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -55,7 +57,7 @@ public class ModeCommand extends AbstractCommand {
         } catch (IllegalArgumentException e) {
             sender.sendMessage(
                     Messages.COMMAND_MODE_INVALID_ARGUMENT
-                            .replaceText(Placeholders.MODE_STRING.apply(secondArgument))
+                            .args(Component.text(secondArgument, NamedTextColor.AQUA))
             );
             return CommandResult.INVALID_ARGUMENTS;
         }
@@ -69,8 +71,7 @@ public class ModeCommand extends AbstractCommand {
         editor.setMode(mode);
 
         sender.sendMessage(
-                Messages.COMMAND_MODE_CHANGE
-                        .replaceText(Placeholders.MODE.apply(mode))
+                Messages.COMMAND_MODE_CHANGE.args(Components.MODE_NAME.apply(mode))
         );
 
         return CommandResult.SUCCESS;

@@ -1,6 +1,7 @@
 package net.okocraft.armorstandeditor.lang;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TranslatableComponent;
 
 import static net.kyori.adventure.text.format.NamedTextColor.GRAY;
 import static net.kyori.adventure.text.format.NamedTextColor.RED;
@@ -48,16 +49,16 @@ public final class Messages {
     public static final Component COMMAND_RELOAD_FAILURE =
             Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.reload.failure", RED));
 
-    public static final Component COMMAND_AXIS_INVALID_ARGUMENT =
+    public static final TranslatableComponent COMMAND_AXIS_INVALID_ARGUMENT =
             Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.axis.invalid-argument", RED));
 
-    public static final Component COMMAND_AXIS_CHANGE =
+    public static final TranslatableComponent COMMAND_AXIS_CHANGE =
             Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.axis.change", GRAY));
 
-    public static final Component COMMAND_MODE_INVALID_ARGUMENT =
+    public static final TranslatableComponent COMMAND_MODE_INVALID_ARGUMENT =
             Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.mode.invalid-argument", RED));
 
-    public static final Component COMMAND_MODE_CHANGE =
+    public static final TranslatableComponent COMMAND_MODE_CHANGE =
             Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.mode.change", GRAY));
 
     public static final Component COMMAND_MODE_NO_PERMISSION =

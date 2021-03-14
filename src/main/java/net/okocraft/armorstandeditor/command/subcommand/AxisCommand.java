@@ -3,10 +3,12 @@ package net.okocraft.armorstandeditor.command.subcommand;
 import com.github.siroshun09.mccommand.common.AbstractCommand;
 import com.github.siroshun09.mccommand.common.CommandResult;
 import com.github.siroshun09.mccommand.common.context.CommandContext;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.okocraft.armorstandeditor.editor.PlayerEditor;
 import net.okocraft.armorstandeditor.editor.PlayerEditorProvider;
+import net.okocraft.armorstandeditor.lang.Components;
 import net.okocraft.armorstandeditor.lang.Messages;
-import net.okocraft.armorstandeditor.lang.Placeholders;
 import net.okocraft.armorstandeditor.permission.Permissions;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -55,7 +57,7 @@ public class AxisCommand extends AbstractCommand {
         } catch (IllegalArgumentException e) {
             sender.sendMessage(
                     Messages.COMMAND_AXIS_INVALID_ARGUMENT
-                            .replaceText(Placeholders.AXIS.apply(secondArgument))
+                            .args(Component.text(secondArgument, NamedTextColor.AQUA))
             );
             return CommandResult.INVALID_ARGUMENTS;
         }
@@ -64,8 +66,7 @@ public class AxisCommand extends AbstractCommand {
         editor.setAxis(axis);
 
         sender.sendMessage(
-                Messages.COMMAND_AXIS_CHANGE
-                        .replaceText(Placeholders.AXIS.apply(axis.getName()))
+                Messages.COMMAND_AXIS_CHANGE.args(Components.AXIS_NAME.apply(axis))
         );
 
         return CommandResult.SUCCESS;
