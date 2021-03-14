@@ -27,6 +27,15 @@ public final class Components {
     public static final Function<Mode, Component> MODE_NAME =
             mode -> Component.translatable(KEY_PREFIX + "mode." + mode.getName(), NamedTextColor.AQUA);
 
+    public static final Component ADJUSTMENT_MODE_FINE =
+            Component.translatable(KEY_PREFIX + "adjustment-mode.fine", NamedTextColor.AQUA);
+
+    public static final Component ADJUSTMENT_MODE_COARSE =
+            Component.translatable(KEY_PREFIX + "adjustment-mode.coarse", NamedTextColor.AQUA);
+
+    public static final Component WIKI_LINK =
+            Component.translatable(KEY_PREFIX + "wiki-link", NamedTextColor.AQUA);
+
     private Components() {
         throw new UnsupportedOperationException();
     }

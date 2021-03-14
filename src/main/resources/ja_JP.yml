@@ -1,5 +1,9 @@
 armorstandeditor:
   prefix: "* "
+  adjustment-mode:
+    coarse: "粗く調整"
+    fine: "細かく調整"
+  wiki-link: "準備中"
   disable-manipulation:
     line-1: "防具立てへの右クリックによる装備の変更は無効化されています。"
     line-2: "防具立てに視点を合わせて /ase equipment を実行してください。"
@@ -39,6 +43,12 @@ armorstandeditor:
         left-hand: "左手"
     selection:
       title: "編集モード選択メニュー"
+      change:
+        axis: "軸を {0} にしました"
+        adjustment-mode: "移動・回転を {0} にしました"
+        copy-slot: "コピースロットを {0} にしました"
+        mode: "編集モードを {0} にしました"
+      help: "Wiki リンク: {0}"
       icon:
         x-axis:
           name: "X軸"

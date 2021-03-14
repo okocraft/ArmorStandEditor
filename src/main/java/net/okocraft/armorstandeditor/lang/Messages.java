@@ -98,4 +98,19 @@ public final class Messages {
     public static final Component EDIT_VISIBLE_ON = Component.translatable(KEY_PREFIX + "edit.visible.on", YELLOW);
 
     public static final Component EDIT_VISIBLE_OFF = Component.translatable(KEY_PREFIX + "edit.visible.off", YELLOW);
+
+    public static final TranslatableComponent MENU_CHANGE_AXIS =
+            Component.translatable(KEY_PREFIX + "menu.selection.change.axis", YELLOW);
+
+    public static final TranslatableComponent MENU_CHANGE_ADJUSTMENT_MODE =
+            Component.translatable(KEY_PREFIX + "menu.selection.change.adjustment-mode", YELLOW);
+
+    public static final TranslatableComponent MENU_CHANGE_COPY_SLOT =
+            Component.translatable(KEY_PREFIX + "menu.selection.change.copy-slot", YELLOW);
+
+    public static final TranslatableComponent MENU_CHANGE_MODE =
+            Component.translatable(KEY_PREFIX + "menu.selection.change.mode", YELLOW);
+
+    public static final TranslatableComponent MENU_HELP =
+            Components.PREFIX.append(Component.translatable(KEY_PREFIX + "menu.help", GRAY));
 }

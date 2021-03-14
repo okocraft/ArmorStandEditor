@@ -9,6 +9,7 @@ import net.okocraft.armorstandeditor.editmode.Mode;
 import net.okocraft.armorstandeditor.editor.PlayerEditor;
 import net.okocraft.armorstandeditor.editor.PlayerEditorProvider;
 import net.okocraft.armorstandeditor.lang.Components;
+import net.okocraft.armorstandeditor.lang.Messages;
 import net.okocraft.armorstandeditor.permission.Permissions;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -35,9 +36,9 @@ public class SelectionMenu implements ArmorStandEditorMenu {
     static {
         var map = new HashMap<Integer, Icon>();
 
-        map.put(0, new Icon(Material.RED_WOOL, "x-axis", editor -> editor.setAxis(PlayerEditor.Axis.X)));
-        map.put(1, new Icon(Material.GREEN_WOOL, "y-axis", editor -> editor.setAxis(PlayerEditor.Axis.Y)));
-        map.put(2, new Icon(Material.BLUE_WOOL, "z-axis", editor -> editor.setAxis(PlayerEditor.Axis.Z)));
+        map.put(0, new Icon(Material.RED_WOOL, "x-axis", editor -> changeAxis(editor, PlayerEditor.Axis.X)));
+        map.put(1, new Icon(Material.GREEN_WOOL, "y-axis", editor -> changeAxis(editor, PlayerEditor.Axis.Y)));
+        map.put(2, new Icon(Material.BLUE_WOOL, "z-axis", editor -> changeAxis(editor, PlayerEditor.Axis.Z)));
 
         map.put(4,
                 new Icon(
@@ -46,6 +47,9 @@ public class SelectionMenu implements ArmorStandEditorMenu {
                         e -> {
                             e.setAngleChangeQuantity(20);
                             e.setMovingDistance(1);
+                            e.getPlayer().sendActionBar(
+                                    Messages.MENU_CHANGE_ADJUSTMENT_MODE.args(Components.ADJUSTMENT_MODE_COARSE)
+                            );
                         }
                 )
         );
@@ -57,33 +61,43 @@ public class SelectionMenu implements ArmorStandEditorMenu {
                         e -> {
                             e.setAngleChangeQuantity(2);
                             e.setMovingDistance(0.1);
+                            e.getPlayer().sendActionBar(
+                                    Messages.MENU_CHANGE_ADJUSTMENT_MODE.args(Components.ADJUSTMENT_MODE_FINE)
+                            );
                         }
                 )
         );
 
-        map.put(7, new Icon(Material.COMPASS, "rotation", editor -> editor.setMode(Mode.ROTATION)));
-        map.put(8, new Icon(Material.MINECART, "movement", editor -> editor.setMode(Mode.MOVEMENT)));
-        map.put(10, new Icon(Material.LEATHER_HELMET, "head-pose", editor -> editor.setMode(Mode.HEAD_POSE)));
-        map.put(18, new Icon(Material.STICK, "right-arm-pose", editor -> editor.setMode(Mode.RIGHT_ARM_POSE)));
-        map.put(19, new Icon(Material.LEATHER_CHESTPLATE, "body-pose", editor -> editor.setMode(Mode.BODY_POSE)));
-        map.put(20, new Icon(Material.STICK, "left-arm-pose", editor -> editor.setMode(Mode.LEFT_ARM_POSE)));
-        map.put(22, new Icon(Material.LEVER, "reset-pose", editor -> editor.setMode(Mode.RESET_POSE)));
-        map.put(24, new Icon(Material.STICK, "show-arms", editor -> editor.setMode(Mode.SHOW_ARMS)));
-        map.put(25, new Icon(Material.POTION, "visible", editor -> editor.setMode(Mode.VISIBLE)));
-        map.put(26, new Icon(Material.PUFFERFISH, "size", editor -> editor.setMode(Mode.SIZE)));
-        map.put(27, new Icon(Material.STICK, "right-leg-pose", editor -> editor.setMode(Mode.RIGHT_LEG_POSE)));
-        map.put(28, new Icon(Material.CHEST, "equipment", editor -> editor.setMode(Mode.EQUIPMENT)));
-        map.put(29, new Icon(Material.STICK, "left-leg-pose", editor -> editor.setMode(Mode.LEFT_LEG_POSE)));
-        map.put(34, new Icon(Material.SAND, "gravity", editor -> editor.setMode(Mode.GRAVITY)));
-        map.put(35, new Icon(Material.SMOOTH_STONE_SLAB, "base-plate", editor -> editor.setMode(Mode.BASE_PLATE)));
-        map.put(37, new Icon(Material.WRITABLE_BOOK, "copy", editor -> editor.setMode(Mode.COPY)));
-        map.put(38, new Icon(Material.ENCHANTED_BOOK, "paste", editor -> editor.setMode(Mode.PASTE)));
-        map.put(45, new Icon(Material.DANDELION, "copy-slot-1", editor -> editor.setSelectedCopySlot(1)));
-        map.put(46, new Icon(Material.AZURE_BLUET, "copy-slot-2", editor -> editor.setSelectedCopySlot(2)));
-        map.put(47, new Icon(Material.BLUE_ORCHID, "copy-slot-3", editor -> editor.setSelectedCopySlot(3)));
-        map.put(48, new Icon(Material.PEONY, "copy-slot-4", editor -> editor.setSelectedCopySlot(4)));
-        map.put(52, new Icon(Material.LAVA_BUCKET, "removal", editor -> editor.setMode(Mode.REMOVAL)));
-        map.put(53, new Icon(Material.NETHER_STAR, "help", editor -> editor.getPlayer())); // TODO
+        map.put(7, new Icon(Material.COMPASS, "rotation", editor -> changeMode(editor, Mode.ROTATION)));
+        map.put(8, new Icon(Material.MINECART, "movement", editor -> changeMode(editor, Mode.MOVEMENT)));
+        map.put(10, new Icon(Material.LEATHER_HELMET, "head-pose", editor -> changeMode(editor, Mode.HEAD_POSE)));
+        map.put(18, new Icon(Material.STICK, "right-arm-pose", editor -> changeMode(editor, Mode.RIGHT_ARM_POSE)));
+        map.put(19, new Icon(Material.LEATHER_CHESTPLATE, "body-pose", editor -> changeMode(editor, Mode.BODY_POSE)));
+        map.put(20, new Icon(Material.STICK, "left-arm-pose", editor -> changeMode(editor, Mode.LEFT_ARM_POSE)));
+        map.put(22, new Icon(Material.LEVER, "reset-pose", editor -> changeMode(editor, Mode.RESET_POSE)));
+        map.put(24, new Icon(Material.STICK, "show-arms", editor -> changeMode(editor, Mode.SHOW_ARMS)));
+        map.put(25, new Icon(Material.POTION, "visible", editor -> changeMode(editor, Mode.VISIBLE)));
+        map.put(26, new Icon(Material.PUFFERFISH, "size", editor -> changeMode(editor, Mode.SIZE)));
+        map.put(27, new Icon(Material.STICK, "right-leg-pose", editor -> changeMode(editor, Mode.RIGHT_LEG_POSE)));
+        map.put(28, new Icon(Material.CHEST, "equipment", editor -> changeMode(editor, Mode.EQUIPMENT)));
+        map.put(29, new Icon(Material.STICK, "left-leg-pose", editor -> changeMode(editor, Mode.LEFT_LEG_POSE)));
+        map.put(34, new Icon(Material.SAND, "gravity", editor -> changeMode(editor, Mode.GRAVITY)));
+        map.put(35, new Icon(Material.SMOOTH_STONE_SLAB, "base-plate", editor -> changeMode(editor, Mode.BASE_PLATE)));
+        map.put(37, new Icon(Material.WRITABLE_BOOK, "copy", editor -> changeMode(editor, Mode.COPY)));
+        map.put(38, new Icon(Material.ENCHANTED_BOOK, "paste", editor -> changeMode(editor, Mode.PASTE)));
+        map.put(45, new Icon(Material.DANDELION, "copy-slot-1", editor -> changeCopySlot(editor, 1)));
+        map.put(46, new Icon(Material.AZURE_BLUET, "copy-slot-2", editor -> changeCopySlot(editor, 2)));
+        map.put(47, new Icon(Material.BLUE_ORCHID, "copy-slot-3", editor -> changeCopySlot(editor, 3)));
+        map.put(48, new Icon(Material.PEONY, "copy-slot-4", editor -> changeCopySlot(editor, 4)));
+        map.put(52, new Icon(Material.LAVA_BUCKET, "removal", editor -> changeMode(editor, Mode.REMOVAL)));
+
+        map.put(53,
+                new Icon(
+                        Material.NETHER_STAR,
+                        "help",
+                        editor -> editor.getPlayer().sendMessage(Messages.MENU_HELP.args(Components.WIKI_LINK))
+                )
+        );
 
         MENU_MAP = Map.copyOf(map);
     }
@@ -133,6 +147,27 @@ public class SelectionMenu implements ArmorStandEditorMenu {
                 inventory.setItem(i, item);
             }
         }
+    }
+
+    private static void changeAxis(@NotNull PlayerEditor editor, @NotNull PlayerEditor.Axis axis) {
+        editor.setAxis(axis);
+        editor.getPlayer().sendActionBar(
+                Messages.MENU_CHANGE_AXIS.args(Components.AXIS_NAME.apply(axis))
+        );
+    }
+
+    private static void changeMode(@NotNull PlayerEditor editor, @NotNull Mode mode) {
+        editor.setMode(mode);
+        editor.getPlayer().sendActionBar(
+                Messages.MENU_CHANGE_MODE.args(Components.MODE_NAME.apply(mode))
+        );
+    }
+
+    private static void changeCopySlot(@NotNull PlayerEditor editor, int slot) {
+        editor.setSelectedCopySlot(slot);
+        editor.getPlayer().sendActionBar(
+                Messages.MENU_CHANGE_COPY_SLOT.args(Component.text(String.valueOf(slot), NamedTextColor.AQUA))
+        );
     }
 
     @Override
