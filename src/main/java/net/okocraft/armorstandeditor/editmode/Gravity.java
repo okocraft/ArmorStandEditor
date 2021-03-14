@@ -17,7 +17,7 @@ class Gravity extends AbstractEditMode {
 
         armorStand.setGravity(!current);
 
-        var message = armorStand.hasBasePlate() ? Messages.EDIT_GRAVITY_ON : Messages.EDIT_GRAVITY_OFF;
+        var message = armorStand.hasGravity() ? Messages.EDIT_GRAVITY_ON : Messages.EDIT_GRAVITY_OFF;
         editor.getPlayer().sendActionBar(message);
     }
 }
