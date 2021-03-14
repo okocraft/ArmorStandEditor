@@ -112,5 +112,5 @@ public final class Messages {
             Component.translatable(KEY_PREFIX + "menu.selection.change.mode", YELLOW);
 
     public static final TranslatableComponent MENU_HELP =
-            Components.PREFIX.append(Component.translatable(KEY_PREFIX + "menu.help", GRAY));
+            Components.PREFIX.append(Component.translatable(KEY_PREFIX + "menu.selection.help", GRAY));
 }
