@@ -1,5 +1,9 @@
 armorstandeditor:
   prefix: "* "
+  axis:
+    x: "X軸"
+    y: "Y軸"
+    z: "Z軸"
   adjustment-mode:
     coarse: "粗く調整"
     fine: "細かく調整"
