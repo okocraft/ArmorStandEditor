@@ -1,6 +1,7 @@
 package net.okocraft.armorstandeditor.editmode;
 
 import net.okocraft.armorstandeditor.editor.PlayerEditor;
+import net.okocraft.armorstandeditor.lang.Messages;
 import org.bukkit.entity.ArmorStand;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,5 +21,7 @@ class ResetPose extends AbstractEditMode {
         armorStand.setRightArmPose(INITIAL_ANGLE);
         armorStand.setLeftLegPose(INITIAL_ANGLE);
         armorStand.setRightLegPose(INITIAL_ANGLE);
+
+        editor.getPlayer().sendActionBar(Messages.EDIT_RESET_POSE);
     }
 }

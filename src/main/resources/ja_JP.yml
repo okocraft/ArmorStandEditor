@@ -6,6 +6,25 @@ armorstandeditor:
   edit:
     no-permission: "防具立てを編集する権限がありません。"
     mode-no-permission: "そのモードで防具立てを編集する権限がありません。"
+    arms:
+      on: "腕を表示しました"
+      off: "腕を非表示にしました"
+    base-plate:
+      on: "土台を表示しました"
+      off: "土台を非表示にしました"
+    copy: "防具立てをスロット {0} にコピーしました"
+    gravity:
+      on: "重力の影響を受けるようにしました"
+      off: "重力の影響を受けないようにしました"
+    paste: "防具立てにスロット {0} から貼り付けました"
+    removal: "防具立てを撤去しました"
+    reset-pose: "防具立ての体勢をリセットしました"
+    size:
+      small: "防具立てを小さくしました"
+      normal: "防具立ての大きさを通常にしました"
+    visible:
+      on: "防具立てを表示しました"
+      off: "防具立てを非表示にしました"
   rename:
     no-permission: "防具立ての名前を変更する権限がありません。"
   menu:

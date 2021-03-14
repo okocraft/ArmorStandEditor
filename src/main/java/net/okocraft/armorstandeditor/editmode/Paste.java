@@ -1,6 +1,9 @@
 package net.okocraft.armorstandeditor.editmode;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.okocraft.armorstandeditor.editor.PlayerEditor;
+import net.okocraft.armorstandeditor.lang.Messages;
 import org.bukkit.GameMode;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.inventory.EntityEquipment;
@@ -49,5 +52,8 @@ class Paste extends AbstractEditMode {
                 armorStandEquipment.setItemInOffHand(originalEquipment.getItemInOffHand());
             }
         }
+
+        var slot = Component.text(String.valueOf(editor.getSelectedCopySlot()), NamedTextColor.AQUA);
+        editor.getPlayer().sendActionBar(Messages.EDIT_PASTE.args(slot));
     }
 }

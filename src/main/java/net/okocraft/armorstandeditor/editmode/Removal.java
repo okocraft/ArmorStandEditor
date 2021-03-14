@@ -1,6 +1,7 @@
 package net.okocraft.armorstandeditor.editmode;
 
 import net.okocraft.armorstandeditor.editor.PlayerEditor;
+import net.okocraft.armorstandeditor.lang.Messages;
 import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
@@ -48,6 +49,8 @@ class Removal extends AbstractEditMode {
                 }
             }
         }
+
+        editor.getPlayer().sendActionBar(Messages.EDIT_REMOVAL);
     }
 
     private static @NotNull ItemStack getOrAir(@Nullable ItemStack item) {

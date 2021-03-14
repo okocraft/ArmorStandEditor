@@ -5,6 +5,7 @@ import net.kyori.adventure.text.TranslatableComponent;
 
 import static net.kyori.adventure.text.format.NamedTextColor.GRAY;
 import static net.kyori.adventure.text.format.NamedTextColor.RED;
+import static net.kyori.adventure.text.format.NamedTextColor.YELLOW;
 import static net.okocraft.armorstandeditor.lang.Components.KEY_PREFIX;
 
 public final class Messages {
@@ -69,4 +70,32 @@ public final class Messages {
 
     public static final Component COMMAND_ITEM_FAILURE =
             Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.item.failure", RED));
+
+    public static final Component EDIT_ARMS_ON = Component.translatable(KEY_PREFIX + "edit.arms.on", YELLOW);
+
+    public static final Component EDIT_ARMS_OFF = Component.translatable(KEY_PREFIX + "edit.arms.off", YELLOW);
+
+    public static final Component EDIT_BASE_PLATE_ON = Component.translatable(KEY_PREFIX + "edit.base-plate.on", YELLOW);
+
+    public static final Component EDIT_BASE_PLATE_OFF = Component.translatable(KEY_PREFIX + "edit.base-plate.off", YELLOW);
+
+    public static final TranslatableComponent EDIT_COPY = Component.translatable(KEY_PREFIX + "edit.copy", YELLOW);
+
+    public static final Component EDIT_GRAVITY_ON = Component.translatable(KEY_PREFIX + "edit.gravity.on", YELLOW);
+
+    public static final Component EDIT_GRAVITY_OFF = Component.translatable(KEY_PREFIX + "edit.gravity.off", YELLOW);
+
+    public static final TranslatableComponent EDIT_PASTE = Component.translatable(KEY_PREFIX + "edit.paste", YELLOW);
+
+    public static final Component EDIT_REMOVAL = Component.translatable(KEY_PREFIX + "edit.removal", YELLOW);
+
+    public static final Component EDIT_RESET_POSE = Component.translatable(KEY_PREFIX + "edit.reset-pose", YELLOW);
+
+    public static final Component EDIT_SIZE_SMALL = Component.translatable(KEY_PREFIX + "edit.size.small", YELLOW);
+
+    public static final Component EDIT_SIZE_NORMAL = Component.translatable(KEY_PREFIX + "edit.size.normal", YELLOW);
+
+    public static final Component EDIT_VISIBLE_ON = Component.translatable(KEY_PREFIX + "edit.visible.on", YELLOW);
+
+    public static final Component EDIT_VISIBLE_OFF = Component.translatable(KEY_PREFIX + "edit.visible.off", YELLOW);
 }
