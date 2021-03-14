@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 public class AxisCommand extends AbstractCommand {
 
     public AxisCommand() {
-        super("axis", Permissions.COMMAND_PREFIX + "axis", Set.of("e"));
+        super("axis", Permissions.COMMAND_PREFIX + "axis", Set.of("a"));
     }
 
     @Override
