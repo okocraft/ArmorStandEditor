@@ -81,7 +81,7 @@ public class PlayerEditor {
         Y("y"),
         Z("z");
 
-        final String name;
+        private final String name;
 
         Axis(@NotNull String name) {
             this.name = name;
