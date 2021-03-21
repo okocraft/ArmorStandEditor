@@ -45,6 +45,8 @@ class Removal extends AbstractEditMode {
             }
         }
 
+        armorStand.remove();
+
         editor.getPlayer().sendActionBar(Messages.EDIT_REMOVAL);
     }
 
