@@ -1,5 +1,7 @@
 package net.okocraft.armorstandeditor.lang;
 
+import com.github.siroshun09.configapi.common.util.FileUtils;
+import com.github.siroshun09.configapi.common.util.ResourceUtils;
 import com.github.siroshun09.configapi.yaml.YamlConfiguration;
 import com.github.siroshun09.mcmessage.loader.MessageLoader;
 import net.kyori.adventure.key.Key;
@@ -24,9 +26,7 @@ public final class LanguageLoader {
     public static void load(@NotNull ArmorStandEditorPlugin plugin) throws IOException {
         var directory = plugin.getDataFolder().toPath().resolve("languages");
 
-        if (!Files.exists(directory)) {
-            Files.createDirectories(directory);
-        }
+        FileUtils.createDirectoriesIfNotExists(directory);
 
         REGISTRY = TranslationRegistry.create(Key.key("armorstandeditor", "language"));
 
@@ -44,14 +44,10 @@ public final class LanguageLoader {
         var defaultLocale = Locale.JAPAN;
         var defaultFile = directory.resolve(defaultLocale.toString() + ".yml");
 
+        ResourceUtils.copyFromClassLoaderIfNotExists(plugin.getClass().getClassLoader(), "languages/ja_JP.yml", defaultFile);
+
         if (!Files.exists(defaultFile)) {
-            var source = plugin.getResource(defaultFile.getFileName().toString());
-
-            if (source == null) {
-                throw new IllegalStateException();
-            }
-
-            Files.copy(source, defaultFile);
+            throw new IllegalStateException();
         }
 
         loadFile(defaultFile);
