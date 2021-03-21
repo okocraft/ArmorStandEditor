@@ -102,7 +102,7 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.2.0</version>
                 <configuration>
-                    <finalName>${project.name}-${project.version}-Original</finalName>
+                    <finalName>${project.name}-${project.version}-original</finalName>
                     <archive>
                         <manifest>
                             <addDefaultEntries>false</addDefaultEntries>
