@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Locale;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public final class LanguageLoader {
 
@@ -34,6 +36,8 @@ public final class LanguageLoader {
         REGISTRY = TranslationRegistry.create(Key.key("armorstandeditor", "language"));
 
         loadDefault(plugin, directory);
+        loadCustom(directory, plugin.getLogger());
+
         REGISTRY.defaultLocale(DEFAULT_LOCALE);
         GlobalTranslator.get().addSource(REGISTRY);
     }
@@ -57,14 +61,28 @@ public final class LanguageLoader {
             throw new IllegalStateException();
         }
 
-        loadFile(defaultFile);
+        loadFile(defaultFile, plugin.getLogger());
     }
 
-    private static void loadFile(@NotNull Path yamlPath) throws IOException {
+    private static void loadCustom(@NotNull Path directory, @NotNull Logger logger) throws IOException {
+        try (var files = Files.list(directory)) {
+            var languages = files.filter(Files::isRegularFile)
+                    .filter(p -> !p.toString().endsWith(DEFAULT_LOCALE.toString() + ".yml"))
+                    .collect(Collectors.toUnmodifiableSet());
+
+            for (var language : languages) {
+                loadFile(language, logger);
+            }
+        }
+    }
+
+    private static void loadFile(@NotNull Path yamlPath, @NotNull Logger logger) throws IOException {
         var yaml = YamlConfiguration.create(yamlPath);
         var loader = MessageLoader.fromFileConfiguration(yaml);
 
         loader.load();
         loader.registerToRegistry(REGISTRY);
+
+        logger.info("Loaded " + yamlPath.getFileName().toString());
     }
 }
