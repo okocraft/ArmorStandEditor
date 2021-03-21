@@ -17,6 +17,9 @@ import java.util.Locale;
 
 public final class LanguageLoader {
 
+    private static final Locale DEFAULT_LOCALE = Locale.JAPAN;
+    private static final String DIRECTORY_NAME = "languages";
+
     private static TranslationRegistry REGISTRY;
 
     private LanguageLoader() {
@@ -24,14 +27,14 @@ public final class LanguageLoader {
     }
 
     public static void load(@NotNull ArmorStandEditorPlugin plugin) throws IOException {
-        var directory = plugin.getDataFolder().toPath().resolve("languages");
+        var directory = plugin.getDataFolder().toPath().resolve(DIRECTORY_NAME);
 
         FileUtils.createDirectoriesIfNotExists(directory);
 
         REGISTRY = TranslationRegistry.create(Key.key("armorstandeditor", "language"));
 
         loadDefault(plugin, directory);
-        REGISTRY.defaultLocale(Locale.JAPAN);
+        REGISTRY.defaultLocale(DEFAULT_LOCALE);
         GlobalTranslator.get().addSource(REGISTRY);
     }
 
@@ -41,10 +44,14 @@ public final class LanguageLoader {
     }
 
     private static void loadDefault(@NotNull ArmorStandEditorPlugin plugin, @NotNull Path directory) throws IOException {
-        var defaultLocale = Locale.JAPAN;
-        var defaultFile = directory.resolve(defaultLocale.toString() + ".yml");
+        var defaultFileName = DEFAULT_LOCALE.toString() + ".yml";
+        var defaultFile = directory.resolve(defaultFileName);
 
-        ResourceUtils.copyFromClassLoaderIfNotExists(plugin.getClass().getClassLoader(), "languages/ja_JP.yml", defaultFile);
+        ResourceUtils.copyFromClassLoaderIfNotExists(
+                plugin.getClass().getClassLoader(),
+                DIRECTORY_NAME + '/' + defaultFileName,
+                defaultFile
+        );
 
         if (!Files.exists(defaultFile)) {
             throw new IllegalStateException();
