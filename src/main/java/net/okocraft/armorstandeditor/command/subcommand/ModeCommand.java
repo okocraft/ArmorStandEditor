@@ -3,6 +3,7 @@ package net.okocraft.armorstandeditor.command.subcommand;
 import com.github.siroshun09.mccommand.common.AbstractCommand;
 import com.github.siroshun09.mccommand.common.CommandResult;
 import com.github.siroshun09.mccommand.common.context.CommandContext;
+import com.github.siroshun09.mccommand.common.filter.StringFilter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.okocraft.armorstandeditor.editmode.Mode;
@@ -86,9 +87,14 @@ public class ModeCommand extends AbstractCommand {
             return Collections.emptyList();
         }
 
-        if (context.getArguments().size() == 2) {
+        var arguments = context.getArguments();
+
+        if (arguments.size() == 2) {
+            var argumentFilter = StringFilter.startsWithIgnoreCase(arguments.get(1).get());
+
             return Arrays.stream(Mode.values())
                     .map(Mode::getName)
+                    .filter(argumentFilter)
                     .collect(Collectors.toUnmodifiableList());
         }
 

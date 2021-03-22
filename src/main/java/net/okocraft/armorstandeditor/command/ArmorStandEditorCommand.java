@@ -5,6 +5,7 @@ import com.github.siroshun09.mccommand.common.Command;
 import com.github.siroshun09.mccommand.common.CommandResult;
 import com.github.siroshun09.mccommand.common.SubCommandHolder;
 import com.github.siroshun09.mccommand.common.context.CommandContext;
+import com.github.siroshun09.mccommand.common.filter.StringFilter;
 import net.okocraft.armorstandeditor.ArmorStandEditorPlugin;
 import net.okocraft.armorstandeditor.command.subcommand.AxisCommand;
 import net.okocraft.armorstandeditor.command.subcommand.EquipmentCommand;
@@ -75,9 +76,12 @@ public class ArmorStandEditorCommand extends AbstractCommand {
         }
 
         if (arguments.size() == 1) {
+            var argumentFilter = StringFilter.startsWithIgnoreCase(arguments.get(0).get());
+
             return holder.getSubCommands()
                     .stream()
                     .map(Command::getName)
+                    .filter(argumentFilter)
                     .collect(Collectors.toUnmodifiableList());
         }
 
