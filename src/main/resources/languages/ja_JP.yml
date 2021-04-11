@@ -149,11 +149,11 @@ armorstandeditor:
       success: "言語ファイルを再読み込みしました。"
       failure: "言語ファイルの再読み込みに失敗しました。"
     axis:
-      invalid-argument: "指定された軸 {0} は存在しません。"
-      change: "軸を {0} に変更しました。"
+      invalid-argument: "指定された軸は存在しません: "
+      change: "軸を変更しました: "
     mode:
-      invalid-argument: "指定された編集モード {0} は存在しません。"
-      change: "編集モードを {0} に変更しました。"
+      invalid-argument: "指定された編集モードは存在しません: "
+      change: "編集モードを変更しました: "
       no-permission: "そのモードに変更する権限がありません。"
     item:
       success: "防具立ての編集アイテムを付与しました。"

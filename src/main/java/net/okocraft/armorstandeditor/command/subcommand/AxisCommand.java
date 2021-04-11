@@ -57,8 +57,7 @@ public class AxisCommand extends AbstractCommand {
             axis = PlayerEditor.Axis.valueOf(secondArgument.toUpperCase());
         } catch (IllegalArgumentException e) {
             sender.sendMessage(
-                    Messages.COMMAND_AXIS_INVALID_ARGUMENT
-                            .args(Component.text(secondArgument, NamedTextColor.AQUA))
+                    Messages.COMMAND_AXIS_INVALID_ARGUMENT.append(Component.text(secondArgument, NamedTextColor.AQUA))
             );
             return CommandResult.INVALID_ARGUMENTS;
         }
@@ -67,7 +66,7 @@ public class AxisCommand extends AbstractCommand {
         editor.setAxis(axis);
 
         sender.sendMessage(
-                Messages.COMMAND_AXIS_CHANGE.args(Components.AXIS_NAME.apply(axis))
+                Messages.COMMAND_AXIS_CHANGE.append(Components.AXIS_NAME.apply(axis))
         );
 
         return CommandResult.SUCCESS;

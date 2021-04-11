@@ -149,11 +149,11 @@ armorstandeditor:
       success: "The language file was reloaded."
       failure: "Failed to reload the language file."
     axis:
-      invalid-argument: "The specified axis {0} does not exist."
-      change: "The axis has been changed to {0}."
+      invalid-argument: "The specified axis does not exist: "
+      change: "The axis has been changed: "
     mode:
-      invalid-argument: "The specified edit mode {0} does not exist."
-      change: "The edit mode was changed to {0}."
+      invalid-argument: "The specified edit mode does not exist: "
+      change: "The edit mode was changed: "
       no-permission: "You don't have permission to change to that mode."
     item:
       success: "Gave edit item for the armor stand."

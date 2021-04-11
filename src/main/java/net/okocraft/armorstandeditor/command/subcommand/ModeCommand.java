@@ -57,8 +57,7 @@ public class ModeCommand extends AbstractCommand {
             mode = Mode.valueOf(secondArgument.toUpperCase());
         } catch (IllegalArgumentException e) {
             sender.sendMessage(
-                    Messages.COMMAND_MODE_INVALID_ARGUMENT
-                            .args(Component.text(secondArgument, NamedTextColor.AQUA))
+                    Messages.COMMAND_MODE_INVALID_ARGUMENT.append(Component.text(secondArgument, NamedTextColor.AQUA))
             );
             return CommandResult.INVALID_ARGUMENTS;
         }
@@ -72,7 +71,7 @@ public class ModeCommand extends AbstractCommand {
         editor.setMode(mode);
 
         sender.sendMessage(
-                Messages.COMMAND_MODE_CHANGE.args(Components.MODE_NAME.apply(mode))
+                Messages.COMMAND_MODE_CHANGE.append(Components.MODE_NAME.apply(mode))
         );
 
         return CommandResult.SUCCESS;
