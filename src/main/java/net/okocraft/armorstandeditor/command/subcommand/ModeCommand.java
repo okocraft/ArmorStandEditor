@@ -54,7 +54,7 @@ public class ModeCommand extends AbstractCommand {
         Mode mode;
 
         try {
-            mode = Mode.valueOf(secondArgument.toUpperCase());
+            mode = Mode.valueOf(secondArgument.toUpperCase().replace('-', '_'));
         } catch (IllegalArgumentException e) {
             sender.sendMessage(
                     Messages.COMMAND_MODE_INVALID_ARGUMENT.append(Component.text(secondArgument, NamedTextColor.AQUA))
