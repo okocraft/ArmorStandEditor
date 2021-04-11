@@ -74,7 +74,7 @@ armorstandeditor:
           description: "Adjust the orientation of the armor stand."
         movement:
           name: "move body"
-          description: "adjust the position of the armor stand"
+          description: "Adjust the position of the armor stand"
         head-pose:
           name: "Adjust the body pose"
           description: ""
