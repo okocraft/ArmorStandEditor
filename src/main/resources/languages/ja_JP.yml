@@ -157,7 +157,7 @@ armorstandeditor:
       no-permission: "そのモードに変更する権限がありません。"
     item:
       success: "防具立ての編集アイテムを付与しました。"
-      failure: "防具たての編集アイテムの付与に失敗しました。"
+      failure: "防具立ての編集アイテムの付与に失敗しました。"
   mode:
     no-permission: "そのモードに変更する権限がありません。"
     base-plate: "土台の表示"
