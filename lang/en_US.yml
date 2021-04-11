@@ -5,8 +5,8 @@ armorstandeditor:
     y: "Y-axis"
     z: "Z-axis"
   adjustment-mode:
-    coarse: "coarse adjustment"
-    fine: "fine adjustment"
+    coarse: "Coarse adjustment"
+    fine: "Fine adjustment"
   wiki-link: "Preparing..."
   disable-manipulation:
     line-1: "Right-clicking on the armor stand to change equipment has been disabled."
@@ -39,12 +39,12 @@ armorstandeditor:
     equipment:
       title: "Equipment editing menu"
       icon:
-        helmet: "helmet"
-        chest-plate: "chest plate"
-        leggings: "leggings"
-        boots: "boots"
-        right-hand: "right hand"
-        left-hand: "left hand"
+        helmet: "Helmet"
+        chest-plate: "Chest plate"
+        leggings: "Leggings"
+        boots: "Boots"
+        right-hand: "Right hand"
+        left-hand: "Left hand"
     selection:
       title: "Edit mode selection menu"
       change:
@@ -64,10 +64,10 @@ armorstandeditor:
           name: "Z-axis"
           description: "Rotate in the direction of the Z-axis."
         coarse:
-          name: "coarse adjustment"
+          name: "Coarse adjustment"
           description: "1 block of movement per edit, 20° of rotation"
         fine:
-          name: "fine adjustment"
+          name: "Fine adjustment"
           description: "0.1 blocks of movement per edit, 2° of rotation"
         rotation:
           name: "Rotate the body"
@@ -124,13 +124,13 @@ armorstandeditor:
           name: "Copy slot 1"
           description: ""
         copy-slot-2:
-          name: "copy slot 2"
+          name: "Copy slot 2"
           description: ""
         copy-slot-3:
-          name: "copy slot 3"
+          name: "Copy slot 3"
           description: ""
         copy-slot-4:
-          name: "copy slot 4"
+          name: "Copy slot 4"
           description: ""
         removal:
           name: "Remove armor stand"
