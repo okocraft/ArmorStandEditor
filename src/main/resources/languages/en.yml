@@ -162,7 +162,7 @@ armorstandeditor:
     no-permission: "You don't have permission to change to that mode."
     base-plate: "Base-Plate"
     body-pose: "Body-pose"
-    copy: "Copy".
+    copy: "Copy"
     equipment: "Equipment"
     gravity: "Gravity"
     head-pose: "Head-pose"
