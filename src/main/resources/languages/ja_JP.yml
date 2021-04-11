@@ -1,5 +1,5 @@
 armorstandeditor:
-  prefix: "* "
+  prefix: ""
   axis:
     x: "X軸"
     y: "Y軸"
