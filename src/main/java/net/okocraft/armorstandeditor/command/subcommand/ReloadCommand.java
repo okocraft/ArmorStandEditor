@@ -4,7 +4,6 @@ import com.github.siroshun09.mccommand.common.AbstractCommand;
 import com.github.siroshun09.mccommand.common.CommandResult;
 import com.github.siroshun09.mccommand.common.context.CommandContext;
 import net.okocraft.armorstandeditor.ArmorStandEditorPlugin;
-import net.okocraft.armorstandeditor.lang.LanguageLoader;
 import net.okocraft.armorstandeditor.lang.Messages;
 import net.okocraft.armorstandeditor.permission.Permissions;
 import org.jetbrains.annotations.NotNull;
@@ -32,7 +31,7 @@ public class ReloadCommand extends AbstractCommand {
         }
 
         try {
-            LanguageLoader.reload(plugin);
+            plugin.getLanguageLoader().reload();
         } catch (IOException e) {
             sender.sendMessage(Messages.COMMAND_RELOAD_FAILURE);
             return CommandResult.EXCEPTION_OCCURRED;

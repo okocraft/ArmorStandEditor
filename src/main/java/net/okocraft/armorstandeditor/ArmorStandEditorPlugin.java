@@ -10,6 +10,7 @@ import net.okocraft.armorstandeditor.listener.PlayerListener;
 import net.okocraft.armorstandeditor.util.EditItemChecker;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -17,12 +18,14 @@ import java.util.logging.Level;
 
 public final class ArmorStandEditorPlugin extends JavaPlugin {
 
+    private final LanguageLoader languageLoader = new LanguageLoader(this);
+
     @Override
     public void onEnable() {
         var manager = getServer().getPluginManager();
 
         try {
-            LanguageLoader.load(this);
+            languageLoader.load();
         } catch (IOException e) {
             getLogger().log(Level.SEVERE, "Failed to load languages.", e);
             manager.disablePlugin(this);
@@ -48,5 +51,9 @@ public final class ArmorStandEditorPlugin extends JavaPlugin {
     public void onDisable() {
         HandlerList.unregisterAll(this);
         getServer().getScheduler().cancelTasks(this);
+    }
+
+    public @NotNull LanguageLoader getLanguageLoader() {
+        return languageLoader;
     }
 }
