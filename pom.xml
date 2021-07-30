@@ -58,8 +58,8 @@
         </dependency>
         <dependency>
             <groupId>com.github.siroshun09.configapi</groupId>
-            <artifactId>yaml</artifactId>
-            <version>3.1.0</version>
+            <artifactId>configapi-yaml</artifactId>
+            <version>4.2.1</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
