@@ -13,6 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Optional;
 import java.util.logging.Level;
 
@@ -55,5 +56,9 @@ public final class ArmorStandEditorPlugin extends JavaPlugin {
 
     public @NotNull LanguageLoader getLanguageLoader() {
         return languageLoader;
+    }
+
+    public @NotNull Path getJarFile() {
+        return getFile().toPath();
     }
 }
