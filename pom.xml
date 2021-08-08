@@ -37,7 +37,7 @@
 
     <properties>
         <project.charset>UTF-8</project.charset>
-        <java.version>11</java.version>
+        <java.version>16</java.version>
         <project.build.sourceEncoding>${project.charset}</project.build.sourceEncoding>
         <project.reporting.outputEncoding>${project.charset}</project.reporting.outputEncoding>
     </properties>
