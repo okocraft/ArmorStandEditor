@@ -59,13 +59,19 @@
         <dependency>
             <groupId>com.github.siroshun09.configapi</groupId>
             <artifactId>configapi-yaml</artifactId>
-            <version>4.2.1</version>
+            <version>4.3.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.github.siroshun09.mccommand</groupId>
             <artifactId>paper</artifactId>
             <version>3.0.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.siroshun09.translationloader</groupId>
+            <artifactId>translationloader</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -132,12 +138,12 @@
                     <shadedArtifactAttached>true</shadedArtifactAttached>
                     <relocations>
                         <relocation>
-                            <pattern>com.github.siroshun09</pattern>
-                            <shadedPattern>${project.groupId}.lib</shadedPattern>
+                            <pattern>com.github.siroshun09.configapi.common</pattern>
+                            <shadedPattern>com.github.siroshun09.configapi.api</shadedPattern>
                         </relocation>
                         <relocation>
-                            <pattern>org.yaml</pattern>
-                            <shadedPattern>${project.groupId}.lib.yaml</shadedPattern>
+                            <pattern>com.github.siroshun09</pattern>
+                            <shadedPattern>${project.groupId}.lib</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>

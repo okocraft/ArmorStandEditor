@@ -31,7 +31,7 @@ public class ReloadCommand extends AbstractCommand {
         }
 
         try {
-            plugin.getLanguageLoader().reload();
+            plugin.getTranslationDirectory().load();
         } catch (IOException e) {
             sender.sendMessage(Messages.COMMAND_RELOAD_FAILURE);
             return CommandResult.EXCEPTION_OCCURRED;
