@@ -1,10 +1,10 @@
 package net.okocraft.armorstandeditor.listener;
 
 import net.kyori.adventure.text.Component;
+import net.okocraft.armorstandeditor.ArmorStandEditorPlugin;
 import net.okocraft.armorstandeditor.editor.PlayerEditorProvider;
 import net.okocraft.armorstandeditor.lang.Messages;
 import net.okocraft.armorstandeditor.permission.Permissions;
-import net.okocraft.armorstandeditor.util.EditItemChecker;
 import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
@@ -19,6 +19,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class ArmorStandListener implements Listener {
+
+    private final ArmorStandEditorPlugin plugin;
+
+    public ArmorStandListener(@NotNull ArmorStandEditorPlugin plugin) {
+        this.plugin = plugin;
+    }
 
     @EventHandler
     public void onManipulate(@NotNull PlayerArmorStandManipulateEvent event) {
@@ -41,7 +47,7 @@ public class ArmorStandListener implements Listener {
 
         var player = (Player) damager;
 
-        if (!EditItemChecker.check(player.getInventory().getItemInMainHand())) {
+        if (!plugin.getEditToolItem().check(player.getInventory().getItemInMainHand())) {
             return;
         }
 
@@ -75,7 +81,7 @@ public class ArmorStandListener implements Listener {
 
         var itemInMainHand = player.getInventory().getItemInMainHand();
 
-        if (EditItemChecker.check(itemInMainHand)) {
+        if (plugin.getEditToolItem().check(itemInMainHand)) {
             if (!player.hasPermission(Permissions.ARMOR_STAND_EDIT)) {
                 player.sendMessage(Messages.EDIT_NO_PERMISSION);
                 return;

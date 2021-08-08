@@ -31,7 +31,7 @@ public class ArmorStandEditorCommand extends AbstractCommand {
         holder = SubCommandHolder.of(
                 new AxisCommand(),
                 new EquipmentCommand(),
-                new ItemCommand(),
+                new ItemCommand(plugin),
                 new ModeCommand(),
                 new ReloadCommand(plugin)
         );

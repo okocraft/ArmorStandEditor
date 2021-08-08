@@ -1,0 +1,7 @@
+tool:
+  allow-normal-flint: true
+  display-name: "&fArmor Stand Edit Tool"
+  lore:
+    - ""
+    - "&eRight click&7 to open the menu or edit the armorstand."
+    - ""

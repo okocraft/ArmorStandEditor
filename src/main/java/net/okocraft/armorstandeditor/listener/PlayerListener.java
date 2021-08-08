@@ -1,9 +1,9 @@
 package net.okocraft.armorstandeditor.listener;
 
+import net.okocraft.armorstandeditor.ArmorStandEditorPlugin;
 import net.okocraft.armorstandeditor.editor.PlayerEditor;
 import net.okocraft.armorstandeditor.editor.PlayerEditorProvider;
 import net.okocraft.armorstandeditor.menu.SelectionMenu;
-import net.okocraft.armorstandeditor.util.EditItemChecker;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -20,6 +20,11 @@ public class PlayerListener implements Listener {
 
     private static final Set<Action> CLICK_ACTIONS =
             Set.of(Action.LEFT_CLICK_AIR, Action.RIGHT_CLICK_AIR, Action.LEFT_CLICK_BLOCK, Action.RIGHT_CLICK_BLOCK);
+    private final ArmorStandEditorPlugin plugin;
+
+    public PlayerListener(@NotNull ArmorStandEditorPlugin plugin) {
+        this.plugin = plugin;
+    }
 
     @EventHandler
     public void onQuit(@NotNull PlayerQuitEvent event) {
@@ -34,7 +39,7 @@ public class PlayerListener implements Listener {
 
         var action = event.getAction();
 
-        if (CLICK_ACTIONS.contains(action) && EditItemChecker.check(event.getItem())) {
+        if (CLICK_ACTIONS.contains(action) && plugin.getEditToolItem().check(event.getItem())) {
             event.setCancelled(true);
 
             var player = event.getPlayer();
@@ -49,7 +54,8 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onScroll(@NotNull PlayerItemHeldEvent e) {
-        if (!e.getPlayer().isSneaking() || !EditItemChecker.check(e.getPlayer().getInventory().getItemInMainHand())) {
+        if (!e.getPlayer().isSneaking() ||
+                !plugin.getEditToolItem().check(e.getPlayer().getInventory().getItemInMainHand())) {
             return;
         }
 

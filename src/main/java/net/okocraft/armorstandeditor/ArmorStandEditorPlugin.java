@@ -19,7 +19,7 @@ import java.util.logging.Level;
 
 public final class ArmorStandEditorPlugin extends JavaPlugin {
 
-    private final LanguageLoader languageLoader = new LanguageLoader(this);
+    private EditToolItem editToolItem;
 
     @Override
     public void onEnable() {
@@ -33,11 +33,13 @@ public final class ArmorStandEditorPlugin extends JavaPlugin {
             return;
         }
 
-        EditItemChecker.setNamespacedKey(this);
+    @Override
+    public void onEnable() {
+        var manager = getServer().getPluginManager();
 
-        manager.registerEvents(new ArmorStandListener(), this);
+        manager.registerEvents(new ArmorStandListener(this), this);
         manager.registerEvents(new InventoryListener(), this);
-        manager.registerEvents(new PlayerListener(), this);
+        manager.registerEvents(new PlayerListener(this), this);
 
         var command = new ArmorStandEditorCommand(this);
 
@@ -46,6 +48,8 @@ public final class ArmorStandEditorPlugin extends JavaPlugin {
                     PaperCommandFactory.register(target, command);
                     AsyncTabCompleteListener.register(this, command);
                 });
+
+        editToolItem = new EditToolItem(this);
     }
 
     @Override
@@ -56,6 +60,10 @@ public final class ArmorStandEditorPlugin extends JavaPlugin {
 
     public @NotNull LanguageLoader getLanguageLoader() {
         return languageLoader;
+    }
+
+    public @NotNull EditToolItem getEditToolItem() {
+        return editToolItem;
     }
 
     public @NotNull Path getJarFile() {

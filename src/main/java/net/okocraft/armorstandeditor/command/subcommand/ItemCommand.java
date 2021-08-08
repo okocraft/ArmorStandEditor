@@ -3,12 +3,10 @@ package net.okocraft.armorstandeditor.command.subcommand;
 import com.github.siroshun09.mccommand.common.AbstractCommand;
 import com.github.siroshun09.mccommand.common.CommandResult;
 import com.github.siroshun09.mccommand.common.context.CommandContext;
+import net.okocraft.armorstandeditor.ArmorStandEditorPlugin;
 import net.okocraft.armorstandeditor.lang.Messages;
 import net.okocraft.armorstandeditor.permission.Permissions;
-import net.okocraft.armorstandeditor.util.EditItemChecker;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -17,8 +15,11 @@ import java.util.Set;
 
 public class ItemCommand extends AbstractCommand {
 
-    public ItemCommand() {
+    private final ArmorStandEditorPlugin plugin;
+
+    public ItemCommand(@NotNull ArmorStandEditorPlugin plugin) {
         super("item", Permissions.COMMAND_PREFIX + "item", Set.of("i"));
+        this.plugin = plugin;
     }
 
     @Override
@@ -28,7 +29,7 @@ public class ItemCommand extends AbstractCommand {
         if (!sender.hasPermission(getPermission())) {
             sender.sendMessage(Messages.COMMAND_NO_PERMISSION);
             return CommandResult.NO_PERMISSION;
-        }
+       }
 
         var object = sender.getOriginalSender();
 
@@ -38,9 +39,7 @@ public class ItemCommand extends AbstractCommand {
         }
 
         var player = (Player) object;
-        var item = new ItemStack(Material.FLINT);
-
-        EditItemChecker.addKey(item);
+        var item = plugin.getEditToolItem().createEditTool();
 
         var success = player.getInventory().addItem(item).isEmpty();
 
