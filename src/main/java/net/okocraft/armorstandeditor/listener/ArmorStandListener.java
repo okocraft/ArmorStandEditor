@@ -61,7 +61,7 @@ public class ArmorStandListener implements Listener {
 
         if (entity instanceof ArmorStand) {
             var editor = PlayerEditorProvider.getEditor(player);
-            editor.getMode().edit(editor, (ArmorStand) entity, false);
+            editor.getMode().edit(editor, (ArmorStand) entity, player.isSneaking());
         }
     }
 
@@ -90,7 +90,7 @@ public class ArmorStandListener implements Listener {
             event.setCancelled(true);
 
             var editor = PlayerEditorProvider.getEditor(player);
-            editor.getMode().edit(editor, (ArmorStand) entity, true);
+            editor.getMode().edit(editor, (ArmorStand) entity, !player.isSneaking());
             return;
         }
 
