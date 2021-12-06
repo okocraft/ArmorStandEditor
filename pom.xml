@@ -59,7 +59,7 @@
         <dependency>
             <groupId>com.github.siroshun09.configapi</groupId>
             <artifactId>configapi-yaml</artifactId>
-            <version>4.3.0</version>
+            <version>4.5.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -71,13 +71,13 @@
         <dependency>
             <groupId>com.github.siroshun09.translationloader</groupId>
             <artifactId>translationloader</artifactId>
-            <version>1.0.0</version>
+            <version>1.2.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>21.0.1</version>
+            <version>23.0.0</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
