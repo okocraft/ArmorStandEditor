@@ -25,7 +25,7 @@ public final class ArmorStandEditorPlugin extends JavaPlugin {
     private final YamlConfiguration configuration =
             YamlConfiguration.create(getDataFolder().toPath().resolve("config.yml"));
     private final TranslationDirectory translationDirectory =
-            new TranslationDirectory(getDataFolder().toPath().resolve("languages"), Key.key("armorstandeditor", "language"));
+            TranslationDirectory.create(getDataFolder().toPath().resolve("languages"), Key.key("armorstandeditor", "language"));
 
     private EditToolItem editToolItem;
 
