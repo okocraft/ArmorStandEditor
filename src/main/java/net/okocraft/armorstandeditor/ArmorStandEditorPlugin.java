@@ -17,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.logging.Level;
 
@@ -25,7 +26,13 @@ public final class ArmorStandEditorPlugin extends JavaPlugin {
     private final YamlConfiguration configuration =
             YamlConfiguration.create(getDataFolder().toPath().resolve("config.yml"));
     private final TranslationDirectory translationDirectory =
-            TranslationDirectory.create(getDataFolder().toPath().resolve("languages"), Key.key("armorstandeditor", "language"));
+            TranslationDirectory
+                    .newBuilder()
+                    .setKey(Key.key("armorstandeditor", "language"))
+                    .setDirectory(getDataFolder().toPath().resolve("languages"))
+                    .setDefaultLocale(Locale.ENGLISH)
+                    .onDirectoryCreated(this::saveDefaultLanguages)
+                    .build();
 
     private EditToolItem editToolItem;
 
@@ -39,7 +46,6 @@ public final class ArmorStandEditorPlugin extends JavaPlugin {
         }
 
         try {
-            translationDirectory.createDirectoryIfNotExists(this::saveDefaultLanguages);
             translationDirectory.load();
         } catch (IOException e) {
             getLogger().log(Level.SEVERE, "Failed to load languages.", e);
