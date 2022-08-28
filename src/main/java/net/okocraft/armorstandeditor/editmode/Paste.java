@@ -42,14 +42,12 @@ class Paste extends AbstractEditMode {
             armorStand.setCustomNameVisible(original.isCustomNameVisible());
             armorStand.customName(original.customName());
 
-            if (armorStandEquipment != null && originalEquipment != null) {
-                armorStandEquipment.setHelmet(originalEquipment.getHelmet());
-                armorStandEquipment.setChestplate(originalEquipment.getChestplate());
-                armorStandEquipment.setLeggings(originalEquipment.getLeggings());
-                armorStandEquipment.setBoots(originalEquipment.getBoots());
-                armorStandEquipment.setItemInMainHand(originalEquipment.getItemInMainHand());
-                armorStandEquipment.setItemInOffHand(originalEquipment.getItemInOffHand());
-            }
+            armorStandEquipment.setHelmet(originalEquipment.getHelmet());
+            armorStandEquipment.setChestplate(originalEquipment.getChestplate());
+            armorStandEquipment.setLeggings(originalEquipment.getLeggings());
+            armorStandEquipment.setBoots(originalEquipment.getBoots());
+            armorStandEquipment.setItemInMainHand(originalEquipment.getItemInMainHand());
+            armorStandEquipment.setItemInOffHand(originalEquipment.getItemInOffHand());
         }
 
         var slot = Component.text(String.valueOf(editor.getSelectedCopySlot()), NamedTextColor.AQUA);

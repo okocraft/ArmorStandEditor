@@ -23,19 +23,17 @@ class Removal extends AbstractEditMode {
         var pi = player.getInventory();
         var returned = pi.addItem(ARMOR_STAND);
 
-        var e = armorStand.getEquipment();
-        if (e != null) {
-            returned.putAll(
-                    pi.addItem(
-                            getOrAir(e.getHelmet()),
-                            getOrAir(e.getChestplate()),
-                            getOrAir(e.getLeggings()),
-                            getOrAir(e.getBoots()),
-                            e.getItemInMainHand(),
-                            e.getItemInOffHand()
-                    )
-            );
-        }
+        var equipment = armorStand.getEquipment();
+        returned.putAll(
+                pi.addItem(
+                        getOrAir(equipment.getHelmet()),
+                        getOrAir(equipment.getChestplate()),
+                        getOrAir(equipment.getLeggings()),
+                        getOrAir(equipment.getBoots()),
+                        equipment.getItemInMainHand(),
+                        equipment.getItemInOffHand()
+                )
+        );
 
         if (!returned.isEmpty()) {
             for (var item : returned.values()) {

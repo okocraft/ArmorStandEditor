@@ -70,14 +70,12 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
         } else {
             EntityEquipment equipment = armorStand.getEquipment();
 
-            if (equipment != null) {
-                inventory.setItem(9, getOrAir(equipment.getHelmet()));
-                inventory.setItem(10, getOrAir(equipment.getChestplate()));
-                inventory.setItem(11, getOrAir(equipment.getLeggings()));
-                inventory.setItem(12, getOrAir(equipment.getBoots()));
-                inventory.setItem(15, equipment.getItemInMainHand());
-                inventory.setItem(16, equipment.getItemInOffHand());
-            }
+            inventory.setItem(9, getOrAir(equipment.getHelmet()));
+            inventory.setItem(10, getOrAir(equipment.getChestplate()));
+            inventory.setItem(11, getOrAir(equipment.getLeggings()));
+            inventory.setItem(12, getOrAir(equipment.getBoots()));
+            inventory.setItem(15, equipment.getItemInMainHand());
+            inventory.setItem(16, equipment.getItemInOffHand());
         }
     }
 
@@ -102,14 +100,12 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
 
         EntityEquipment equipment = armorStand.getEquipment();
 
-        if (equipment != null) {
-            equipment.setHelmet(inventory.getItem(9));
-            equipment.setChestplate(inventory.getItem(10));
-            equipment.setLeggings(inventory.getItem(11));
-            equipment.setBoots(inventory.getItem(12));
-            equipment.setItemInMainHand(inventory.getItem(15));
-            equipment.setItemInOffHand(inventory.getItem(16));
-        }
+        equipment.setHelmet(inventory.getItem(9));
+        equipment.setChestplate(inventory.getItem(10));
+        equipment.setLeggings(inventory.getItem(11));
+        equipment.setBoots(inventory.getItem(12));
+        equipment.setItemInMainHand(inventory.getItem(15));
+        equipment.setItemInOffHand(inventory.getItem(16));
     }
 
     private void setIcons() {
