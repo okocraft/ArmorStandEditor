@@ -19,29 +19,19 @@ public final class LocationCalculator {
 
     private static @NotNull Location add(@NotNull Location original, double distance,
                                          @NotNull PlayerEditor.Axis axis) {
-        switch (axis) {
-            case X:
-                return original.add(distance, 0, 0);
-            case Y:
-                return original.add(0, distance, 0);
-            case Z:
-                return original.add(0, 0, distance);
-            default:
-                return original;
-        }
+        return switch (axis) {
+            case X -> original.add(distance, 0, 0);
+            case Y -> original.add(0, distance, 0);
+            case Z -> original.add(0, 0, distance);
+        };
     }
 
     private static @NotNull Location subtract(@NotNull Location original, double distance,
                                               @NotNull PlayerEditor.Axis axis) {
-        switch (axis) {
-            case X:
-                return original.subtract(distance, 0, 0);
-            case Y:
-                return original.subtract(0, distance, 0);
-            case Z:
-                return original.subtract(0, 0, distance);
-            default:
-                return original;
-        }
+        return switch (axis) {
+            case X -> original.subtract(distance, 0, 0);
+            case Y -> original.subtract(0, distance, 0);
+            case Z -> original.subtract(0, 0, distance);
+        };
     }
 }

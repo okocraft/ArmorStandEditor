@@ -68,29 +68,17 @@ public class PlayerListener implements Listener {
 
         if (newSlot == previousSlot + 1 || (newSlot == 0 && previousSlot == 8)) {
             switch (editor.getAxis()) {
-                case X:
-                    editor.setAxis(PlayerEditor.Axis.Y);
-                    break;
-                case Y:
-                    editor.setAxis(PlayerEditor.Axis.Z);
-                    break;
-                case Z:
-                    editor.setAxis(PlayerEditor.Axis.X);
-                    break;
+                case X -> editor.setAxis(PlayerEditor.Axis.Y);
+                case Y -> editor.setAxis(PlayerEditor.Axis.Z);
+                case Z -> editor.setAxis(PlayerEditor.Axis.X);
             }
         }
 
         if (e.getNewSlot() == e.getPreviousSlot() - 1 || (e.getNewSlot() == 8 && e.getPreviousSlot() == 0)) {
             switch (editor.getAxis()) {
-                case X:
-                    editor.setAxis(PlayerEditor.Axis.Z);
-                    break;
-                case Y:
-                    editor.setAxis(PlayerEditor.Axis.X);
-                    break;
-                case Z:
-                    editor.setAxis(PlayerEditor.Axis.Y);
-                    break;
+                case X -> editor.setAxis(PlayerEditor.Axis.Z);
+                case Y -> editor.setAxis(PlayerEditor.Axis.X);
+                case Z -> editor.setAxis(PlayerEditor.Axis.Y);
             }
         }
     }

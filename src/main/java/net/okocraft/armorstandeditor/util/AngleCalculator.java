@@ -24,31 +24,21 @@ public final class AngleCalculator {
                                            double angleChangeQuantity, @NotNull PlayerEditor.Axis axis) {
         var rad = angleChangeQuantity * RADIAN;
 
-        switch (axis) {
-            case X:
-                return original.add(rad, 0, 0);
-            case Y:
-                return original.add(0, rad, 0);
-            case Z:
-                return original.add(0, 0, rad);
-            default:
-                return original;
-        }
+        return switch (axis) {
+            case X -> original.add(rad, 0, 0);
+            case Y -> original.add(0, rad, 0);
+            case Z -> original.add(0, 0, rad);
+        };
     }
 
     private static @NotNull EulerAngle subtract(@NotNull EulerAngle original,
                                                 double angleChangeQuantity, @NotNull PlayerEditor.Axis axis) {
         var rad = angleChangeQuantity * RADIAN;
 
-        switch (axis) {
-            case X:
-                return original.subtract(rad, 0, 0);
-            case Y:
-                return original.subtract(0, rad, 0);
-            case Z:
-                return original.subtract(0, 0, rad);
-            default:
-                return original;
-        }
+        return switch (axis) {
+            case X -> original.subtract(rad, 0, 0);
+            case Y -> original.subtract(0, rad, 0);
+            case Z -> original.subtract(0, 0, rad);
+        };
     }
 }
