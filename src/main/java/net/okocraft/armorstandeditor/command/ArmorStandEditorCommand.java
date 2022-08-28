@@ -19,7 +19,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class ArmorStandEditorCommand extends AbstractCommand {
 
@@ -82,7 +81,7 @@ public class ArmorStandEditorCommand extends AbstractCommand {
                     .stream()
                     .map(Command::getName)
                     .filter(argumentFilter)
-                    .collect(Collectors.toUnmodifiableList());
+                    .toList();
         }
 
         var sub = holder.search(arguments.get(0));

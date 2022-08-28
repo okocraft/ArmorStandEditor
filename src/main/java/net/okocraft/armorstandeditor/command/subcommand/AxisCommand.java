@@ -18,7 +18,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class AxisCommand extends AbstractCommand {
 
@@ -88,7 +87,7 @@ public class AxisCommand extends AbstractCommand {
             return Arrays.stream(PlayerEditor.Axis.values())
                     .map(PlayerEditor.Axis::getName)
                     .filter(argumentFilter)
-                    .collect(Collectors.toUnmodifiableList());
+                    .toList();
         }
 
         return Collections.emptyList();

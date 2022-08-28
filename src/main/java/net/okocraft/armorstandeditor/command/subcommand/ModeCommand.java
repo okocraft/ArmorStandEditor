@@ -18,7 +18,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class ModeCommand extends AbstractCommand {
 
@@ -93,7 +92,7 @@ public class ModeCommand extends AbstractCommand {
             return Arrays.stream(Mode.values())
                     .map(Mode::getName)
                     .filter(argumentFilter)
-                    .collect(Collectors.toUnmodifiableList());
+                    .toList();
         }
 
         return Collections.emptyList();
