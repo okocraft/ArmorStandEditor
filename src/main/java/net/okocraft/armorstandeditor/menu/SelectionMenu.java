@@ -214,8 +214,7 @@ public class SelectionMenu implements ArmorStandEditorMenu {
                 meta.displayName(translatedName);
                 meta.lore(List.of(translatedLore));
 
-                if (meta instanceof PotionMeta) {
-                    var potionMeta = (PotionMeta) meta;
+                if (meta instanceof PotionMeta potionMeta) {
                     potionMeta.addCustomEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 1, 0), false);
                 }
             }

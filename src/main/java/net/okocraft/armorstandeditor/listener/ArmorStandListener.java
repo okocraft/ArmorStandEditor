@@ -41,11 +41,9 @@ public class ArmorStandListener implements Listener {
 
         var damager = event.getDamager();
 
-        if (!(damager instanceof Player)) {
+        if (!(damager instanceof Player player)) {
             return;
         }
-
-        var player = (Player) damager;
 
         if (!plugin.getEditToolItem().check(player.getInventory().getItemInMainHand())) {
             return;

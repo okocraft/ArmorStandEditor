@@ -31,12 +31,10 @@ public class EquipmentCommand extends AbstractCommand {
 
         var object = sender.getOriginalSender();
 
-        if (!(object instanceof Player)) {
+        if (!(object instanceof Player player)) {
             sender.sendMessage(Messages.COMMAND_ONLY_PLAYER);
             return CommandResult.NOT_PLAYER;
         }
-
-        var player = (Player) object;
 
         var target = player.getTargetEntity(3);
 
