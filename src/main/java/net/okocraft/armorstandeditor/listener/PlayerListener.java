@@ -1,8 +1,11 @@
 package net.okocraft.armorstandeditor.listener;
 
 import net.okocraft.armorstandeditor.ArmorStandEditorPlugin;
+import net.okocraft.armorstandeditor.editmode.Mode;
 import net.okocraft.armorstandeditor.editor.PlayerEditor;
 import net.okocraft.armorstandeditor.editor.PlayerEditorProvider;
+import net.okocraft.armorstandeditor.lang.Components;
+import net.okocraft.armorstandeditor.lang.Messages;
 import net.okocraft.armorstandeditor.menu.SelectionMenu;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.event.EventHandler;
@@ -59,12 +62,18 @@ public class PlayerListener implements Listener {
             return;
         }
 
+        var player = e.getPlayer();
+        var editor = PlayerEditorProvider.getEditor(player);
+
+        if (editor.getMode() != Mode.MOVEMENT &&
+                (editor.getMode() == Mode.RESET_POSE || !editor.getMode().name().endsWith("POSE"))) {
+            return;
+        }
+
         e.setCancelled(true);
 
-        var player = e.getPlayer();
         var newSlot = e.getNewSlot();
         var previousSlot = e.getPreviousSlot();
-        var editor = PlayerEditorProvider.getEditor(player);
 
         if (newSlot == previousSlot + 1 || (newSlot == 0 && previousSlot == 8)) {
             switch (editor.getAxis()) {
@@ -72,14 +81,17 @@ public class PlayerListener implements Listener {
                 case Y -> editor.setAxis(PlayerEditor.Axis.Z);
                 case Z -> editor.setAxis(PlayerEditor.Axis.X);
             }
+            player.sendActionBar(Messages.MENU_CHANGE_AXIS.args(Components.AXIS_NAME.apply(editor.getAxis())));
+            return;
         }
 
-        if (e.getNewSlot() == e.getPreviousSlot() - 1 || (e.getNewSlot() == 8 && e.getPreviousSlot() == 0)) {
+        if (e.getNewSlot() == e.getPreviousSlot() - 1 || (newSlot == 8 && previousSlot == 0)) {
             switch (editor.getAxis()) {
                 case X -> editor.setAxis(PlayerEditor.Axis.Z);
                 case Y -> editor.setAxis(PlayerEditor.Axis.X);
                 case Z -> editor.setAxis(PlayerEditor.Axis.Y);
             }
+            player.sendActionBar(Messages.MENU_CHANGE_AXIS.args(Components.AXIS_NAME.apply(editor.getAxis())));
         }
     }
 }
