@@ -83,6 +83,10 @@ public final class Messages {
 
     public static final Component EDIT_GRAVITY_ON = Component.translatable(KEY_PREFIX + "edit.gravity.on", YELLOW);
 
+    public static final Component EDIT_LOCK = Component.translatable(KEY_PREFIX + "edit.lock.locked", YELLOW);
+
+    public static final Component EDIT_UNLOCK = Component.translatable(KEY_PREFIX + "edit.lock.unlocked", YELLOW);
+
     public static final Component EDIT_GRAVITY_OFF = Component.translatable(KEY_PREFIX + "edit.gravity.off", YELLOW);
 
     public static final TranslatableComponent EDIT_PASTE = Component.translatable(KEY_PREFIX + "edit.paste", YELLOW);

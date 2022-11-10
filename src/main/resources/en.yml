@@ -24,6 +24,9 @@ armorstandeditor:
     gravity:
       'on': "Now affected by gravity."
       'off': "Made the armor stand unaffected by gravity."
+    lock:
+      locked: "Locked the armor stand (Click again to unlock)."
+      unlock: "Unlocked the armor stand."
     paste: "Pasted from slot {0} into the armor stand."
     removal: "Removed armor stand."
     reset-pose: "Reset the pose of the armor stand."
@@ -132,9 +135,14 @@ armorstandeditor:
         copy-slot-4:
           name: "Copy slot 4"
           description: ""
+        lock:
+          name: "Temporary lock the armor stand."
+          description-1: "The locked armor stand will not be edited"
+          description-2: "when clicked in other modes (until unlock or logout)."
         removal:
           name: "Remove armor stand"
-          description: "Removing it will return the armor stand and equipment to your inventory."
+          description-1: "Removing it will return the armor stand"
+          description-2: "and equipment to your inventory."
         help:
           name: "Help"
           description: "Click to show help."
@@ -168,6 +176,7 @@ armorstandeditor:
     head-pose: "Head-pose"
     left-arm-pose: "Left-arm-pose"
     left-leg-pose: "Left-leg-pose"
+    lock: "Lock"
     movement: "Movement"
     none: "None"
     paste: "Paste"

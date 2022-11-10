@@ -15,6 +15,7 @@ public enum Mode {
     HEAD_POSE(new HeadPose()),
     LEFT_ARM_POSE(new LeftArmPose()),
     LEFT_LEG_POSE(new LeftLegPose()),
+    LOCK(new Lock()),
     MOVEMENT(new Movement()),
     PASTE(new Paste()),
     REMOVAL(new Removal()),
@@ -41,6 +42,10 @@ public enum Mode {
     }
 
     public void edit(@NotNull PlayerEditor editor, @NotNull ArmorStand armorStand, boolean reverse) {
+        if (this != LOCK && editor.isLocked(armorStand)) {
+            return;
+        }
+
         if (editor.getPlayer().hasPermission(getPermission())) {
             editMode.edit(editor, armorStand, reverse);
         } else {

@@ -7,12 +7,16 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 public class PlayerEditor {
 
     private final Player player;
     private final Map<Integer, ArmorStand> copiedArmorStands = new HashMap<>();
+    private final Set<UUID> lockedArmorStand = new HashSet<>();
 
     private Axis axis = Axis.X;
     private Mode mode = Mode.NONE;
@@ -74,6 +78,18 @@ public class PlayerEditor {
 
     public @Nullable ArmorStand getSelectedArmorStand() {
         return copiedArmorStands.get(selectedCopySlot);
+    }
+
+    public void lock(@NotNull ArmorStand armorStand) {
+        lockedArmorStand.add(armorStand.getUniqueId());
+    }
+
+    public void unlock(@NotNull ArmorStand armorStand) {
+        lockedArmorStand.remove(armorStand.getUniqueId());
+    }
+
+    public boolean isLocked(@NotNull ArmorStand armorStand) {
+        return lockedArmorStand.contains(armorStand.getUniqueId());
     }
 
     public enum Axis {

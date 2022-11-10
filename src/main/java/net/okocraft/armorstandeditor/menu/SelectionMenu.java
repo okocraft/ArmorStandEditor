@@ -89,7 +89,8 @@ public class SelectionMenu implements ArmorStandEditorMenu {
         map.put(46, new Icon(Material.AZURE_BLUET, "copy-slot-2", editor -> changeCopySlot(editor, 2)));
         map.put(47, new Icon(Material.BLUE_ORCHID, "copy-slot-3", editor -> changeCopySlot(editor, 3)));
         map.put(48, new Icon(Material.PEONY, "copy-slot-4", editor -> changeCopySlot(editor, 4)));
-        map.put(52, new Icon(Material.LAVA_BUCKET, "removal", editor -> changeMode(editor, Mode.REMOVAL)));
+        map.put(51, new Icon(Material.TRIPWIRE_HOOK, "lock", editor -> changeMode(editor, Mode.LOCK), true));
+        map.put(52, new Icon(Material.LAVA_BUCKET, "removal", editor -> changeMode(editor, Mode.REMOVAL), true));
 
         map.put(53,
                 new Icon(
@@ -184,19 +185,29 @@ public class SelectionMenu implements ArmorStandEditorMenu {
         private static final ItemStack AIR = new ItemStack(Material.AIR);
 
         private final String permission;
-        // private final ItemStack icon;
         private final Material material;
         private final Consumer<PlayerEditor> onClick;
         private final TranslatableComponent name;
-        private final TranslatableComponent lore;
+        private final List<TranslatableComponent> lore;
 
         private Icon(@NotNull Material material, @NotNull String name, Consumer<PlayerEditor> onClick) {
+            this(material, name, onClick, false);
+        }
+
+        private Icon(@NotNull Material material, @NotNull String name, @NotNull Consumer<PlayerEditor> onClick, boolean twoLines) {
             this.permission = Permissions.ICON_PREFIX + name;
-            //  this.icon = new ItemStack(material);
             this.material = material;
             this.onClick = onClick;
             this.name = Component.translatable(KEY_PREFIX + name + DISPLAY_NAME_SUFFIX, NamedTextColor.GOLD);
-            this.lore = Component.translatable(KEY_PREFIX + name + LORE_SUFFIX, NamedTextColor.GRAY);
+
+            if (twoLines) {
+                this.lore = List.of(
+                        Component.translatable(KEY_PREFIX + name + LORE_SUFFIX + "-1", NamedTextColor.GRAY),
+                        Component.translatable(KEY_PREFIX + name + LORE_SUFFIX + "-2", NamedTextColor.GRAY)
+                );
+            } else {
+                this.lore = List.of(Component.translatable(KEY_PREFIX + name + LORE_SUFFIX, NamedTextColor.GRAY));
+            }
         }
 
         private @NotNull ItemStack getIcon(@NotNull Player player) {
@@ -209,10 +220,16 @@ public class SelectionMenu implements ArmorStandEditorMenu {
 
             if (meta != null) {
                 var translatedName = GlobalTranslator.render(name, player.locale()).decoration(TextDecoration.ITALIC, false);
-                var translatedLore = GlobalTranslator.render(lore, player.locale()).decoration(TextDecoration.ITALIC, false);
+
 
                 meta.displayName(translatedName);
-                meta.lore(List.of(translatedLore));
+
+                if (lore.size() == 1) {
+                    var translatedLore = GlobalTranslator.render(lore.get(0), player.locale()).decoration(TextDecoration.ITALIC, false);
+                    meta.lore(List.of(translatedLore));
+                } else {
+                    meta.lore(lore.stream().map(line -> GlobalTranslator.render(line, player.locale()).decoration(TextDecoration.ITALIC, false)).toList());
+                }
 
                 if (meta instanceof PotionMeta potionMeta) {
                     potionMeta.addCustomEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 1, 0), false);
