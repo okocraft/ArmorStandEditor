@@ -15,8 +15,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
@@ -114,27 +112,20 @@ public class SelectionMenu implements ArmorStandEditorMenu {
     }
 
     @Override
-    public void onOpen(@NotNull InventoryOpenEvent event) {
-
-    }
-
-    @Override
     public void onClick(@NotNull InventoryClickEvent event) {
-        var editor = PlayerEditorProvider.getEditor(event.getWhoClicked());
-
         event.setCancelled(true);
+
+        if (event.getClickedInventory() != inventory) {
+            return;
+        }
 
         var icon = MENU_MAP.get(event.getSlot());
 
         if (icon != null) {
+            var editor = PlayerEditorProvider.getEditor(event.getWhoClicked());
             icon.onClick(editor);
             player.closeInventory();
         }
-    }
-
-    @Override
-    public void onClose(@NotNull InventoryCloseEvent event) {
-
     }
 
     private void setItems() {

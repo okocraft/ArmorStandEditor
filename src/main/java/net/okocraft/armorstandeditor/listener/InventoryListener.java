@@ -11,15 +11,6 @@ import org.jetbrains.annotations.NotNull;
 public class InventoryListener implements Listener {
 
     @EventHandler
-    public void onOpen(@NotNull InventoryOpenEvent event) {
-        var holder = event.getInventory().getHolder();
-
-        if (holder instanceof ArmorStandEditorMenu) {
-            ((ArmorStandEditorMenu) holder).onOpen(event);
-        }
-    }
-
-    @EventHandler
     public void onClick(@NotNull InventoryClickEvent event) {
         var inventory = event.getClickedInventory();
 
@@ -34,12 +25,4 @@ public class InventoryListener implements Listener {
         }
     }
 
-    @EventHandler
-    public void onClose(@NotNull InventoryCloseEvent event) {
-        var holder = event.getInventory().getHolder();
-
-        if (holder instanceof ArmorStandEditorMenu) {
-            ((ArmorStandEditorMenu) holder).onClose(event);
-        }
-    }
 }
