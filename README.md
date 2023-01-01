@@ -1,7 +1,7 @@
 # ArmorStandEditor
 
 ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/okocraft/ArmorStandEditor)
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/okocraft/ArmorStandEditor/Java%20CI)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/okocraft/ArmorStandEditor/maven.yml?branch=master)
 ![GitHub](https://img.shields.io/github/license/okocraft/ArmorStandEditor)
 
 防具立てを簡単に編集できるようにする Paper プラグインです。
@@ -37,4 +37,4 @@ Tab completion is available for the arguments.
 
 This project is under the GPL-3.0. Please see [LICENSE](LICENSE) for more info.
 
-Copyright © 2021-2022, OKOCRAFT and Siroshun09
+Copyright © 2021-2023, OKOCRAFT and Siroshun09
