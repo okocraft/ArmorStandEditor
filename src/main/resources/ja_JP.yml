@@ -8,9 +8,6 @@ armorstandeditor:
     coarse: "粗く調整"
     fine: "細かく調整"
   wiki-link: "準備中"
-  disable-manipulation:
-    line-1: "防具立てへの右クリックによる装備の変更は無効化されています。"
-    line-2: "防具立てに視点を合わせて /ase equipment を実行してください。"
   edit:
     no-permission: "防具立てを編集する権限がありません。"
     mode-no-permission: "そのモードで防具立てを編集する権限がありません。"

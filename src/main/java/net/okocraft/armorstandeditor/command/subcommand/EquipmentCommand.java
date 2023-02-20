@@ -38,8 +38,8 @@ public class EquipmentCommand extends AbstractCommand {
 
         var target = player.getTargetEntity(3);
 
-        if (target instanceof ArmorStand) {
-            var menu = EquipmentMenuProvider.getMenu((ArmorStand) target);
+        if (target instanceof ArmorStand armorStand) {
+            var menu = EquipmentMenuProvider.getMenu(armorStand);
             player.openInventory(menu.getInventory());
 
             return CommandResult.SUCCESS;
