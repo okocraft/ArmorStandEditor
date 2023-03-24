@@ -8,9 +8,6 @@ armorstandeditor:
     coarse: "Coarse adjustment"
     fine: "Fine adjustment"
   wiki-link: "Preparing..."
-  disable-manipulation:
-    line-1: "Right-clicking on the armor stand to change equipment has been disabled."
-    line-2: "Please /ase equipment by pointing to the armor stand."
   edit:
     no-permission: "You don't have permission to edit the armor stand."
     mode-no-permission: "You don't have permission to edit the armor stand in that mode."

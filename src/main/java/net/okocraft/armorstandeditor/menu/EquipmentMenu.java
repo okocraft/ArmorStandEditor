@@ -4,26 +4,38 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.okocraft.armorstandeditor.lang.Components;
+import net.okocraft.armorstandeditor.util.TaskScheduler;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.HumanEntity;
+import org.bukkit.event.Cancellable;
+import org.bukkit.event.block.BlockDispenseArmorEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 public class EquipmentMenu implements ArmorStandEditorMenu {
 
-    private static final Set<Integer> EDITABLE_SLOTS = Set.of(9, 10, 11, 12, 15, 16);
-    //  private static final String ICON_KEY_PREFIX = "armorstandeditor.menu.equipment.icon.";
-
+    private static final EquipmentSlot[] EQUIPMENT_SLOTS = EquipmentSlot.values();
+    private static final int[] MENU_EQUIPMENT_SLOT_INDEXES = Arrays.stream(EQUIPMENT_SLOTS).mapToInt(EquipmentMenu::toMenuIndex).toArray();
+    private static final Set<Integer> MODIFIABLE_SLOTS = Arrays.stream(MENU_EQUIPMENT_SLOT_INDEXES).boxed().collect(Collectors.toUnmodifiableSet());
     private static final ItemStack AIR = new ItemStack(Material.AIR);
     private static final ItemStack HELMET = new ItemStack(Material.LEATHER_HELMET);
     private static final ItemStack CHEST_PLATE = new ItemStack(Material.LEATHER_CHESTPLATE);
@@ -34,23 +46,28 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
     private static final ItemStack DISABLED = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
 
     static {
-        setName(HELMET, "Helmet");
-        setName(CHEST_PLATE, "Chest-plate");
-        setName(LEGGINGS, "Leggings");
-        setName(BOOTS, "Boots");
-        setName(RIGHT_HAND, "Right-hand");
-        setName(LEFT_HAND, "Left-hand");
-        setName(DISABLED, "");
+        setItemName(HELMET, "Helmet");
+        setItemName(CHEST_PLATE, "Chest-plate");
+        setItemName(LEGGINGS, "Leggings");
+        setItemName(BOOTS, "Boots");
+        setItemName(RIGHT_HAND, "Right-hand");
+        setItemName(LEFT_HAND, "Left-hand");
+        setItemName(DISABLED, "");
     }
 
-    private final ArmorStand armorStand;
     private final Inventory inventory;
+    private final UUID armorStandUuid;
+    private final NamespacedKey worldKey;
+    private final ItemStack[] knownEquipments = new ItemStack[EQUIPMENT_SLOTS.length];
+    private final AtomicBoolean blockModifying = new AtomicBoolean();
 
     public EquipmentMenu(@NotNull ArmorStand armorStand) {
-        this.armorStand = armorStand;
         this.inventory = Bukkit.createInventory(this, 18, Components.EQUIPMENT_MENU_TITLE);
+        this.armorStandUuid = armorStand.getUniqueId();
+        this.worldKey = armorStand.getWorld().getKey();
 
-        setIcons();
+        initMenu(inventory);
+        renderItems(armorStand.getEquipment());
     }
 
     @Override
@@ -59,56 +76,158 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
     }
 
     @Override
-    public void onOpen(@NotNull InventoryOpenEvent event) {
-        if (armorStand.isDead()) {
-            inventory.setItem(9, null);
-            inventory.setItem(10, null);
-            inventory.setItem(11, null);
-            inventory.setItem(12, null);
-            inventory.setItem(15, null);
-            inventory.setItem(16, null);
-        } else {
-            EntityEquipment equipment = armorStand.getEquipment();
-
-            inventory.setItem(9, getOrAir(equipment.getHelmet()));
-            inventory.setItem(10, getOrAir(equipment.getChestplate()));
-            inventory.setItem(11, getOrAir(equipment.getLeggings()));
-            inventory.setItem(12, getOrAir(equipment.getBoots()));
-            inventory.setItem(15, equipment.getItemInMainHand());
-            inventory.setItem(16, equipment.getItemInOffHand());
-        }
-    }
-
-    @Override
     public void onClick(@NotNull InventoryClickEvent event) {
-        if (!EDITABLE_SLOTS.contains(event.getSlot())) {
+        if (inventory.equals(event.getClickedInventory()) && !MODIFIABLE_SLOTS.contains(event.getSlot())) {
+            event.setCancelled(true);
+        }
+
+        processEvent(event);
+    }
+
+    public void onDrag(@NotNull InventoryDragEvent event) {
+        for (var rawSlot : event.getNewItems().keySet()) {
+            if (!inventory.equals(event.getView().getInventory(rawSlot))) {
+                continue;
+            }
+
+            if (!MODIFIABLE_SLOTS.contains(event.getView().convertSlot(rawSlot))) {
+                event.setCancelled(true);
+                return;
+            }
+        }
+
+        processEvent(event);
+    }
+
+    public void handleManipulateEvent(@NotNull PlayerArmorStandManipulateEvent event) {
+        if (blockModifying.compareAndSet(false, true)) {
+            TaskScheduler.runNextTick(this::renderItemsIfArmorStandExist);
+        } else {
+            event.setCancelled(true);
+        }
+    }
+
+    public void handleDispenseArmorEvent(@NotNull BlockDispenseArmorEvent event) {
+        if (blockModifying.compareAndSet(false, true)) {
+            TaskScheduler.runNextTick(this::renderItemsIfArmorStandExist);
+        } else {
+            event.setCancelled(true);
+        }
+    }
+
+    private void processEvent(@NotNull Cancellable event) {
+        if (blockModifying.get()) {
             event.setCancelled(true);
             return;
         }
 
-        if (armorStand.isDead()) {
-            event.setCancelled(true);
-            event.getWhoClicked().closeInventory();
-        }
-    }
+        var armorStand = getArmorStand();
 
-    @Override
-    public void onClose(@NotNull InventoryCloseEvent event) {
-        if (armorStand.isDead()) {
+        if (armorStand == null || armorStand.isDead()) {
+            event.setCancelled(true);
+            TaskScheduler.runNextTick(this::closeMenu);
             return;
         }
 
-        EntityEquipment equipment = armorStand.getEquipment();
+        var equipment = armorStand.getEquipment();
 
-        equipment.setHelmet(inventory.getItem(9));
-        equipment.setChestplate(inventory.getItem(10));
-        equipment.setLeggings(inventory.getItem(11));
-        equipment.setBoots(inventory.getItem(12));
-        equipment.setItemInMainHand(inventory.getItem(15));
-        equipment.setItemInOffHand(inventory.getItem(16));
+        if (hasUnknownEquipment(equipment)) {
+            event.setCancelled(true);
+            renderItems(equipment);
+            return;
+        }
+
+        blockModifying.set(true);
+        TaskScheduler.runNextTick(this::applyEquipmentsIfModified);
     }
 
-    private void setIcons() {
+    public void renderItems(@NotNull EntityEquipment equipment) {
+        for (int i = 0; i < EQUIPMENT_SLOTS.length; i++) {
+            var slot = EQUIPMENT_SLOTS[i];
+            var item = equipment.getItem(slot).clone();
+
+            knownEquipments[i] = item;
+            inventory.setItem(MENU_EQUIPMENT_SLOT_INDEXES[i], item);
+        }
+    }
+
+    public void closeMenu() {
+        List.copyOf(inventory.getViewers()).forEach(HumanEntity::closeInventory);
+    }
+
+    private void renderItemsIfArmorStandExist() {
+        var armorStand = getArmorStand();
+
+        if (armorStand == null || armorStand.isDead()) {
+            return;
+        }
+
+        renderItems(armorStand.getEquipment());
+        blockModifying.set(false);
+    }
+
+    private void applyEquipmentsIfModified() {
+        var armorStand = getArmorStand();
+
+        if (armorStand == null || armorStand.isDead()) { // If this happens, duplicate/lost items may occur. However, there is nothing we can do.
+            return;
+        }
+
+        var equipment = armorStand.getEquipment();
+
+        for (int i = 0; i < EQUIPMENT_SLOTS.length; i++) {
+            var inventoryItem = getInventoryItem(i).clone();
+            var knownEquipment = getKnownEquipment(i);
+
+            if (!inventoryItem.equals(knownEquipment)) {
+                knownEquipments[i] = inventoryItem;
+                equipment.setItem(EQUIPMENT_SLOTS[i], inventoryItem);
+            }
+        }
+
+        blockModifying.set(false);
+    }
+
+    private @Nullable ArmorStand getArmorStand() {
+        var world = Bukkit.getWorld(worldKey);
+
+        if (world == null) {
+            return null;
+        }
+
+        return world.getEntity(armorStandUuid) instanceof ArmorStand armorStand ? armorStand : null;
+    }
+
+    private boolean hasUnknownEquipment(@NotNull EntityEquipment equipment) {
+        for (int i = 0; i < EQUIPMENT_SLOTS.length; i++) {
+            if (!equipment.getItem(EQUIPMENT_SLOTS[i]).equals(getKnownEquipment(i))) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private @NotNull ItemStack getKnownEquipment(int i) {
+        return Objects.requireNonNullElse(knownEquipments[i], AIR);
+    }
+
+    private @NotNull ItemStack getInventoryItem(int i) {
+        return Objects.requireNonNullElse(inventory.getItem(MENU_EQUIPMENT_SLOT_INDEXES[i]), AIR);
+    }
+
+    private static int toMenuIndex(@NotNull EquipmentSlot slot) {
+        return switch (slot) {
+            case HEAD -> 9;
+            case CHEST -> 10;
+            case LEGS -> 11;
+            case FEET -> 12;
+            case HAND -> 15;
+            case OFF_HAND -> 16;
+        };
+    }
+
+    private static void initMenu(@NotNull Inventory inventory) {
         inventory.setItem(0, HELMET);
         inventory.setItem(1, CHEST_PLATE);
         inventory.setItem(2, LEGGINGS);
@@ -123,11 +242,7 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
         inventory.setItem(17, DISABLED);
     }
 
-    private static @NotNull ItemStack getOrAir(@Nullable ItemStack item) {
-        return item != null ? item : AIR;
-    }
-
-    private static void setName(@NotNull ItemStack item, @NotNull String name) {
+    private static void setItemName(@NotNull ItemStack item, @NotNull String name) {
         ItemMeta meta = item.getItemMeta();
 
         if (meta == null) {

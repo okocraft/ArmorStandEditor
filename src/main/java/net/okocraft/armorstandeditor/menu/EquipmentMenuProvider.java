@@ -2,6 +2,7 @@ package net.okocraft.armorstandeditor.menu;
 
 import org.bukkit.entity.ArmorStand;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,14 +17,14 @@ public final class EquipmentMenuProvider {
     }
 
     public static @NotNull EquipmentMenu getMenu(@NotNull ArmorStand armorStand) {
-        var uuid = armorStand.getUniqueId();
-        var menu = MENU_MAP.get(uuid);
+        return MENU_MAP.computeIfAbsent(armorStand.getUniqueId(), u -> new EquipmentMenu(armorStand));
+    }
 
-        if (menu == null) {
-            menu = new EquipmentMenu(armorStand);
-            MENU_MAP.put(uuid, menu);
-        }
+    public static @Nullable EquipmentMenu getMenuOrNull(@NotNull ArmorStand armorStand) {
+        return MENU_MAP.get(armorStand.getUniqueId());
+    }
 
-        return menu;
+    public static @Nullable EquipmentMenu removeMenu(@NotNull ArmorStand armorStand) {
+        return MENU_MAP.remove(armorStand.getUniqueId());
     }
 }

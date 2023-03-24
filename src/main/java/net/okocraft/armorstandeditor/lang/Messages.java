@@ -14,12 +14,6 @@ public final class Messages {
         throw new UnsupportedOperationException();
     }
 
-    public static final Component DISABLE_MANIPULATION_1 =
-            Components.PREFIX.append(Component.translatable(KEY_PREFIX + "disable-manipulation.line-1"));
-
-    public static final Component DISABLE_MANIPULATION_2 =
-            Components.PREFIX.append(Component.translatable(KEY_PREFIX + "disable-manipulation.line-2"));
-
     public static final Component EDIT_NO_PERMISSION =
             Components.PREFIX.append(Component.translatable(KEY_PREFIX + "edit.no-permission", RED));
 

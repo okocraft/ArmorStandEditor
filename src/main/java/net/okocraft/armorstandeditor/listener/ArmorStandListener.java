@@ -1,9 +1,11 @@
 package net.okocraft.armorstandeditor.listener;
 
+import com.destroystokyo.paper.event.entity.EntityRemoveFromWorldEvent;
 import net.kyori.adventure.text.Component;
 import net.okocraft.armorstandeditor.ArmorStandEditorPlugin;
 import net.okocraft.armorstandeditor.editor.PlayerEditorProvider;
 import net.okocraft.armorstandeditor.lang.Messages;
+import net.okocraft.armorstandeditor.menu.EquipmentMenuProvider;
 import net.okocraft.armorstandeditor.permission.Permissions;
 import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
@@ -12,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockDispenseArmorEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
@@ -26,11 +29,36 @@ public class ArmorStandListener implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onManipulate(@NotNull PlayerArmorStandManipulateEvent event) {
-        event.setCancelled(true);
-        event.getPlayer().sendMessage(Messages.DISABLE_MANIPULATION_1);
-        event.getPlayer().sendMessage(Messages.DISABLE_MANIPULATION_2);
+        var armorStand = event.getRightClicked();
+        var menu = EquipmentMenuProvider.getMenuOrNull(armorStand);
+
+        if (menu != null) {
+            menu.handleManipulateEvent(event);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onDispenseArmor(@NotNull BlockDispenseArmorEvent event){
+        if (event.getTargetEntity() instanceof ArmorStand armorStand) {
+            var menu = EquipmentMenuProvider.getMenuOrNull(armorStand);
+
+            if (menu != null) {
+                menu.handleDispenseArmorEvent(event);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onRemove(@NotNull EntityRemoveFromWorldEvent event) {
+        if (event.getEntity() instanceof ArmorStand armorStand) {
+            var menu = EquipmentMenuProvider.removeMenu(armorStand);
+
+            if (menu != null) {
+                menu.closeMenu();
+            }
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
