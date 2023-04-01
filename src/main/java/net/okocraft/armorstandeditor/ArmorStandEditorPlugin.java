@@ -1,9 +1,12 @@
 package net.okocraft.armorstandeditor;
 
+import com.github.siroshun09.configapi.api.Configuration;
 import com.github.siroshun09.configapi.api.util.ResourceUtils;
 import com.github.siroshun09.configapi.yaml.YamlConfiguration;
 import com.github.siroshun09.mccommand.paper.PaperCommandFactory;
 import com.github.siroshun09.mccommand.paper.listener.AsyncTabCompleteListener;
+import com.github.siroshun09.translationloader.ConfigurationLoader;
+import com.github.siroshun09.translationloader.TranslationLoader;
 import com.github.siroshun09.translationloader.directory.TranslationDirectory;
 import net.kyori.adventure.key.Key;
 import net.okocraft.armorstandeditor.command.ArmorStandEditorCommand;
@@ -16,11 +19,13 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.jar.JarFile;
 import java.util.logging.Level;
 
 public final class ArmorStandEditorPlugin extends JavaPlugin {
@@ -33,7 +38,9 @@ public final class ArmorStandEditorPlugin extends JavaPlugin {
                     .setKey(Key.key("armorstandeditor", "language"))
                     .setDirectory(getDataFolder().toPath().resolve("languages"))
                     .setDefaultLocale(Locale.ENGLISH)
+                    .setVersion(getDescription().getVersion())
                     .onDirectoryCreated(this::saveDefaultLanguages)
+                    .setTranslationLoaderCreator(this::getBuiltinTranslation)
                     .build();
 
     private EditToolItem editToolItem;
@@ -105,5 +112,25 @@ public final class ArmorStandEditorPlugin extends JavaPlugin {
         var japaneseFile = directory.resolve(japaneseFileName);
 
         ResourceUtils.copyFromJarIfNotExists(jarFile, japaneseFileName, japaneseFile);
+    }
+
+    private @Nullable TranslationLoader getBuiltinTranslation(@NotNull Locale locale) throws IOException {
+        var strLocale = locale.toString();
+
+        if (!(strLocale.equals("en") || strLocale.equals("ja_JP"))) {
+            return null;
+        }
+
+        Configuration source;
+
+        try (var jar = new JarFile(getFile(), false);
+             var input = ResourceUtils.getInputStreamFromJar(jar, strLocale + ".yml")) {
+            source = YamlConfiguration.loadFromInputStream(input);
+        }
+
+        var loader = ConfigurationLoader.create(locale, source);
+        loader.load();
+
+        return loader;
     }
 }
