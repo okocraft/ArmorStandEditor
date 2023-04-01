@@ -1,11 +1,13 @@
 package net.okocraft.armorstandeditor.editor;
 
+import net.okocraft.armorstandeditor.data.ArmorStandData;
 import net.okocraft.armorstandeditor.editmode.Mode;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -15,7 +17,7 @@ import java.util.UUID;
 public class PlayerEditor {
 
     private final Player player;
-    private final Map<Integer, ArmorStand> copiedArmorStands = new HashMap<>();
+    private final Map<Integer, ArmorStandData> copiedArmorStands = Collections.synchronizedMap(new HashMap<>());
     private final Set<UUID> lockedArmorStand = new HashSet<>();
 
     private Axis axis = Axis.X;
@@ -73,10 +75,10 @@ public class PlayerEditor {
     }
 
     public void copy(@NotNull ArmorStand source) {
-        copiedArmorStands.put(selectedCopySlot, source);
+        copiedArmorStands.put(selectedCopySlot, ArmorStandData.create(source));
     }
 
-    public @Nullable ArmorStand getSelectedArmorStand() {
+    public @Nullable ArmorStandData getSelectedArmorStand() {
         return copiedArmorStands.get(selectedCopySlot);
     }
 
