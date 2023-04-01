@@ -97,6 +97,10 @@ public final class Messages {
 
     public static final Component EDIT_VISIBLE_OFF = Component.translatable(KEY_PREFIX + "edit.visible.off", YELLOW);
 
+    public static final Component EDIT_CUSTOM_NAME_VISIBLE_ON = Component.translatable(KEY_PREFIX + "edit.custom-name-visible.on", YELLOW);
+
+    public static final Component EDIT_CUSTOM_NAME_VISIBLE_OFF = Component.translatable(KEY_PREFIX + "edit.custom-name-visible.off", YELLOW);
+
     public static final TranslatableComponent MENU_CHANGE_AXIS =
             Component.translatable(KEY_PREFIX + "menu.selection.change.axis", YELLOW);
 

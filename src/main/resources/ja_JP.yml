@@ -18,6 +18,9 @@ armorstandeditor:
       'on': "土台を表示しました"
       'off': "土台を非表示にしました"
     copy: "防具立てをスロット {0} にコピーしました"
+    custom-name-visible:
+      'on': "名前を表示しました"
+      'off': "名前を非表示にしました"
     gravity:
       'on': "重力の影響を受けるようにしました"
       'off': "重力の影響を受けないようにしました"
@@ -108,6 +111,9 @@ armorstandeditor:
         equipment:
           name: "装備を編集"
           description: ""
+        custom-name-visible:
+          name: "名前の表示を変更"
+          description: ""
         gravity:
           name: "重力の影響の有無を変更"
           description: ""
@@ -168,6 +174,7 @@ armorstandeditor:
     base-plate: "土台の表示"
     body-pose: "胴体の向き"
     copy: "コピー"
+    custom-name-visible: "名前の表示"
     equipment: "装備の編集"
     gravity: "重力の影響の有無"
     head-pose: "頭の向き"

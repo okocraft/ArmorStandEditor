@@ -10,6 +10,7 @@ public enum Mode {
     BASE_PLATE(new BasePlate()),
     BODY_POSE(new BodyPose()),
     COPY(new Copy()),
+    CUSTOM_NAME_VISIBLE(new CustomNameVisible()),
     EQUIPMENT(new Equipment()),
     GRAVITY(new Gravity()),
     HEAD_POSE(new HeadPose()),

@@ -79,6 +79,7 @@ public class SelectionMenu implements ArmorStandEditorMenu {
         map.put(27, new Icon(Material.STICK, "right-leg-pose", editor -> changeMode(editor, Mode.RIGHT_LEG_POSE)));
         map.put(28, new Icon(Material.CHEST, "equipment", editor -> changeMode(editor, Mode.EQUIPMENT)));
         map.put(29, new Icon(Material.STICK, "left-leg-pose", editor -> changeMode(editor, Mode.LEFT_LEG_POSE)));
+        map.put(33, new Icon(Material.NAME_TAG, "custom-name-visible", editor -> changeMode(editor, Mode.CUSTOM_NAME_VISIBLE)));
         map.put(34, new Icon(Material.SAND, "gravity", editor -> changeMode(editor, Mode.GRAVITY)));
         map.put(35, new Icon(Material.SMOOTH_STONE_SLAB, "base-plate", editor -> changeMode(editor, Mode.BASE_PLATE)));
         map.put(37, new Icon(Material.WRITABLE_BOOK, "copy", editor -> changeMode(editor, Mode.COPY)));
