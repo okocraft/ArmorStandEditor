@@ -5,6 +5,7 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -12,7 +13,7 @@ import java.util.UUID;
 
 public final class PlayerEditorProvider {
 
-    private static final Map<UUID, PlayerEditor> EDITOR_MAP = new HashMap<>();
+    private static final Map<UUID, PlayerEditor> EDITOR_MAP = Collections.synchronizedMap(new HashMap<>());
 
     private PlayerEditorProvider() {
         throw new UnsupportedOperationException();

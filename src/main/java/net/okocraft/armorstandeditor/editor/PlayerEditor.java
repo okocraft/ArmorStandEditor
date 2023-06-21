@@ -18,7 +18,7 @@ public class PlayerEditor {
 
     private final Player player;
     private final Map<Integer, ArmorStandData> copiedArmorStands = Collections.synchronizedMap(new HashMap<>());
-    private final Set<UUID> lockedArmorStand = new HashSet<>();
+    private final Set<UUID> lockedArmorStand = Collections.synchronizedSet(new HashSet<>());
 
     private Axis axis = Axis.X;
     private Mode mode = Mode.NONE;

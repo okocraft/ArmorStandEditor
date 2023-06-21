@@ -101,7 +101,7 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
 
     public void handleManipulateEvent(@NotNull PlayerArmorStandManipulateEvent event) {
         if (blockModifying.compareAndSet(false, true)) {
-            TaskScheduler.runNextTick(this::renderItemsIfArmorStandExist);
+            TaskScheduler.scheduleEntityTask(this::getArmorStand, this::renderItemsIfArmorStandExist);
         } else {
             event.setCancelled(true);
         }
@@ -109,7 +109,7 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
 
     public void handleDispenseArmorEvent(@NotNull BlockDispenseArmorEvent event) {
         if (blockModifying.compareAndSet(false, true)) {
-            TaskScheduler.runNextTick(this::renderItemsIfArmorStandExist);
+            TaskScheduler.scheduleEntityTask(this::getArmorStand, this::renderItemsIfArmorStandExist);
         } else {
             event.setCancelled(true);
         }
@@ -125,20 +125,22 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
 
         if (armorStand == null || armorStand.isDead()) {
             event.setCancelled(true);
-            TaskScheduler.runNextTick(this::closeMenu);
+            closeMenu();
             return;
         }
+
+        blockModifying.set(true);
 
         var equipment = armorStand.getEquipment();
 
         if (hasUnknownEquipment(equipment)) {
             event.setCancelled(true);
             renderItems(equipment);
+            blockModifying.set(false);
             return;
         }
 
-        blockModifying.set(true);
-        TaskScheduler.runNextTick(this::applyEquipmentsIfModified);
+        TaskScheduler.scheduleEntityTask(this::getArmorStand, this::applyEquipmentsIfModified);
     }
 
     public void renderItems(@NotNull EntityEquipment equipment) {
@@ -152,23 +154,18 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
     }
 
     public void closeMenu() {
-        List.copyOf(inventory.getViewers()).forEach(HumanEntity::closeInventory);
+        blockModifying.set(true);
+        TaskScheduler.scheduleEntityTasks(() -> List.copyOf(inventory.getViewers()), HumanEntity::closeInventory);
     }
 
-    private void renderItemsIfArmorStandExist() {
-        var armorStand = getArmorStand();
-
-        if (armorStand == null || armorStand.isDead()) {
-            return;
+    private void renderItemsIfArmorStandExist(@Nullable ArmorStand armorStand) {
+        if (armorStand != null && !armorStand.isDead()) {
+            renderItems(armorStand.getEquipment());
+            blockModifying.set(false);
         }
-
-        renderItems(armorStand.getEquipment());
-        blockModifying.set(false);
     }
 
-    private void applyEquipmentsIfModified() {
-        var armorStand = getArmorStand();
-
+    private void applyEquipmentsIfModified(@Nullable ArmorStand armorStand) {
         if (armorStand == null || armorStand.isDead()) { // If this happens, duplicate/lost items may occur. However, there is nothing we can do.
             return;
         }
@@ -190,12 +187,7 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
 
     private @Nullable ArmorStand getArmorStand() {
         var world = Bukkit.getWorld(worldKey);
-
-        if (world == null) {
-            return null;
-        }
-
-        return world.getEntity(armorStandUuid) instanceof ArmorStand armorStand ? armorStand : null;
+        return world != null && world.getEntity(armorStandUuid) instanceof ArmorStand armorStand ? armorStand : null;
     }
 
     private boolean hasUnknownEquipment(@NotNull EntityEquipment equipment) {
