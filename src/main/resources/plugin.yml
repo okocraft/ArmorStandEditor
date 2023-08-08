@@ -3,6 +3,7 @@ main: net.okocraft.armorstandeditor.ArmorStandEditorPlugin
 version: ${project.version}
 author: "Siroshun09"
 api-version: "1.16"
+folia-supported: true
 commands:
   armorstandeditor:
     aliases: ["ase", "aseditor"]

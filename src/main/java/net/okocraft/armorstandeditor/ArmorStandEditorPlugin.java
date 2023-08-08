@@ -15,6 +15,7 @@ import net.okocraft.armorstandeditor.listener.ArmorStandListener;
 import net.okocraft.armorstandeditor.listener.InventoryListener;
 import net.okocraft.armorstandeditor.listener.PlayerListener;
 import net.okocraft.armorstandeditor.menu.ArmorStandEditorMenu;
+import net.okocraft.armorstandeditor.util.TaskScheduler;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -84,7 +85,7 @@ public final class ArmorStandEditorPlugin extends JavaPlugin {
     public void onDisable() {
         getServer().getOnlinePlayers().stream().filter(player -> player.getOpenInventory().getTopInventory().getHolder() instanceof ArmorStandEditorMenu).forEach(HumanEntity::closeInventory);
         HandlerList.unregisterAll(this);
-        getServer().getScheduler().cancelTasks(this);
+        TaskScheduler.cancelTasks();
         translationDirectory.unload();
     }
 

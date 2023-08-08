@@ -1,7 +1,9 @@
 package net.okocraft.armorstandeditor.editmode;
 
 import net.okocraft.armorstandeditor.editor.PlayerEditor;
+import net.okocraft.armorstandeditor.util.FoliaSyncTeleporter;
 import net.okocraft.armorstandeditor.util.LocationCalculator;
+import net.okocraft.armorstandeditor.util.TaskScheduler;
 import org.bukkit.entity.ArmorStand;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,6 +22,10 @@ class Movement extends AbstractEditMode {
                 reverse
         );
 
-        armorStand.teleport(location);
+        if (TaskScheduler.FOLIA) {
+            FoliaSyncTeleporter.teleport(armorStand, location);
+        } else {
+            armorStand.teleport(location);
+        }
     }
 }

@@ -4,13 +4,14 @@ import org.bukkit.entity.ArmorStand;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 public final class EquipmentMenuProvider {
 
-    private static final Map<UUID, EquipmentMenu> MENU_MAP = new HashMap<>();
+    private static final Map<UUID, EquipmentMenu> MENU_MAP = Collections.synchronizedMap(new HashMap<>());
 
     private EquipmentMenuProvider() {
         throw new UnsupportedOperationException();
