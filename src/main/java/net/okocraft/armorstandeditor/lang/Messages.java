@@ -47,11 +47,17 @@ public final class Messages {
     public static final TranslatableComponent COMMAND_AXIS_INVALID_ARGUMENT =
             Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.axis.invalid-argument", RED));
 
+    public static final TranslatableComponent COMMAND_AXIS_TOOLTIP =
+            Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.axis.tooltip", GRAY));
+
     public static final TranslatableComponent COMMAND_AXIS_CHANGE =
             Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.axis.change", GRAY));
 
     public static final TranslatableComponent COMMAND_MODE_INVALID_ARGUMENT =
             Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.mode.invalid-argument", RED));
+
+    public static final TranslatableComponent COMMAND_MODE_TOOLTIP =
+            Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.mode.tooltip", GRAY));
 
     public static final TranslatableComponent COMMAND_MODE_CHANGE =
             Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.mode.change", GRAY));

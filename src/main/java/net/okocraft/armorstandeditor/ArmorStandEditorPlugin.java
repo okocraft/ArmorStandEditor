@@ -3,11 +3,10 @@ package net.okocraft.armorstandeditor;
 import com.github.siroshun09.configapi.api.Configuration;
 import com.github.siroshun09.configapi.api.util.ResourceUtils;
 import com.github.siroshun09.configapi.yaml.YamlConfiguration;
-import com.github.siroshun09.mccommand.paper.PaperCommandFactory;
-import com.github.siroshun09.mccommand.paper.listener.AsyncTabCompleteListener;
 import com.github.siroshun09.translationloader.ConfigurationLoader;
 import com.github.siroshun09.translationloader.TranslationLoader;
 import com.github.siroshun09.translationloader.directory.TranslationDirectory;
+import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import net.kyori.adventure.key.Key;
 import net.okocraft.armorstandeditor.command.ArmorStandEditorCommand;
 import net.okocraft.armorstandeditor.item.EditToolItem;
@@ -25,7 +24,6 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Locale;
-import java.util.Optional;
 import java.util.jar.JarFile;
 import java.util.logging.Level;
 
@@ -70,15 +68,8 @@ public final class ArmorStandEditorPlugin extends JavaPlugin {
         manager.registerEvents(new InventoryListener(), this);
         manager.registerEvents(new PlayerListener(this), this);
 
-        var command = new ArmorStandEditorCommand(this);
-
-        Optional.ofNullable(getCommand("armorstandeditor"))
-                .ifPresent(target -> {
-                    PaperCommandFactory.register(target, command);
-                    AsyncTabCompleteListener.register(this, command);
-                });
-
-        editToolItem = new EditToolItem(this);
+        this.editToolItem = new EditToolItem(this);
+        this.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, event -> ArmorStandEditorCommand.register(event.registrar(), this));
     }
 
     @Override
