@@ -161,9 +161,11 @@ armorstandeditor:
       failure: "言語ファイルの再読み込みに失敗しました。"
     axis:
       invalid-argument: "指定された軸は存在しません: "
+      tooltip: "編集時の軸: {0}"
       change: "軸を変更しました: "
     mode:
       invalid-argument: "指定された編集モードは存在しません: "
+      tooltip: "編集モード: {0}"
       change: "編集モードを変更しました: "
       no-permission: "そのモードに変更する権限がありません。"
     item:

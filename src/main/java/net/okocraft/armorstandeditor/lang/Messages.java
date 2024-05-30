@@ -2,11 +2,17 @@ package net.okocraft.armorstandeditor.lang;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
+import net.okocraft.armorstandeditor.editor.EditMode;
+import net.okocraft.armorstandeditor.editor.PlayerEditor;
+
+import java.util.function.Function;
 
 import static net.kyori.adventure.text.format.NamedTextColor.GRAY;
 import static net.kyori.adventure.text.format.NamedTextColor.RED;
 import static net.kyori.adventure.text.format.NamedTextColor.YELLOW;
+import static net.okocraft.armorstandeditor.lang.Components.AXIS_NAME;
 import static net.okocraft.armorstandeditor.lang.Components.KEY_PREFIX;
+import static net.okocraft.armorstandeditor.lang.Components.MODE_NAME;
 
 public final class Messages {
 
@@ -47,11 +53,17 @@ public final class Messages {
     public static final TranslatableComponent COMMAND_AXIS_INVALID_ARGUMENT =
             Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.axis.invalid-argument", RED));
 
+    public static final Function<PlayerEditor.Axis, Component> COMMAND_AXIS_TOOLTIP =
+            axis -> Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.axis.tooltip", GRAY).arguments(AXIS_NAME.apply(axis)));
+
     public static final TranslatableComponent COMMAND_AXIS_CHANGE =
             Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.axis.change", GRAY));
 
     public static final TranslatableComponent COMMAND_MODE_INVALID_ARGUMENT =
             Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.mode.invalid-argument", RED));
+
+    public static final Function<EditMode, Component> COMMAND_MODE_TOOLTIP =
+            mode -> Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.mode.tooltip", GRAY).arguments(MODE_NAME.apply(mode)));
 
     public static final TranslatableComponent COMMAND_MODE_CHANGE =
             Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.mode.change", GRAY));

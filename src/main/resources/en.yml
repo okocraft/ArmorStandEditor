@@ -161,9 +161,11 @@ armorstandeditor:
       failure: "Failed to reload the language file."
     axis:
       invalid-argument: "The specified axis does not exist: "
+      tooltip: "The axis for editing: {0}"
       change: "The axis has been changed: "
     mode:
       invalid-argument: "The specified edit mode does not exist: "
+      tooltip: "The edit mode: {0}"
       change: "The edit mode was changed: "
       no-permission: "You don't have permission to change to that mode."
     item:
