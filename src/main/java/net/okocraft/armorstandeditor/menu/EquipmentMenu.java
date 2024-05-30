@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 public class EquipmentMenu implements ArmorStandEditorMenu {
 
     private static final EquipmentSlot[] EQUIPMENT_SLOTS = EquipmentSlot.values();
-    private static final int[] MENU_EQUIPMENT_SLOT_INDEXES = Arrays.stream(EQUIPMENT_SLOTS).mapToInt(EquipmentMenu::toMenuIndex).toArray();
+    private static final int[] MENU_EQUIPMENT_SLOT_INDEXES = Arrays.stream(EQUIPMENT_SLOTS).filter(slot -> !slot.name().equals("BODY")).mapToInt(EquipmentMenu::toMenuIndex).toArray();
     private static final Set<Integer> MODIFIABLE_SLOTS = Arrays.stream(MENU_EQUIPMENT_SLOT_INDEXES).boxed().collect(Collectors.toUnmodifiableSet());
     private static final ItemStack AIR = new ItemStack(Material.AIR);
     private static final ItemStack HELMET = new ItemStack(Material.LEATHER_HELMET);
@@ -216,6 +216,7 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
             case FEET -> 12;
             case HAND -> 15;
             case OFF_HAND -> 16;
+            default -> throw new UnsupportedOperationException();
         };
     }
 
