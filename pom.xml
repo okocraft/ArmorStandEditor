@@ -6,7 +6,7 @@
 
     <groupId>net.okocraft.armorstandeditor</groupId>
     <artifactId>armorstandeditor</artifactId>
-    <version>1.4.2</version>
+    <version>1.4.3-SNAPSHOT</version>
 
     <name>ArmorStandEditor</name>
     <url>https://github.com/okocraft/ArmorStandEditor</url>
@@ -53,7 +53,7 @@
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.20.4-R0.1-SNAPSHOT</version>
+            <version>1.20.6-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
