@@ -10,8 +10,8 @@ A Paper plugin that makes it easy to edit armor stands.
 
 ## 動作環境 / Requirements
 
-- Java 17+
-- Paper 1.16.5 (after 'adventure update') or its fork
+- Java 21+
+- Paper 1.20.6 or its fork
 
 ## コマンド / Command
 
@@ -37,4 +37,4 @@ Tab completion is available for the arguments.
 
 This project is under the GPL-3.0. Please see [LICENSE](LICENSE) for more info.
 
-Copyright © 2021-2023, OKOCRAFT and Siroshun09
+Copyright © 2021-2024, OKOCRAFT and Siroshun09
