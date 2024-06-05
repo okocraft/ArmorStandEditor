@@ -12,16 +12,7 @@ class Rotation extends AbstractEditMode {
 
     @Override
     public void edit(@NotNull PlayerEditor editor, @NotNull ArmorStand armorStand, boolean reverse) {
-        var location = armorStand.getLocation();
-
-        float yaw;
-
-        if (!reverse) {
-            yaw = (float) (location.getYaw() + editor.getAngleChangeQuantity());
-        } else {
-            yaw = (float) (location.getYaw() - editor.getAngleChangeQuantity());
-        }
-
-        armorStand.setRotation(yaw, location.getPitch());
+        double diff = editor.getAngleChangeQuantity() * (reverse ? -1 : 1);
+        armorStand.setRotation((float) (armorStand.getYaw() + diff), armorStand.getPitch());
     }
 }
