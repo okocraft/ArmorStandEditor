@@ -217,7 +217,7 @@ public class SelectionMenu implements ArmorStandEditorMenu {
                 meta.displayName(translatedName);
 
                 if (this.lore.size() == 1) {
-                    var translatedLore = GlobalTranslator.render(this.lore.get(0), player.locale()).decoration(TextDecoration.ITALIC, false);
+                    var translatedLore = GlobalTranslator.render(this.lore.getFirst(), player.locale()).decoration(TextDecoration.ITALIC, false);
                     meta.lore(List.of(translatedLore));
                 } else {
                     meta.lore(this.lore.stream().map(line -> GlobalTranslator.render(line, player.locale()).decoration(TextDecoration.ITALIC, false)).toList());
