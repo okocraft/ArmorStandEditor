@@ -58,7 +58,7 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onScroll(@NotNull PlayerItemHeldEvent e) {
         if (!e.getPlayer().isSneaking() ||
-                !plugin.getEditToolItem().check(e.getPlayer().getInventory().getItemInMainHand())) {
+            !plugin.getEditToolItem().check(e.getPlayer().getInventory().getItemInMainHand())) {
             return;
         }
 
