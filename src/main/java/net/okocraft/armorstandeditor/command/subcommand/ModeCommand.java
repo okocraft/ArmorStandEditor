@@ -14,7 +14,6 @@ import net.okocraft.armorstandeditor.permission.Permissions;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -49,11 +48,9 @@ public class ModeCommand extends AbstractCommand {
         }
 
         var secondArgument = arguments.get(1).get();
-        Mode mode;
+        var mode = Mode.byName(secondArgument);
 
-        try {
-            mode = Mode.valueOf(secondArgument.toUpperCase().replace('-', '_'));
-        } catch (IllegalArgumentException e) {
+        if (mode == null) {
             sender.sendMessage(
                     Messages.COMMAND_MODE_INVALID_ARGUMENT.append(Component.text(secondArgument, NamedTextColor.AQUA))
             );
@@ -88,11 +85,7 @@ public class ModeCommand extends AbstractCommand {
 
         if (arguments.size() == 2) {
             var argumentFilter = StringFilter.startsWithIgnoreCase(arguments.get(1).get());
-
-            return Arrays.stream(Mode.values())
-                    .map(Mode::getName)
-                    .filter(argumentFilter)
-                    .toList();
+            return Mode.names().filter(argumentFilter).toList();
         }
 
         return Collections.emptyList();

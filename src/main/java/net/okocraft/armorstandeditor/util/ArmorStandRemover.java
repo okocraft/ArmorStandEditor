@@ -1,4 +1,4 @@
-package net.okocraft.armorstandeditor.editmode;
+package net.okocraft.armorstandeditor.util;
 
 import net.okocraft.armorstandeditor.editor.PlayerEditor;
 import net.okocraft.armorstandeditor.lang.Messages;
@@ -8,17 +8,12 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-class Removal extends AbstractEditMode {
+public final class ArmorStandRemover {
 
     private static final ItemStack AIR = new ItemStack(Material.AIR);
     private static final ItemStack ARMOR_STAND = new ItemStack(Material.ARMOR_STAND);
 
-    Removal() {
-        super("removal");
-    }
-
-    @Override
-    public void edit(@NotNull PlayerEditor editor, @NotNull ArmorStand armorStand, boolean reverse) {
+    public static void remove(@NotNull PlayerEditor editor, @NotNull ArmorStand armorStand, boolean ignored) {
         var player = editor.getPlayer();
         var pi = player.getInventory();
         var returned = pi.addItem(ARMOR_STAND);
@@ -50,5 +45,9 @@ class Removal extends AbstractEditMode {
 
     private static @NotNull ItemStack getOrAir(@Nullable ItemStack item) {
         return item != null ? item : AIR;
+    }
+
+    private ArmorStandRemover() {
+        throw new UnsupportedOperationException();
     }
 }

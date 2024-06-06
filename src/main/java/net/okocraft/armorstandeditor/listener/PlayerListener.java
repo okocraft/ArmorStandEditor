@@ -66,7 +66,7 @@ public class PlayerListener implements Listener {
         var editor = PlayerEditorProvider.getEditor(player);
 
         if (editor.getMode() != Mode.MOVEMENT &&
-                (editor.getMode() == Mode.RESET_POSE || !editor.getMode().name().endsWith("POSE"))) {
+                (editor.getMode() == Mode.RESET_POSE || !editor.getMode().getName().endsWith("pose"))) {
             return;
         }
 
