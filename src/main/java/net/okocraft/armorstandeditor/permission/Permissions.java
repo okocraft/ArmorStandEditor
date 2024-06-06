@@ -14,7 +14,17 @@ public final class Permissions {
 
     public static final String COMMAND = PREFIX + "command";
 
-    public static final String COMMAND_PREFIX = COMMAND + '.';
+    private static final String COMMAND_PREFIX = COMMAND + '.';
+
+    public static final String COMMAND_AXIS = COMMAND_PREFIX + "axis";
+
+    public static final String COMMAND_EQUIPMENT = COMMAND_PREFIX + "equipment";
+
+    public static final String COMMAND_ITEM = COMMAND_PREFIX + "item";
+
+    public static final String COMMAND_MODE = COMMAND_PREFIX + "mode";
+
+    public static final String COMMAND_RELOAD = COMMAND_PREFIX + "reload";
 
     public static final String MODE_PREFIX = PREFIX + "mode.";
 
