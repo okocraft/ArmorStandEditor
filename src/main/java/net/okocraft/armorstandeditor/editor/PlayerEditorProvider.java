@@ -36,15 +36,9 @@ public final class PlayerEditorProvider {
     }
 
     private static @NotNull PlayerEditor getOrCreateEditor(@NotNull UUID uuid) {
-        var editor = EDITOR_MAP.get(uuid);
-
-        if (editor == null) {
+        return EDITOR_MAP.computeIfAbsent(uuid, ignored -> {
             var player = Bukkit.getPlayer(uuid);
-            editor = new PlayerEditor(Objects.requireNonNull(player));
-
-            EDITOR_MAP.put(uuid, editor);
-        }
-
-        return editor;
+            return new PlayerEditor(Objects.requireNonNull(player));
+        });
     }
 }
