@@ -83,7 +83,7 @@ public final class ArmorStandEditorPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        getServer().getOnlinePlayers().stream().filter(player -> player.getOpenInventory().getTopInventory().getHolder() instanceof ArmorStandEditorMenu).forEach(HumanEntity::closeInventory);
+        getServer().getOnlinePlayers().stream().filter(player -> ArmorStandEditorMenu.isArmorStandEditorMenu(player.getOpenInventory().getTopInventory())).forEach(HumanEntity::closeInventory);
         HandlerList.unregisterAll(this);
         TaskScheduler.cancelTasks();
         translationDirectory.unload();

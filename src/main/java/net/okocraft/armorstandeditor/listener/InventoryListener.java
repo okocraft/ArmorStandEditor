@@ -12,14 +12,16 @@ public class InventoryListener implements Listener {
 
     @EventHandler
     public void onClick(@NotNull InventoryClickEvent event) {
-        if (event.getView().getTopInventory().getHolder() instanceof ArmorStandEditorMenu menu) {
+        var menu = ArmorStandEditorMenu.getMenuFromInventory(event.getView().getTopInventory(), ArmorStandEditorMenu.class);
+        if (menu != null) {
             menu.onClick(event);
         }
     }
 
     @EventHandler
     public void onDrag(@NotNull InventoryDragEvent event) {
-        if (event.getView().getTopInventory().getHolder() instanceof EquipmentMenu menu) {
+        var menu = ArmorStandEditorMenu.getMenuFromInventory(event.getView().getTopInventory(), EquipmentMenu.class);
+        if (menu != null) {
             menu.onDrag(event);
         }
     }
