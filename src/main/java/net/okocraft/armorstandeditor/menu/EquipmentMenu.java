@@ -1,5 +1,6 @@
 package net.okocraft.armorstandeditor.menu;
 
+import it.unimi.dsi.fastutil.ints.IntSet;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -26,16 +27,17 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Collectors;
 
 public class EquipmentMenu implements ArmorStandEditorMenu {
 
-    private static final EquipmentSlot[] EQUIPMENT_SLOTS = Arrays.stream(EquipmentSlot.values()).filter(slot -> !slot.name().equals("BODY")).toArray(EquipmentSlot[]::new);
+    private static final EquipmentSlot[] EQUIPMENT_SLOTS = new EquipmentSlot[]{
+            EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET,
+            EquipmentSlot.HAND, EquipmentSlot.OFF_HAND
+    };
     private static final int[] MENU_EQUIPMENT_SLOT_INDEXES = Arrays.stream(EQUIPMENT_SLOTS).mapToInt(EquipmentMenu::toMenuIndex).toArray();
-    private static final Set<Integer> MODIFIABLE_SLOTS = Arrays.stream(MENU_EQUIPMENT_SLOT_INDEXES).boxed().collect(Collectors.toUnmodifiableSet());
+    private static final IntSet MODIFIABLE_SLOTS = IntSet.of(MENU_EQUIPMENT_SLOT_INDEXES);
     private static final ItemStack AIR = new ItemStack(Material.AIR);
     private static final ItemStack HELMET = new ItemStack(Material.LEATHER_HELMET);
     private static final ItemStack CHEST_PLATE = new ItemStack(Material.LEATHER_CHESTPLATE);
@@ -216,7 +218,7 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
             case FEET -> 12;
             case HAND -> 15;
             case OFF_HAND -> 16;
-            default -> throw new UnsupportedOperationException();
+            default -> throw new AssertionError("No other EquipmentSlot should come here");
         };
     }
 
