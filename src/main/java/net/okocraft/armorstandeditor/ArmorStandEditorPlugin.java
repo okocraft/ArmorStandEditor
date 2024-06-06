@@ -27,6 +27,7 @@ import java.util.Locale;
 import java.util.jar.JarFile;
 import java.util.logging.Level;
 
+@SuppressWarnings("UnstableApiUsage")
 public final class ArmorStandEditorPlugin extends JavaPlugin {
 
     private final YamlConfiguration configuration =
