@@ -5,7 +5,7 @@ import net.kyori.adventure.text.TranslatableComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.translation.GlobalTranslator;
-import net.okocraft.armorstandeditor.editmode.Mode;
+import net.okocraft.armorstandeditor.editor.EditMode;
 import net.okocraft.armorstandeditor.editor.PlayerEditor;
 import net.okocraft.armorstandeditor.editor.PlayerEditorProvider;
 import net.okocraft.armorstandeditor.lang.Components;
@@ -66,30 +66,30 @@ public class SelectionMenu implements ArmorStandEditorMenu {
                 )
         );
 
-        map.put(7, new Icon(Material.COMPASS, "rotation", editor -> changeMode(editor, Mode.ROTATION)));
-        map.put(8, new Icon(Material.MINECART, "movement", editor -> changeMode(editor, Mode.MOVEMENT)));
-        map.put(10, new Icon(Material.LEATHER_HELMET, "head-pose", editor -> changeMode(editor, Mode.HEAD_POSE)));
-        map.put(18, new Icon(Material.STICK, "right-arm-pose", editor -> changeMode(editor, Mode.RIGHT_ARM_POSE)));
-        map.put(19, new Icon(Material.LEATHER_CHESTPLATE, "body-pose", editor -> changeMode(editor, Mode.BODY_POSE)));
-        map.put(20, new Icon(Material.STICK, "left-arm-pose", editor -> changeMode(editor, Mode.LEFT_ARM_POSE)));
-        map.put(22, new Icon(Material.LEVER, "reset-pose", editor -> changeMode(editor, Mode.RESET_POSE)));
-        map.put(24, new Icon(Material.STICK, "show-arms", editor -> changeMode(editor, Mode.SHOW_ARMS)));
-        map.put(25, new Icon(Material.POTION, "visible", editor -> changeMode(editor, Mode.VISIBLE)));
-        map.put(26, new Icon(Material.PUFFERFISH, "size", editor -> changeMode(editor, Mode.SIZE)));
-        map.put(27, new Icon(Material.STICK, "right-leg-pose", editor -> changeMode(editor, Mode.RIGHT_LEG_POSE)));
-        map.put(28, new Icon(Material.CHEST, "equipment", editor -> changeMode(editor, Mode.EQUIPMENT)));
-        map.put(29, new Icon(Material.STICK, "left-leg-pose", editor -> changeMode(editor, Mode.LEFT_LEG_POSE)));
-        map.put(33, new Icon(Material.NAME_TAG, "custom-name-visible", editor -> changeMode(editor, Mode.CUSTOM_NAME_VISIBLE)));
-        map.put(34, new Icon(Material.SAND, "gravity", editor -> changeMode(editor, Mode.GRAVITY)));
-        map.put(35, new Icon(Material.SMOOTH_STONE_SLAB, "base-plate", editor -> changeMode(editor, Mode.BASE_PLATE)));
-        map.put(37, new Icon(Material.WRITABLE_BOOK, "copy", editor -> changeMode(editor, Mode.COPY)));
-        map.put(38, new Icon(Material.ENCHANTED_BOOK, "paste", editor -> changeMode(editor, Mode.PASTE)));
+        map.put(7, new Icon(Material.COMPASS, "rotation", editor -> changeMode(editor, EditMode.ROTATION)));
+        map.put(8, new Icon(Material.MINECART, "movement", editor -> changeMode(editor, EditMode.MOVEMENT)));
+        map.put(10, new Icon(Material.LEATHER_HELMET, "head-pose", editor -> changeMode(editor, EditMode.HEAD_POSE)));
+        map.put(18, new Icon(Material.STICK, "right-arm-pose", editor -> changeMode(editor, EditMode.RIGHT_ARM_POSE)));
+        map.put(19, new Icon(Material.LEATHER_CHESTPLATE, "body-pose", editor -> changeMode(editor, EditMode.BODY_POSE)));
+        map.put(20, new Icon(Material.STICK, "left-arm-pose", editor -> changeMode(editor, EditMode.LEFT_ARM_POSE)));
+        map.put(22, new Icon(Material.LEVER, "reset-pose", editor -> changeMode(editor, EditMode.RESET_POSE)));
+        map.put(24, new Icon(Material.STICK, "show-arms", editor -> changeMode(editor, EditMode.SHOW_ARMS)));
+        map.put(25, new Icon(Material.POTION, "visible", editor -> changeMode(editor, EditMode.VISIBLE)));
+        map.put(26, new Icon(Material.PUFFERFISH, "size", editor -> changeMode(editor, EditMode.SIZE)));
+        map.put(27, new Icon(Material.STICK, "right-leg-pose", editor -> changeMode(editor, EditMode.RIGHT_LEG_POSE)));
+        map.put(28, new Icon(Material.CHEST, "equipment", editor -> changeMode(editor, EditMode.EQUIPMENT)));
+        map.put(29, new Icon(Material.STICK, "left-leg-pose", editor -> changeMode(editor, EditMode.LEFT_LEG_POSE)));
+        map.put(33, new Icon(Material.NAME_TAG, "custom-name-visible", editor -> changeMode(editor, EditMode.CUSTOM_NAME_VISIBLE)));
+        map.put(34, new Icon(Material.SAND, "gravity", editor -> changeMode(editor, EditMode.GRAVITY)));
+        map.put(35, new Icon(Material.SMOOTH_STONE_SLAB, "base-plate", editor -> changeMode(editor, EditMode.BASE_PLATE)));
+        map.put(37, new Icon(Material.WRITABLE_BOOK, "copy", editor -> changeMode(editor, EditMode.COPY)));
+        map.put(38, new Icon(Material.ENCHANTED_BOOK, "paste", editor -> changeMode(editor, EditMode.PASTE)));
         map.put(45, new Icon(Material.DANDELION, "copy-slot-1", editor -> changeCopySlot(editor, 1)));
         map.put(46, new Icon(Material.AZURE_BLUET, "copy-slot-2", editor -> changeCopySlot(editor, 2)));
         map.put(47, new Icon(Material.BLUE_ORCHID, "copy-slot-3", editor -> changeCopySlot(editor, 3)));
         map.put(48, new Icon(Material.PEONY, "copy-slot-4", editor -> changeCopySlot(editor, 4)));
-        map.put(51, new Icon(Material.TRIPWIRE_HOOK, "lock", editor -> changeMode(editor, Mode.LOCK), true));
-        map.put(52, new Icon(Material.LAVA_BUCKET, "removal", editor -> changeMode(editor, Mode.REMOVAL), true));
+        map.put(51, new Icon(Material.TRIPWIRE_HOOK, "lock", editor -> changeMode(editor, EditMode.LOCK), true));
+        map.put(52, new Icon(Material.LAVA_BUCKET, "removal", editor -> changeMode(editor, EditMode.REMOVAL), true));
 
         map.put(53,
                 new Icon(
@@ -149,7 +149,7 @@ public class SelectionMenu implements ArmorStandEditorMenu {
         );
     }
 
-    private static void changeMode(@NotNull PlayerEditor editor, @NotNull Mode mode) {
+    private static void changeMode(@NotNull PlayerEditor editor, @NotNull EditMode mode) {
         editor.setMode(mode);
         editor.getPlayer().sendActionBar(
                 Messages.MENU_CHANGE_MODE.args(Components.MODE_NAME.apply(mode))

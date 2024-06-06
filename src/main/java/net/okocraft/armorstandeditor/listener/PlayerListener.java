@@ -1,7 +1,7 @@
 package net.okocraft.armorstandeditor.listener;
 
 import net.okocraft.armorstandeditor.ArmorStandEditorPlugin;
-import net.okocraft.armorstandeditor.editmode.Mode;
+import net.okocraft.armorstandeditor.editor.EditMode;
 import net.okocraft.armorstandeditor.editor.PlayerEditor;
 import net.okocraft.armorstandeditor.editor.PlayerEditorProvider;
 import net.okocraft.armorstandeditor.lang.Components;
@@ -65,8 +65,8 @@ public class PlayerListener implements Listener {
         var player = e.getPlayer();
         var editor = PlayerEditorProvider.getEditor(player);
 
-        if (editor.getMode() != Mode.MOVEMENT &&
-                (editor.getMode() == Mode.RESET_POSE || !editor.getMode().getName().endsWith("pose"))) {
+        if (editor.getMode() != EditMode.MOVEMENT &&
+            (editor.getMode() == EditMode.RESET_POSE || !editor.getMode().getName().endsWith("pose"))) {
             return;
         }
 

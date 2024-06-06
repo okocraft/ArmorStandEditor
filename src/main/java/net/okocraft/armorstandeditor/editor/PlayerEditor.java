@@ -1,7 +1,6 @@
 package net.okocraft.armorstandeditor.editor;
 
 import net.okocraft.armorstandeditor.data.ArmorStandData;
-import net.okocraft.armorstandeditor.editmode.Mode;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -21,7 +20,7 @@ public class PlayerEditor {
     private final Set<UUID> lockedArmorStand = Collections.synchronizedSet(new HashSet<>());
 
     private Axis axis = Axis.X;
-    private Mode mode = Mode.NONE;
+    private EditMode mode = EditMode.NONE;
     private int selectedCopySlot = 1;
     private double angleChangeQuantity = 12;
     private double movingDistance = 1;
@@ -42,11 +41,11 @@ public class PlayerEditor {
         this.axis = axis;
     }
 
-    public @NotNull Mode getMode() {
+    public @NotNull EditMode getMode() {
         return mode;
     }
 
-    public void setMode(@NotNull Mode mode) {
+    public void setMode(@NotNull EditMode mode) {
         this.mode = mode;
     }
 

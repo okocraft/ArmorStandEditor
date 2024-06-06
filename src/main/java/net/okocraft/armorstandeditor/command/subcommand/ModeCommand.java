@@ -6,7 +6,7 @@ import com.github.siroshun09.mccommand.common.context.CommandContext;
 import com.github.siroshun09.mccommand.common.filter.StringFilter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.okocraft.armorstandeditor.editmode.Mode;
+import net.okocraft.armorstandeditor.editor.EditMode;
 import net.okocraft.armorstandeditor.editor.PlayerEditorProvider;
 import net.okocraft.armorstandeditor.lang.Components;
 import net.okocraft.armorstandeditor.lang.Messages;
@@ -48,7 +48,7 @@ public class ModeCommand extends AbstractCommand {
         }
 
         var secondArgument = arguments.get(1).get();
-        var mode = Mode.byName(secondArgument);
+        var mode = EditMode.byName(secondArgument);
 
         if (mode == null) {
             sender.sendMessage(
@@ -85,7 +85,7 @@ public class ModeCommand extends AbstractCommand {
 
         if (arguments.size() == 2) {
             var argumentFilter = StringFilter.startsWithIgnoreCase(arguments.get(1).get());
-            return Mode.names().filter(argumentFilter).toList();
+            return EditMode.names().filter(argumentFilter).toList();
         }
 
         return Collections.emptyList();

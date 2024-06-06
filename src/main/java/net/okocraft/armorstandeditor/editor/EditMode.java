@@ -1,8 +1,7 @@
-package net.okocraft.armorstandeditor.editmode;
+package net.okocraft.armorstandeditor.editor;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.okocraft.armorstandeditor.editor.PlayerEditor;
 import net.okocraft.armorstandeditor.lang.Messages;
 import net.okocraft.armorstandeditor.menu.EquipmentMenuProvider;
 import net.okocraft.armorstandeditor.menu.SelectionMenu;
@@ -27,10 +26,10 @@ import java.util.stream.Stream;
 
 import static net.okocraft.armorstandeditor.util.AngleCalculator.INITIAL_ANGLE;
 
-public final class Mode {
-    private static final Map<String, Mode> BY_NAME = new LinkedHashMap<>();
+public final class EditMode {
+    private static final Map<String, EditMode> BY_NAME = new LinkedHashMap<>();
 
-    public static @Nullable Mode byName(@NotNull String name) {
+    public static @Nullable EditMode byName(@NotNull String name) {
         return BY_NAME.get(name);
     }
 
@@ -38,33 +37,33 @@ public final class Mode {
         return BY_NAME.keySet().stream();
     }
 
-    public static final Mode NONE = create("none", (editor, armorStand, reverse) -> editor.getPlayer().openInventory(new SelectionMenu(editor.getPlayer()).getInventory()));
+    public static final EditMode NONE = create("none", (editor, armorStand, reverse) -> editor.getPlayer().openInventory(new SelectionMenu(editor.getPlayer()).getInventory()));
 
-    public static final Mode BASE_PLATE = toggleBooleanState("base-plate", ArmorStand::hasBasePlate, ArmorStand::setBasePlate, Messages.EDIT_BASE_PLATE_ON, Messages.EDIT_BASE_PLATE_OFF);
+    public static final EditMode BASE_PLATE = toggleBooleanState("base-plate", ArmorStand::hasBasePlate, ArmorStand::setBasePlate, Messages.EDIT_BASE_PLATE_ON, Messages.EDIT_BASE_PLATE_OFF);
 
-    public static final Mode BODY_POSE = changePose("body", ArmorStand::getBodyPose, ArmorStand::setBodyPose);
+    public static final EditMode BODY_POSE = changePose("body", ArmorStand::getBodyPose, ArmorStand::setBodyPose);
 
-    public static final Mode COPY = create("copy", (editor, armorStand, reverse) -> {
+    public static final EditMode COPY = create("copy", (editor, armorStand, reverse) -> {
         editor.copy(armorStand);
         editor.getPlayer().sendActionBar(Messages.EDIT_COPY.args(Component.text(String.valueOf(editor.getSelectedCopySlot()), NamedTextColor.AQUA)));
     });
 
-    public static final Mode CUSTOM_NAME_VISIBLE = toggleBooleanState("custom-name-visible", ArmorStand::isCustomNameVisible, ArmorStand::setCustomNameVisible, Messages.EDIT_CUSTOM_NAME_VISIBLE_ON, Messages.EDIT_CUSTOM_NAME_VISIBLE_OFF);
+    public static final EditMode CUSTOM_NAME_VISIBLE = toggleBooleanState("custom-name-visible", ArmorStand::isCustomNameVisible, ArmorStand::setCustomNameVisible, Messages.EDIT_CUSTOM_NAME_VISIBLE_ON, Messages.EDIT_CUSTOM_NAME_VISIBLE_OFF);
 
-    public static final Mode EQUIPMENT = create(
+    public static final EditMode EQUIPMENT = create(
             "equipment",
             (editor, armorStand, reverse) -> editor.getPlayer().openInventory(EquipmentMenuProvider.getMenu(armorStand).getInventory())
     );
 
-    public static final Mode GRAVITY = toggleBooleanState("gravity", ArmorStand::hasGravity, ArmorStand::setGravity, Messages.EDIT_GRAVITY_ON, Messages.EDIT_GRAVITY_OFF);
+    public static final EditMode GRAVITY = toggleBooleanState("gravity", ArmorStand::hasGravity, ArmorStand::setGravity, Messages.EDIT_GRAVITY_ON, Messages.EDIT_GRAVITY_OFF);
 
-    public static final Mode HEAD_POSE = changePose("head", ArmorStand::getHeadPose, ArmorStand::setHeadPose);
+    public static final EditMode HEAD_POSE = changePose("head", ArmorStand::getHeadPose, ArmorStand::setHeadPose);
 
-    public static final Mode LEFT_ARM_POSE = changePose("left-arm", ArmorStand::getLeftArmPose, ArmorStand::setLeftArmPose);
+    public static final EditMode LEFT_ARM_POSE = changePose("left-arm", ArmorStand::getLeftArmPose, ArmorStand::setLeftArmPose);
 
-    public static final Mode LEFT_LEG_POSE = changePose("left-leg", ArmorStand::getLeftLegPose, ArmorStand::setLeftLegPose);
+    public static final EditMode LEFT_LEG_POSE = changePose("left-leg", ArmorStand::getLeftLegPose, ArmorStand::setLeftLegPose);
 
-    public static final Mode LOCK = create("lock", (editor, armorStand, reverse) -> {
+    public static final EditMode LOCK = create("lock", (editor, armorStand, reverse) -> {
         Component message;
 
         if (editor.isLocked(armorStand)) {
@@ -78,7 +77,7 @@ public final class Mode {
         editor.getPlayer().sendActionBar(message);
     });
 
-    public static final Mode MOVEMENT = create("movement", (editor, armorStand, reverse) -> {
+    public static final EditMode MOVEMENT = create("movement", (editor, armorStand, reverse) -> {
         var location = LocationCalculator.calculate(
                 armorStand.getLocation(),
                 editor.getMovingDistance(),
@@ -93,7 +92,7 @@ public final class Mode {
         }
     });
 
-    public static final Mode PASTE = create("paste", (editor, armorStand, reverse) -> {
+    public static final EditMode PASTE = create("paste", (editor, armorStand, reverse) -> {
         var data = editor.getSelectedArmorStand();
 
         if (data == null) {
@@ -104,9 +103,9 @@ public final class Mode {
         editor.getPlayer().sendActionBar(Messages.EDIT_PASTE.args(Component.text(String.valueOf(editor.getSelectedCopySlot()), NamedTextColor.AQUA)));
     });
 
-    public static final Mode REMOVAL = create("removal", ArmorStandRemover::remove);
+    public static final EditMode REMOVAL = create("removal", ArmorStandRemover::remove);
 
-    public static final Mode RESET_POSE = create("reset-pose", (editor, armorStand, reverse) -> {
+    public static final EditMode RESET_POSE = create("reset-pose", (editor, armorStand, reverse) -> {
         armorStand.setHeadPose(INITIAL_ANGLE);
         armorStand.setBodyPose(INITIAL_ANGLE);
         armorStand.setLeftArmPose(INITIAL_ANGLE);
@@ -117,29 +116,29 @@ public final class Mode {
         editor.getPlayer().sendActionBar(Messages.EDIT_RESET_POSE);
     });
 
-    public static final Mode RIGHT_ARM_POSE = changePose("right-arm", ArmorStand::getRightArmPose, ArmorStand::setRightArmPose);
+    public static final EditMode RIGHT_ARM_POSE = changePose("right-arm", ArmorStand::getRightArmPose, ArmorStand::setRightArmPose);
 
-    public static final Mode RIGHT_LEG_POSE = changePose("right-leg", ArmorStand::getRightLegPose, ArmorStand::setRightLegPose);
+    public static final EditMode RIGHT_LEG_POSE = changePose("right-leg", ArmorStand::getRightLegPose, ArmorStand::setRightLegPose);
 
-    public static final Mode ROTATION = create("rotation", (editor, armorStand, reverse) -> {
+    public static final EditMode ROTATION = create("rotation", (editor, armorStand, reverse) -> {
         double diff = editor.getAngleChangeQuantity() * (reverse ? -1 : 1);
         armorStand.setRotation((float) (armorStand.getYaw() + diff), armorStand.getPitch());
     });
 
-    public static final Mode SHOW_ARMS = toggleBooleanState("show-arms", ArmorStand::hasArms, ArmorStand::setArms, Messages.EDIT_ARMS_ON, Messages.EDIT_ARMS_OFF);
+    public static final EditMode SHOW_ARMS = toggleBooleanState("show-arms", ArmorStand::hasArms, ArmorStand::setArms, Messages.EDIT_ARMS_ON, Messages.EDIT_ARMS_OFF);
 
-    public static final Mode SIZE = toggleBooleanState("size", ArmorStand::isSmall, ArmorStand::setSmall, Messages.EDIT_SIZE_SMALL, Messages.EDIT_SIZE_NORMAL);
+    public static final EditMode SIZE = toggleBooleanState("size", ArmorStand::isSmall, ArmorStand::setSmall, Messages.EDIT_SIZE_SMALL, Messages.EDIT_SIZE_NORMAL);
 
-    public static final Mode VISIBLE = toggleBooleanState("visible", ArmorStand::isVisible, ArmorStand::setVisible, Messages.EDIT_VISIBLE_ON, Messages.EDIT_VISIBLE_OFF);
+    public static final EditMode VISIBLE = toggleBooleanState("visible", ArmorStand::isVisible, ArmorStand::setVisible, Messages.EDIT_VISIBLE_ON, Messages.EDIT_VISIBLE_OFF);
 
     @Contract(value = "_, _ -> new", pure = true)
-    private static @NotNull Mode create(@NotNull String name, @NotNull Editor editor) {
-        var mode = new Mode(name, editor);
+    private static @NotNull EditMode create(@NotNull String name, @NotNull Editor editor) {
+        var mode = new EditMode(name, editor);
         BY_NAME.put(mode.getName(), mode);
-        return new Mode(name, editor);
+        return new EditMode(name, editor);
     }
 
-    private static @NotNull Mode toggleBooleanState(@NotNull String name, @NotNull Function<ArmorStand, Boolean> getter, @NotNull BiConsumer<ArmorStand, Boolean> setter, @NotNull Component on, @NotNull Component off) {
+    private static @NotNull EditMode toggleBooleanState(@NotNull String name, @NotNull Function<ArmorStand, Boolean> getter, @NotNull BiConsumer<ArmorStand, Boolean> setter, @NotNull Component on, @NotNull Component off) {
         return create(name, (editor, armorStand, reverse) -> {
             boolean currentOn = getter.apply(armorStand);
             setter.accept(armorStand, !currentOn);
@@ -147,7 +146,7 @@ public final class Mode {
         });
     }
 
-    private static @NotNull Mode changePose(@NotNull String part, @NotNull Function<ArmorStand, EulerAngle> getter, @NotNull BiConsumer<ArmorStand, EulerAngle> setter) {
+    private static @NotNull EditMode changePose(@NotNull String part, @NotNull Function<ArmorStand, EulerAngle> getter, @NotNull BiConsumer<ArmorStand, EulerAngle> setter) {
         return create(part + "-pose", (editor, armorStand, reverse) -> {
             var current = getter.apply(armorStand);
             var newAngle = AngleCalculator.calculate(current, editor.getAngleChangeQuantity(), editor.getAxis(), reverse);
@@ -159,7 +158,7 @@ public final class Mode {
     private final String permission;
     private final Editor editor;
 
-    Mode(@NotNull String name, @NotNull Editor editor) {
+    EditMode(@NotNull String name, @NotNull Editor editor) {
         this.name = name;
         this.permission = Permissions.MODE_PREFIX + name;
         this.editor = editor;

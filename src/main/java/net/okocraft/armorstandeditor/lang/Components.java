@@ -3,7 +3,7 @@ package net.okocraft.armorstandeditor.lang;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.okocraft.armorstandeditor.editmode.Mode;
+import net.okocraft.armorstandeditor.editor.EditMode;
 import net.okocraft.armorstandeditor.editor.PlayerEditor;
 
 import java.util.function.Function;
@@ -24,7 +24,7 @@ public final class Components {
     public static final Function<PlayerEditor.Axis, Component> AXIS_NAME =
             axis -> Component.translatable(KEY_PREFIX + "axis." + axis.getName(), NamedTextColor.AQUA);
 
-    public static final Function<Mode, Component> MODE_NAME =
+    public static final Function<EditMode, Component> MODE_NAME =
             mode -> Component.translatable(KEY_PREFIX + "mode." + mode.getName(), NamedTextColor.AQUA);
 
     public static final Component ADJUSTMENT_MODE_FINE =
