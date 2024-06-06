@@ -26,7 +26,7 @@ public class EditToolItem {
             return false;
         }
 
-        if (plugin.getConfiguration().get(Settings.TOOL_ALLOW_NORMAL_FLINT)) {
+        if (this.plugin.getConfiguration().get(Settings.TOOL_ALLOW_NORMAL_FLINT)) {
             return item.getType() == Material.FLINT;
         }
 
@@ -40,7 +40,7 @@ public class EditToolItem {
             return false;
         }
 
-        var b = meta.getPersistentDataContainer().get(key, PersistentDataType.BYTE);
+        var b = meta.getPersistentDataContainer().get(this.key, PersistentDataType.BYTE);
 
         return b != null && b == VALUE;
     }
@@ -50,14 +50,14 @@ public class EditToolItem {
         var meta = item.getItemMeta();
 
         if (meta != null) {
-            meta.getPersistentDataContainer().set(key, PersistentDataType.BYTE, VALUE);
+            meta.getPersistentDataContainer().set(this.key, PersistentDataType.BYTE, VALUE);
 
-            var displayName = plugin.getConfiguration().get(Settings.TOOL_DISPLAY_NAME);
+            var displayName = this.plugin.getConfiguration().get(Settings.TOOL_DISPLAY_NAME);
             if (!displayName.content().isEmpty()) {
                 meta.displayName(displayName);
             }
 
-            var lore = plugin.getConfiguration().get(Settings.TOOL_LORE);
+            var lore = this.plugin.getConfiguration().get(Settings.TOOL_LORE);
             if (!lore.isEmpty()) {
                 meta.lore(lore);
             }

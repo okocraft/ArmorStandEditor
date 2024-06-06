@@ -30,11 +30,11 @@ public class PlayerEditor {
     }
 
     public @NotNull Player getPlayer() {
-        return player;
+        return this.player;
     }
 
     public @NotNull Axis getAxis() {
-        return axis;
+        return this.axis;
     }
 
     public void setAxis(@NotNull Axis axis) {
@@ -42,7 +42,7 @@ public class PlayerEditor {
     }
 
     public @NotNull EditMode getMode() {
-        return mode;
+        return this.mode;
     }
 
     public void setMode(@NotNull EditMode mode) {
@@ -50,7 +50,7 @@ public class PlayerEditor {
     }
 
     public double getAngleChangeQuantity() {
-        return angleChangeQuantity;
+        return this.angleChangeQuantity;
     }
 
     public void setAngleChangeQuantity(double angleChangeQuantity) {
@@ -58,7 +58,7 @@ public class PlayerEditor {
     }
 
     public double getMovingDistance() {
-        return movingDistance;
+        return this.movingDistance;
     }
 
     public void setMovingDistance(double movingDistance) {
@@ -66,7 +66,7 @@ public class PlayerEditor {
     }
 
     public int getSelectedCopySlot() {
-        return selectedCopySlot;
+        return this.selectedCopySlot;
     }
 
     public void setSelectedCopySlot(int selectedCopySlot) {
@@ -74,23 +74,23 @@ public class PlayerEditor {
     }
 
     public void copy(@NotNull ArmorStand source) {
-        copiedArmorStands.put(selectedCopySlot, ArmorStandData.create(source));
+        this.copiedArmorStands.put(this.selectedCopySlot, ArmorStandData.create(source));
     }
 
     public @Nullable ArmorStandData getSelectedArmorStand() {
-        return copiedArmorStands.get(selectedCopySlot);
+        return this.copiedArmorStands.get(this.selectedCopySlot);
     }
 
     public void lock(@NotNull ArmorStand armorStand) {
-        lockedArmorStand.add(armorStand.getUniqueId());
+        this.lockedArmorStand.add(armorStand.getUniqueId());
     }
 
     public void unlock(@NotNull ArmorStand armorStand) {
-        lockedArmorStand.remove(armorStand.getUniqueId());
+        this.lockedArmorStand.remove(armorStand.getUniqueId());
     }
 
     public boolean isLocked(@NotNull ArmorStand armorStand) {
-        return lockedArmorStand.contains(armorStand.getUniqueId());
+        return this.lockedArmorStand.contains(armorStand.getUniqueId());
     }
 
     public enum Axis {
@@ -105,7 +105,7 @@ public class PlayerEditor {
         }
 
         public @NotNull String getName() {
-            return name;
+            return this.name;
         }
     }
 }

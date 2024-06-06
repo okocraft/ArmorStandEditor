@@ -36,29 +36,29 @@ public record ArmorStandData(@NotNull EulerAngle headPose, @NotNull EulerAngle b
     }
 
     public void apply(@NotNull ArmorStand target, boolean creative) {
-        target.setHeadPose(headPose());
-        target.setBodyPose(bodyPose());
-        target.setRightArmPose(rightArmPose());
-        target.setLeftArmPose(leftArmPose());
-        target.setRightLegPose(rightLegPose());
-        target.setLeftLegPose(leftLegPose());
-        target.setSmall(small());
-        target.setVisible(visible());
-        target.setGlowing(glowing());
-        target.setGravity(hasGravity());
-        target.setArms(hasArms());
-        target.setBasePlate(hasBasePlate());
+        target.setHeadPose(this.headPose());
+        target.setBodyPose(this.bodyPose());
+        target.setRightArmPose(this.rightArmPose());
+        target.setLeftArmPose(this.leftArmPose());
+        target.setRightLegPose(this.rightLegPose());
+        target.setLeftLegPose(this.leftLegPose());
+        target.setSmall(this.small());
+        target.setVisible(this.visible());
+        target.setGlowing(this.glowing());
+        target.setGravity(this.hasGravity());
+        target.setArms(this.hasArms());
+        target.setBasePlate(this.hasBasePlate());
 
         if (creative) {
-            target.setCustomNameVisible(customNameVisible());
-            target.customName(customName());
+            target.setCustomNameVisible(this.customNameVisible());
+            target.customName(this.customName());
 
-            target.setItem(EquipmentSlot.HEAD, helmet());
-            target.setItem(EquipmentSlot.CHEST, chestplate());
-            target.setItem(EquipmentSlot.LEGS, leggings());
-            target.setItem(EquipmentSlot.FEET, boots());
-            target.setItem(EquipmentSlot.HAND, itemInMainHand());
-            target.setItem(EquipmentSlot.OFF_HAND, itemInOffHand());
+            target.setItem(EquipmentSlot.HEAD, this.helmet());
+            target.setItem(EquipmentSlot.CHEST, this.chestplate());
+            target.setItem(EquipmentSlot.LEGS, this.leggings());
+            target.setItem(EquipmentSlot.FEET, this.boots());
+            target.setItem(EquipmentSlot.HAND, this.itemInMainHand());
+            target.setItem(EquipmentSlot.OFF_HAND, this.itemInOffHand());
         }
     }
 }

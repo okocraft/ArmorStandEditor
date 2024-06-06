@@ -31,14 +31,14 @@ import java.util.logging.Level;
 public final class ArmorStandEditorPlugin extends JavaPlugin {
 
     private final YamlConfiguration configuration =
-            YamlConfiguration.create(getDataFolder().toPath().resolve("config.yml"));
+            YamlConfiguration.create(this.getDataFolder().toPath().resolve("config.yml"));
     private final TranslationDirectory translationDirectory =
             TranslationDirectory
                     .newBuilder()
                     .setKey(Key.key("armorstandeditor", "language"))
-                    .setDirectory(getDataFolder().toPath().resolve("languages"))
+                    .setDirectory(this.getDataFolder().toPath().resolve("languages"))
                     .setDefaultLocale(Locale.ENGLISH)
-                    .setVersion(getDescription().getVersion())
+                    .setVersion(this.getDescription().getVersion())
                     .onDirectoryCreated(this::saveDefaultLanguages)
                     .setTranslationLoaderCreator(this::getBuiltinTranslation)
                     .build();
@@ -48,22 +48,22 @@ public final class ArmorStandEditorPlugin extends JavaPlugin {
     @Override
     public void onLoad() {
         try {
-            ResourceUtils.copyFromJarIfNotExists(getFile().toPath(), "config.yml", configuration.getPath());
-            configuration.load();
+            ResourceUtils.copyFromJarIfNotExists(this.getFile().toPath(), "config.yml", this.configuration.getPath());
+            this.configuration.load();
         } catch (IOException e) {
-            getLogger().log(Level.SEVERE, "Failed to load config.yml.", e);
+            this.getLogger().log(Level.SEVERE, "Failed to load config.yml.", e);
         }
 
         try {
-            translationDirectory.load();
+            this.translationDirectory.load();
         } catch (IOException e) {
-            getLogger().log(Level.SEVERE, "Failed to load languages.", e);
+            this.getLogger().log(Level.SEVERE, "Failed to load languages.", e);
         }
     }
 
     @Override
     public void onEnable() {
-        var manager = getServer().getPluginManager();
+        var manager = this.getServer().getPluginManager();
 
         manager.registerEvents(new ArmorStandListener(this), this);
         manager.registerEvents(new InventoryListener(), this);
@@ -75,26 +75,26 @@ public final class ArmorStandEditorPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        getServer().getOnlinePlayers().stream().filter(player -> ArmorStandEditorMenu.isArmorStandEditorMenu(player.getOpenInventory().getTopInventory())).forEach(HumanEntity::closeInventory);
+        this.getServer().getOnlinePlayers().stream().filter(player -> ArmorStandEditorMenu.isArmorStandEditorMenu(player.getOpenInventory().getTopInventory())).forEach(HumanEntity::closeInventory);
         HandlerList.unregisterAll(this);
         TaskScheduler.cancelTasks();
-        translationDirectory.unload();
+        this.translationDirectory.unload();
     }
 
     public @NotNull YamlConfiguration getConfiguration() {
-        return configuration;
+        return this.configuration;
     }
 
     public @NotNull TranslationDirectory getTranslationDirectory() {
-        return translationDirectory;
+        return this.translationDirectory;
     }
 
     public @NotNull EditToolItem getEditToolItem() {
-        return editToolItem;
+        return this.editToolItem;
     }
 
     private void saveDefaultLanguages(@NotNull Path directory) throws IOException {
-        var jarFile = getFile().toPath();
+        var jarFile = this.getFile().toPath();
 
         var defaultFileName = "en.yml";
         var defaultFile = directory.resolve(defaultFileName);
@@ -116,7 +116,7 @@ public final class ArmorStandEditorPlugin extends JavaPlugin {
 
         Configuration source;
 
-        try (var jar = new JarFile(getFile(), false);
+        try (var jar = new JarFile(this.getFile(), false);
              var input = ResourceUtils.getInputStreamFromJar(jar, strLocale + ".yml")) {
             source = YamlConfiguration.loadFromInputStream(input);
         }

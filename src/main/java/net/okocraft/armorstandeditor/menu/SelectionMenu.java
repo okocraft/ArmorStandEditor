@@ -109,14 +109,14 @@ public class SelectionMenu implements ArmorStandEditorMenu {
         this.player = player;
         this.inventory = Bukkit.createInventory(this, 54, Components.SELECTION_MENU_TITLE);
 
-        setItems();
+        this.setItems();
     }
 
     @Override
     public void onClick(@NotNull InventoryClickEvent event) {
         event.setCancelled(true);
 
-        if (event.getClickedInventory() != inventory) {
+        if (event.getClickedInventory() != this.inventory) {
             return;
         }
 
@@ -125,19 +125,19 @@ public class SelectionMenu implements ArmorStandEditorMenu {
         if (icon != null) {
             var editor = PlayerEditorProvider.getEditor(event.getWhoClicked());
             icon.onClick(editor);
-            player.closeInventory();
+            this.player.closeInventory();
         }
     }
 
     private void setItems() {
-        var size = inventory.getSize();
+        var size = this.inventory.getSize();
 
         for (int i = 0; i < size; i++) {
             var icon = MENU_MAP.get(i);
 
             if (icon != null) {
-                var item = icon.getIcon(player);
-                inventory.setItem(i, item);
+                var item = icon.getIcon(this.player);
+                this.inventory.setItem(i, item);
             }
         }
     }
@@ -165,7 +165,7 @@ public class SelectionMenu implements ArmorStandEditorMenu {
 
     @Override
     public @NotNull Inventory getInventory() {
-        return inventory;
+        return this.inventory;
     }
 
     private static class Icon {
@@ -203,24 +203,24 @@ public class SelectionMenu implements ArmorStandEditorMenu {
         }
 
         private @NotNull ItemStack getIcon(@NotNull Player player) {
-            if (!player.hasPermission(permission)) {
+            if (!player.hasPermission(this.permission)) {
                 return AIR;
             }
 
-            var item = new ItemStack(material);
+            var item = new ItemStack(this.material);
             var meta = item.getItemMeta();
 
             if (meta != null) {
-                var translatedName = GlobalTranslator.render(name, player.locale()).decoration(TextDecoration.ITALIC, false);
+                var translatedName = GlobalTranslator.render(this.name, player.locale()).decoration(TextDecoration.ITALIC, false);
 
 
                 meta.displayName(translatedName);
 
-                if (lore.size() == 1) {
-                    var translatedLore = GlobalTranslator.render(lore.get(0), player.locale()).decoration(TextDecoration.ITALIC, false);
+                if (this.lore.size() == 1) {
+                    var translatedLore = GlobalTranslator.render(this.lore.get(0), player.locale()).decoration(TextDecoration.ITALIC, false);
                     meta.lore(List.of(translatedLore));
                 } else {
-                    meta.lore(lore.stream().map(line -> GlobalTranslator.render(line, player.locale()).decoration(TextDecoration.ITALIC, false)).toList());
+                    meta.lore(this.lore.stream().map(line -> GlobalTranslator.render(line, player.locale()).decoration(TextDecoration.ITALIC, false)).toList());
                 }
 
                 if (meta instanceof PotionMeta potionMeta) {
@@ -234,8 +234,8 @@ public class SelectionMenu implements ArmorStandEditorMenu {
         }
 
         private void onClick(@NotNull PlayerEditor editor) {
-            if (editor.getPlayer().hasPermission(permission)) {
-                onClick.accept(editor);
+            if (editor.getPlayer().hasPermission(this.permission)) {
+                this.onClick.accept(editor);
             }
         }
     }

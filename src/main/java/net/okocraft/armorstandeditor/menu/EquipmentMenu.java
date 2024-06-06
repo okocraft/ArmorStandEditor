@@ -68,27 +68,27 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
         this.armorStandUuid = armorStand.getUniqueId();
         this.worldKey = armorStand.getWorld().getKey();
 
-        initMenu(inventory);
-        renderItems(armorStand.getEquipment());
+        initMenu(this.inventory);
+        this.renderItems(armorStand.getEquipment());
     }
 
     @Override
     public @NotNull Inventory getInventory() {
-        return inventory;
+        return this.inventory;
     }
 
     @Override
     public void onClick(@NotNull InventoryClickEvent event) {
-        if (inventory.equals(event.getClickedInventory()) && !MODIFIABLE_SLOTS.contains(event.getSlot())) {
+        if (this.inventory.equals(event.getClickedInventory()) && !MODIFIABLE_SLOTS.contains(event.getSlot())) {
             event.setCancelled(true);
         }
 
-        processEvent(event);
+        this.processEvent(event);
     }
 
     public void onDrag(@NotNull InventoryDragEvent event) {
         for (var rawSlot : event.getNewItems().keySet()) {
-            if (!inventory.equals(event.getView().getInventory(rawSlot))) {
+            if (!this.inventory.equals(event.getView().getInventory(rawSlot))) {
                 continue;
             }
 
@@ -98,11 +98,11 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
             }
         }
 
-        processEvent(event);
+        this.processEvent(event);
     }
 
     public void handleManipulateEvent(@NotNull PlayerArmorStandManipulateEvent event) {
-        if (blockModifying.compareAndSet(false, true)) {
+        if (this.blockModifying.compareAndSet(false, true)) {
             TaskScheduler.scheduleEntityTask(this::getArmorStand, this::renderItemsIfArmorStandExist);
         } else {
             event.setCancelled(true);
@@ -110,7 +110,7 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
     }
 
     public void handleDispenseArmorEvent(@NotNull BlockDispenseArmorEvent event) {
-        if (blockModifying.compareAndSet(false, true)) {
+        if (this.blockModifying.compareAndSet(false, true)) {
             TaskScheduler.scheduleEntityTask(this::getArmorStand, this::renderItemsIfArmorStandExist);
         } else {
             event.setCancelled(true);
@@ -118,27 +118,27 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
     }
 
     private void processEvent(@NotNull Cancellable event) {
-        if (blockModifying.get()) {
+        if (this.blockModifying.get()) {
             event.setCancelled(true);
             return;
         }
 
-        var armorStand = getArmorStand();
+        var armorStand = this.getArmorStand();
 
         if (armorStand == null || armorStand.isDead()) {
             event.setCancelled(true);
-            closeMenu();
+            this.closeMenu();
             return;
         }
 
-        blockModifying.set(true);
+        this.blockModifying.set(true);
 
         var equipment = armorStand.getEquipment();
 
-        if (hasUnknownEquipment(equipment)) {
+        if (this.hasUnknownEquipment(equipment)) {
             event.setCancelled(true);
-            renderItems(equipment);
-            blockModifying.set(false);
+            this.renderItems(equipment);
+            this.blockModifying.set(false);
             return;
         }
 
@@ -150,20 +150,20 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
             var slot = EQUIPMENT_SLOTS[i];
             var item = equipment.getItem(slot).clone();
 
-            knownEquipments[i] = item;
-            inventory.setItem(MENU_EQUIPMENT_SLOT_INDEXES[i], item);
+            this.knownEquipments[i] = item;
+            this.inventory.setItem(MENU_EQUIPMENT_SLOT_INDEXES[i], item);
         }
     }
 
     public void closeMenu() {
-        blockModifying.set(true);
-        TaskScheduler.scheduleEntityTasks(() -> List.copyOf(inventory.getViewers()), HumanEntity::closeInventory);
+        this.blockModifying.set(true);
+        TaskScheduler.scheduleEntityTasks(() -> List.copyOf(this.inventory.getViewers()), HumanEntity::closeInventory);
     }
 
     private void renderItemsIfArmorStandExist(@Nullable ArmorStand armorStand) {
         if (armorStand != null && !armorStand.isDead()) {
-            renderItems(armorStand.getEquipment());
-            blockModifying.set(false);
+            this.renderItems(armorStand.getEquipment());
+            this.blockModifying.set(false);
         }
     }
 
@@ -175,26 +175,26 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
         var equipment = armorStand.getEquipment();
 
         for (int i = 0; i < EQUIPMENT_SLOTS.length; i++) {
-            var inventoryItem = getInventoryItem(i).clone();
-            var knownEquipment = getKnownEquipment(i);
+            var inventoryItem = this.getInventoryItem(i).clone();
+            var knownEquipment = this.getKnownEquipment(i);
 
             if (!inventoryItem.equals(knownEquipment)) {
-                knownEquipments[i] = inventoryItem;
+                this.knownEquipments[i] = inventoryItem;
                 equipment.setItem(EQUIPMENT_SLOTS[i], inventoryItem);
             }
         }
 
-        blockModifying.set(false);
+        this.blockModifying.set(false);
     }
 
     private @Nullable ArmorStand getArmorStand() {
-        var world = Bukkit.getWorld(worldKey);
-        return world != null && world.getEntity(armorStandUuid) instanceof ArmorStand armorStand ? armorStand : null;
+        var world = Bukkit.getWorld(this.worldKey);
+        return world != null && world.getEntity(this.armorStandUuid) instanceof ArmorStand armorStand ? armorStand : null;
     }
 
     private boolean hasUnknownEquipment(@NotNull EntityEquipment equipment) {
         for (int i = 0; i < EQUIPMENT_SLOTS.length; i++) {
-            if (!equipment.getItem(EQUIPMENT_SLOTS[i]).equals(getKnownEquipment(i))) {
+            if (!equipment.getItem(EQUIPMENT_SLOTS[i]).equals(this.getKnownEquipment(i))) {
                 return true;
             }
         }
@@ -203,11 +203,11 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
     }
 
     private @NotNull ItemStack getKnownEquipment(int i) {
-        return Objects.requireNonNullElse(knownEquipments[i], AIR);
+        return Objects.requireNonNullElse(this.knownEquipments[i], AIR);
     }
 
     private @NotNull ItemStack getInventoryItem(int i) {
-        return Objects.requireNonNullElse(inventory.getItem(MENU_EQUIPMENT_SLOT_INDEXES[i]), AIR);
+        return Objects.requireNonNullElse(this.inventory.getItem(MENU_EQUIPMENT_SLOT_INDEXES[i]), AIR);
     }
 
     private static int toMenuIndex(@NotNull EquipmentSlot slot) {

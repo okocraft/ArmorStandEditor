@@ -73,7 +73,7 @@ public class ArmorStandListener implements Listener {
             return;
         }
 
-        if (!plugin.getEditToolItem().check(player.getInventory().getItemInMainHand())) {
+        if (!this.plugin.getEditToolItem().check(player.getInventory().getItemInMainHand())) {
             return;
         }
 
@@ -107,7 +107,7 @@ public class ArmorStandListener implements Listener {
 
         var itemInMainHand = player.getInventory().getItemInMainHand();
 
-        if (plugin.getEditToolItem().check(itemInMainHand)) {
+        if (this.plugin.getEditToolItem().check(itemInMainHand)) {
             if (!player.hasPermission(Permissions.ARMOR_STAND_EDIT)) {
                 player.sendMessage(Messages.EDIT_NO_PERMISSION);
                 return;
@@ -134,7 +134,7 @@ public class ArmorStandListener implements Listener {
                 return;
             }
 
-            rename(player, entity, meta.displayName());
+            this.rename(player, entity, meta.displayName());
         }
     }
 

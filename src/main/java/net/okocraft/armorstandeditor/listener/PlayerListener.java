@@ -42,7 +42,7 @@ public class PlayerListener implements Listener {
 
         var action = event.getAction();
 
-        if (CLICK_ACTIONS.contains(action) && plugin.getEditToolItem().check(event.getItem())) {
+        if (CLICK_ACTIONS.contains(action) && this.plugin.getEditToolItem().check(event.getItem())) {
             event.setCancelled(true);
 
             var player = event.getPlayer();
@@ -58,7 +58,7 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onScroll(@NotNull PlayerItemHeldEvent e) {
         if (!e.getPlayer().isSneaking() ||
-            !plugin.getEditToolItem().check(e.getPlayer().getInventory().getItemInMainHand())) {
+            !this.plugin.getEditToolItem().check(e.getPlayer().getInventory().getItemInMainHand())) {
             return;
         }
 
