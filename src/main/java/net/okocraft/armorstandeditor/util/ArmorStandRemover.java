@@ -15,19 +15,16 @@ public final class ArmorStandRemover {
 
     public static void remove(@NotNull PlayerEditor editor, @NotNull ArmorStand armorStand, boolean ignored) {
         var player = editor.getPlayer();
-        var pi = player.getInventory();
-        var returned = pi.addItem(ARMOR_STAND);
 
         var equipment = armorStand.getEquipment();
-        returned.putAll(
-                pi.addItem(
-                        getOrAir(equipment.getHelmet()),
-                        getOrAir(equipment.getChestplate()),
-                        getOrAir(equipment.getLeggings()),
-                        getOrAir(equipment.getBoots()),
-                        equipment.getItemInMainHand(),
-                        equipment.getItemInOffHand()
-                )
+        var returned = player.getInventory().addItem(
+                ARMOR_STAND,
+                getOrAir(equipment.getHelmet()),
+                getOrAir(equipment.getChestplate()),
+                getOrAir(equipment.getLeggings()),
+                getOrAir(equipment.getBoots()),
+                equipment.getItemInMainHand(),
+                equipment.getItemInOffHand()
         );
 
         if (!returned.isEmpty()) {
