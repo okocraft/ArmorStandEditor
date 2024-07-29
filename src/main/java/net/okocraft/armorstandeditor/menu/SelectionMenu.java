@@ -39,31 +39,31 @@ public class SelectionMenu implements ArmorStandEditorMenu {
         map.put(2, new Icon(Material.BLUE_WOOL, "z-axis", editor -> changeAxis(editor, PlayerEditor.Axis.Z)));
 
         map.put(4,
-                new Icon(
-                        Material.COARSE_DIRT,
-                        "coarse",
-                        e -> {
-                            e.setAngleChangeQuantity(20);
-                            e.setMovingDistance(1);
-                            e.getPlayer().sendActionBar(
-                                    Messages.MENU_CHANGE_ADJUSTMENT_MODE.args(Components.ADJUSTMENT_MODE_COARSE)
-                            );
-                        }
-                )
+            new Icon(
+                Material.COARSE_DIRT,
+                "coarse",
+                e -> {
+                    e.setAngleChangeQuantity(20);
+                    e.setMovingDistance(1);
+                    e.getPlayer().sendActionBar(
+                        Messages.MENU_CHANGE_ADJUSTMENT_MODE.args(Components.ADJUSTMENT_MODE_COARSE)
+                    );
+                }
+            )
         );
 
         map.put(5,
-                new Icon(
-                        Material.SANDSTONE,
-                        "fine",
-                        e -> {
-                            e.setAngleChangeQuantity(2);
-                            e.setMovingDistance(0.1);
-                            e.getPlayer().sendActionBar(
-                                    Messages.MENU_CHANGE_ADJUSTMENT_MODE.args(Components.ADJUSTMENT_MODE_FINE)
-                            );
-                        }
-                )
+            new Icon(
+                Material.SANDSTONE,
+                "fine",
+                e -> {
+                    e.setAngleChangeQuantity(2);
+                    e.setMovingDistance(0.1);
+                    e.getPlayer().sendActionBar(
+                        Messages.MENU_CHANGE_ADJUSTMENT_MODE.args(Components.ADJUSTMENT_MODE_FINE)
+                    );
+                }
+            )
         );
 
         map.put(7, new Icon(Material.COMPASS, "rotation", editor -> changeMode(editor, EditMode.ROTATION)));
@@ -92,11 +92,11 @@ public class SelectionMenu implements ArmorStandEditorMenu {
         map.put(52, new Icon(Material.LAVA_BUCKET, "removal", editor -> changeMode(editor, EditMode.REMOVAL), true));
 
         map.put(53,
-                new Icon(
-                        Material.NETHER_STAR,
-                        "help",
-                        editor -> editor.getPlayer().sendMessage(Messages.MENU_HELP.args(Components.WIKI_LINK))
-                )
+            new Icon(
+                Material.NETHER_STAR,
+                "help",
+                editor -> editor.getPlayer().sendMessage(Messages.MENU_HELP.args(Components.WIKI_LINK))
+            )
         );
 
         MENU_MAP = Map.copyOf(map);
@@ -145,21 +145,21 @@ public class SelectionMenu implements ArmorStandEditorMenu {
     private static void changeAxis(@NotNull PlayerEditor editor, @NotNull PlayerEditor.Axis axis) {
         editor.setAxis(axis);
         editor.getPlayer().sendActionBar(
-                Messages.MENU_CHANGE_AXIS.args(Components.AXIS_NAME.apply(axis))
+            Messages.MENU_CHANGE_AXIS.args(Components.AXIS_NAME.apply(axis))
         );
     }
 
     private static void changeMode(@NotNull PlayerEditor editor, @NotNull EditMode mode) {
         editor.setMode(mode);
         editor.getPlayer().sendActionBar(
-                Messages.MENU_CHANGE_MODE.args(Components.MODE_NAME.apply(mode))
+            Messages.MENU_CHANGE_MODE.args(Components.MODE_NAME.apply(mode))
         );
     }
 
     private static void changeCopySlot(@NotNull PlayerEditor editor, int slot) {
         editor.setSelectedCopySlot(slot);
         editor.getPlayer().sendActionBar(
-                Messages.MENU_CHANGE_COPY_SLOT.args(Component.text(String.valueOf(slot), NamedTextColor.AQUA))
+            Messages.MENU_CHANGE_COPY_SLOT.args(Component.text(String.valueOf(slot), NamedTextColor.AQUA))
         );
     }
 
@@ -194,8 +194,8 @@ public class SelectionMenu implements ArmorStandEditorMenu {
 
             if (twoLines) {
                 this.lore = List.of(
-                        Component.translatable(KEY_PREFIX + name + LORE_SUFFIX + "-1", NamedTextColor.GRAY),
-                        Component.translatable(KEY_PREFIX + name + LORE_SUFFIX + "-2", NamedTextColor.GRAY)
+                    Component.translatable(KEY_PREFIX + name + LORE_SUFFIX + "-1", NamedTextColor.GRAY),
+                    Component.translatable(KEY_PREFIX + name + LORE_SUFFIX + "-2", NamedTextColor.GRAY)
                 );
             } else {
                 this.lore = List.of(Component.translatable(KEY_PREFIX + name + LORE_SUFFIX, NamedTextColor.GRAY));

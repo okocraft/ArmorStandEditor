@@ -20,18 +20,18 @@ public record ArmorStandData(@NotNull EulerAngle headPose, @NotNull EulerAngle b
 
     public static @NotNull ArmorStandData create(@NotNull ArmorStand source) {
         return new ArmorStandData(
-                source.getHeadPose(), source.getBodyPose(),
-                source.getRightArmPose(), source.getLeftArmPose(),
-                source.getRightLegPose(), source.getLeftLegPose(),
-                source.isSmall(), source.isVisible(), source.isGlowing(),
-                source.hasGravity(), source.hasArms(), source.hasBasePlate(),
-                source.isCustomNameVisible(), source.customName(),
-                source.getItem(EquipmentSlot.HEAD).clone(),
-                source.getItem(EquipmentSlot.CHEST).clone(),
-                source.getItem(EquipmentSlot.LEGS).clone(),
-                source.getItem(EquipmentSlot.FEET).clone(),
-                source.getItem(EquipmentSlot.HAND).clone(),
-                source.getItem(EquipmentSlot.OFF_HAND).clone()
+            source.getHeadPose(), source.getBodyPose(),
+            source.getRightArmPose(), source.getLeftArmPose(),
+            source.getRightLegPose(), source.getLeftLegPose(),
+            source.isSmall(), source.isVisible(), source.isGlowing(),
+            source.hasGravity(), source.hasArms(), source.hasBasePlate(),
+            source.isCustomNameVisible(), source.customName(),
+            source.getItem(EquipmentSlot.HEAD).clone(),
+            source.getItem(EquipmentSlot.CHEST).clone(),
+            source.getItem(EquipmentSlot.LEGS).clone(),
+            source.getItem(EquipmentSlot.FEET).clone(),
+            source.getItem(EquipmentSlot.HAND).clone(),
+            source.getItem(EquipmentSlot.OFF_HAND).clone()
         );
     }
 

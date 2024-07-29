@@ -40,7 +40,7 @@ public class ArmorStandListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onDispenseArmor(@NotNull BlockDispenseArmorEvent event){
+    public void onDispenseArmor(@NotNull BlockDispenseArmorEvent event) {
         if (event.getTargetEntity() instanceof ArmorStand armorStand) {
             var menu = EquipmentMenuProvider.getMenuOrNull(armorStand);
 

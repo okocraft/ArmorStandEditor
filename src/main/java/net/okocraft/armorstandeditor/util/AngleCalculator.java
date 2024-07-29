@@ -16,8 +16,8 @@ public final class AngleCalculator {
     public static @NotNull EulerAngle calculate(@NotNull EulerAngle original, double angleChangeQuantity,
                                                 @NotNull PlayerEditor.Axis axis, boolean reverse) {
         return !reverse ?
-                add(original, angleChangeQuantity, axis) :
-                subtract(original, angleChangeQuantity, axis);
+            add(original, angleChangeQuantity, axis) :
+            subtract(original, angleChangeQuantity, axis);
     }
 
     private static @NotNull EulerAngle add(@NotNull EulerAngle original,

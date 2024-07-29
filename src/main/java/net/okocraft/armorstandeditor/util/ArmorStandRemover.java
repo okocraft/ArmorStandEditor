@@ -18,13 +18,13 @@ public final class ArmorStandRemover {
 
         var equipment = armorStand.getEquipment();
         var returned = player.getInventory().addItem(
-                ARMOR_STAND,
-                getOrAir(equipment.getHelmet()),
-                getOrAir(equipment.getChestplate()),
-                getOrAir(equipment.getLeggings()),
-                getOrAir(equipment.getBoots()),
-                equipment.getItemInMainHand(),
-                equipment.getItemInOffHand()
+            ARMOR_STAND,
+            getOrAir(equipment.getHelmet()),
+            getOrAir(equipment.getChestplate()),
+            getOrAir(equipment.getLeggings()),
+            getOrAir(equipment.getBoots()),
+            equipment.getItemInMainHand(),
+            equipment.getItemInOffHand()
         );
 
         if (!returned.isEmpty()) {

@@ -22,7 +22,7 @@ import java.util.Set;
 public class PlayerListener implements Listener {
 
     private static final Set<Action> CLICK_ACTIONS =
-            Set.of(Action.LEFT_CLICK_AIR, Action.RIGHT_CLICK_AIR, Action.LEFT_CLICK_BLOCK, Action.RIGHT_CLICK_BLOCK);
+        Set.of(Action.LEFT_CLICK_AIR, Action.RIGHT_CLICK_AIR, Action.LEFT_CLICK_BLOCK, Action.RIGHT_CLICK_BLOCK);
     private final ArmorStandEditorPlugin plugin;
 
     public PlayerListener(@NotNull ArmorStandEditorPlugin plugin) {

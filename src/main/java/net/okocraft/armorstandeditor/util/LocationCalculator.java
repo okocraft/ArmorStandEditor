@@ -13,8 +13,8 @@ public final class LocationCalculator {
     public static Location calculate(@NotNull Location original, double distance,
                                      @NotNull PlayerEditor.Axis axis, boolean reverse) {
         return !reverse ?
-                add(original, distance, axis) :
-                subtract(original, distance, axis);
+            add(original, distance, axis) :
+            subtract(original, distance, axis);
     }
 
     private static @NotNull Location add(@NotNull Location original, double distance,
