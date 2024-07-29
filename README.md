@@ -11,7 +11,7 @@ A Paper plugin that makes it easy to edit armor stands.
 ## 動作環境 / Requirements
 
 - Java 21+
-- Paper 1.20.6 or its fork
+- Paper 1.21 or its fork
 
 ## コマンド / Command
 
