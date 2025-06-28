@@ -10,7 +10,6 @@ jcommon {
     setupPaperRepository()
 
     commonDependencies {
-        implementation(libs.annotations)
         implementation(libs.configapi.yaml)
         implementation(libs.translationloader)
 
