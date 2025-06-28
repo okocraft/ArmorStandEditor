@@ -1,0 +1,22 @@
+[versions]
+# libraries
+annotations = "26.0.1"
+configapi = "4.6.4"
+translationloader = "2.0.2"
+paper = "1.21.6-R0.1-SNAPSHOT"
+
+# gradle plugins
+run-task = "2.3.1"
+gradle-plugins = "1.2.2"
+
+[libraries]
+annotations = { module = "org.jetbrains:annotations", version.ref = "annotations" }
+configapi-yaml = { module = "com.github.siroshun09.configapi:configapi-yaml", version.ref = "configapi" }
+translationloader = { module = "com.github.siroshun09.translationloader:translationloader", version.ref = "translationloader" }
+platform-paper = { module = "io.papermc.paper:paper-api", version.ref = "paper" }
+
+[plugins]
+
+run-paper = { id = "xyz.jpenilla.run-paper", version.ref = "run-task" }
+bundler = { id = "dev.siroshun.gradle.plugins.bundler", version.ref = "gradle-plugins" }
+jcommon = { id = "dev.siroshun.gradle.plugins.jcommon", version.ref = "gradle-plugins" }

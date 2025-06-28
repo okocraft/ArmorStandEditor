@@ -1,0 +1,9 @@
+name: Java CI
+on: [ push, pull_request ]
+
+jobs:
+  build-java-21:
+    uses: okocraft/workflows/.github/workflows/gradle.yml@v1
+    with:
+      java-version: '21'
+      package-name: ArmorStandEditor-Build-${{ github.run_number }}
