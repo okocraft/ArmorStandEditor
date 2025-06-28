@@ -150,10 +150,7 @@ armorstandeditor:
           name: "Help"
           description: "Click to show help."
   command:
-    no-permission: "You don't have permission to execute this command."
-    only-player: "Only the player can execute that command."
     argument-not-enough: "There are not enough arguments."
-    sub-command-not-found: "The specified sub-command is not found."
     equipment:
       armor-stand-not-found: "There was no armor stand in the line of sight."
     reload:

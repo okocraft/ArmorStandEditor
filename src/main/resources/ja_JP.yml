@@ -150,10 +150,7 @@ armorstandeditor:
           name: "ヘルプ"
           description: "クリックでヘルプを表示する"
   command:
-    no-permission: "そのコマンドを実行する権限がありません。"
-    only-player: "そのコマンドはプレイヤーのみ実行できます。"
     argument-not-enough: "引数が足りません。"
-    sub-command-not-found: "指定されたサブコマンドはありません。"
     equipment:
       armor-stand-not-found: "視線の先に防具立てはありませんでした。"
     reload:
