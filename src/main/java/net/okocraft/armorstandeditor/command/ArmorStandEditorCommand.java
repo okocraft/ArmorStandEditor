@@ -102,7 +102,7 @@ public final class ArmorStandEditorCommand {
                 .executes(context -> {
                     var player = (Player) context.getSource().getSender();
 
-                    if (player.getInventory().addItem(editToolItem.createEditTool()).isEmpty()) {
+                    if (player.getInventory().addItem(editToolItem.getItem()).isEmpty()) {
                         player.sendMessage(Messages.COMMAND_ITEM_SUCCESS);
                     } else {
                         player.sendMessage(Messages.COMMAND_ITEM_FAILURE);

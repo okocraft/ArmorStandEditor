@@ -10,9 +10,7 @@ jcommon {
     setupPaperRepository()
 
     commonDependencies {
-        implementation(libs.configapi.yaml)
         implementation(libs.mcmsgdef)
-
         compileOnly(libs.platform.paper)
     }
 }

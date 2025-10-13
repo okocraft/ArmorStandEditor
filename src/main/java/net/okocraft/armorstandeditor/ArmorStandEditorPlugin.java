@@ -1,12 +1,11 @@
 package net.okocraft.armorstandeditor;
 
-import com.github.siroshun09.configapi.api.util.ResourceUtils;
-import com.github.siroshun09.configapi.yaml.YamlConfiguration;
 import dev.siroshun.mcmsgdef.directory.DirectorySource;
 import dev.siroshun.mcmsgdef.directory.MessageProcessors;
 import dev.siroshun.mcmsgdef.file.PropertiesFile;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.okocraft.armorstandeditor.command.ArmorStandEditorCommand;
 import net.okocraft.armorstandeditor.item.EditToolItem;
 import net.okocraft.armorstandeditor.listener.ArmorStandListener;
@@ -21,25 +20,20 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 public final class ArmorStandEditorPlugin extends JavaPlugin {
 
-    private final YamlConfiguration configuration =
-        YamlConfiguration.create(this.getDataFolder().toPath().resolve("config.yml"));
-
-    private EditToolItem editToolItem;
+    private EditToolItem editToolItem = new EditToolItem(true, null, List.of());
 
     @Override
     public void onLoad() {
-        try {
-            ResourceUtils.copyFromJarIfNotExists(this.getFile().toPath(), "config.yml", this.configuration.getPath());
-            this.configuration.load();
-        } catch (IOException e) {
-            this.getLogger().log(Level.SEVERE, "Failed to load config.yml.", e);
-        }
+        this.saveDefaultConfig();
+        this.reloadConfig();
 
         try {
             this.loadMessages();
@@ -56,7 +50,7 @@ public final class ArmorStandEditorPlugin extends JavaPlugin {
         manager.registerEvents(new InventoryListener(), this);
         manager.registerEvents(new PlayerListener(this), this);
 
-        this.editToolItem = new EditToolItem(this);
+        this.editToolItem = this.createEditToolItem();
         this.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, event -> ArmorStandEditorCommand.register(event.registrar(), this));
     }
 
@@ -65,10 +59,6 @@ public final class ArmorStandEditorPlugin extends JavaPlugin {
         this.getServer().getOnlinePlayers().stream().filter(player -> ArmorStandEditorMenu.isArmorStandEditorMenu(player.getOpenInventory().getTopInventory())).forEach(HumanEntity::closeInventory);
         HandlerList.unregisterAll(this);
         TaskScheduler.cancelTasks();
-    }
-
-    public @NotNull YamlConfiguration getConfiguration() {
-        return this.configuration;
     }
 
     public void loadMessages() throws IOException {
@@ -86,5 +76,16 @@ public final class ArmorStandEditorPlugin extends JavaPlugin {
 
     public @NotNull EditToolItem getEditToolItem() {
         return this.editToolItem;
+    }
+
+    private @NotNull EditToolItem createEditToolItem() {
+        boolean allowNormalFlint = this.getConfig().getBoolean("tool.allow-normal-flint");
+        String displayName = this.getConfig().getString("tool.display-name");
+        List<String> lore = this.getConfig().getStringList("tool.lore");
+        return new EditToolItem(
+            allowNormalFlint,
+            displayName != null ? LegacyComponentSerializer.legacyAmpersand().deserialize(displayName) : null,
+            lore.stream().map(LegacyComponentSerializer.legacyAmpersand()::deserialize).collect(Collectors.toUnmodifiableList())
+        );
     }
 }
