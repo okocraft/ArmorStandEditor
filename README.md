@@ -37,4 +37,4 @@ Tab completion is available for the arguments.
 
 This project is under the GPL-3.0. Please see [LICENSE](LICENSE) for more info.
 
-Copyright © 2021-2024, OKOCRAFT and Siroshun09
+Copyright © 2021-2025, OKOCRAFT and Siroshun09
