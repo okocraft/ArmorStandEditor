@@ -12,7 +12,7 @@ import net.okocraft.armorstandeditor.listener.ArmorStandListener;
 import net.okocraft.armorstandeditor.listener.InventoryListener;
 import net.okocraft.armorstandeditor.listener.PlayerListener;
 import net.okocraft.armorstandeditor.menu.ArmorStandEditorMenu;
-import net.okocraft.armorstandeditor.util.TaskScheduler;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -23,10 +23,21 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 public final class ArmorStandEditorPlugin extends JavaPlugin {
+
+    private static ArmorStandEditorPlugin instance;
+
+    public static @NotNull ArmorStandEditorPlugin plugin() {
+        return Objects.requireNonNull(instance);
+    }
+
+    public ArmorStandEditorPlugin() {
+        instance = this;
+    }
 
     private EditToolItem editToolItem = new EditToolItem(true, null, List.of());
 
@@ -58,7 +69,8 @@ public final class ArmorStandEditorPlugin extends JavaPlugin {
     public void onDisable() {
         this.getServer().getOnlinePlayers().stream().filter(player -> ArmorStandEditorMenu.isArmorStandEditorMenu(player.getOpenInventory().getTopInventory())).forEach(HumanEntity::closeInventory);
         HandlerList.unregisterAll(this);
-        TaskScheduler.cancelTasks();
+        Bukkit.getGlobalRegionScheduler().cancelTasks(this);
+        Bukkit.getAsyncScheduler().cancelTasks(this);
     }
 
     public void loadMessages() throws IOException {

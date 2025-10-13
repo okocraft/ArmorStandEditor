@@ -4,13 +4,12 @@ import it.unimi.dsi.fastutil.ints.IntSet;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.okocraft.armorstandeditor.ArmorStandEditorPlugin;
 import net.okocraft.armorstandeditor.lang.Components;
-import net.okocraft.armorstandeditor.util.TaskScheduler;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.block.BlockDispenseArmorEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -25,7 +24,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -33,8 +31,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class EquipmentMenu implements ArmorStandEditorMenu {
 
     private static final EquipmentSlot[] EQUIPMENT_SLOTS = new EquipmentSlot[]{
-            EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET,
-            EquipmentSlot.HAND, EquipmentSlot.OFF_HAND
+        EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET,
+        EquipmentSlot.HAND, EquipmentSlot.OFF_HAND
     };
     private static final int[] MENU_EQUIPMENT_SLOT_INDEXES = Arrays.stream(EQUIPMENT_SLOTS).mapToInt(EquipmentMenu::toMenuIndex).toArray();
     private static final IntSet MODIFIABLE_SLOTS = IntSet.of(MENU_EQUIPMENT_SLOT_INDEXES);
@@ -103,18 +101,26 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
 
     public void handleManipulateEvent(@NotNull PlayerArmorStandManipulateEvent event) {
         if (this.blockModifying.compareAndSet(false, true)) {
-            TaskScheduler.scheduleEntityTask(this::getArmorStand, this::renderItemsIfArmorStandExist);
-        } else {
-            event.setCancelled(true);
+            ArmorStand armorStand = this.getArmorStand();
+            if (armorStand != null) {
+                armorStand.getScheduler().run(ArmorStandEditorPlugin.plugin(), ignored -> this.renderItemsIfArmorStandExist(armorStand), null);
+                return;
+            }
         }
+
+        event.setCancelled(true);
     }
 
     public void handleDispenseArmorEvent(@NotNull BlockDispenseArmorEvent event) {
         if (this.blockModifying.compareAndSet(false, true)) {
-            TaskScheduler.scheduleEntityTask(this::getArmorStand, this::renderItemsIfArmorStandExist);
-        } else {
-            event.setCancelled(true);
+            ArmorStand armorStand = this.getArmorStand();
+            if (armorStand != null) {
+                armorStand.getScheduler().run(ArmorStandEditorPlugin.plugin(), ignored -> this.renderItemsIfArmorStandExist(armorStand), null);
+                return;
+            }
         }
+
+        event.setCancelled(true);
     }
 
     private void processEvent(@NotNull Cancellable event) {
@@ -142,7 +148,7 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
             return;
         }
 
-        TaskScheduler.scheduleEntityTask(this::getArmorStand, this::applyEquipmentsIfModified);
+        armorStand.getScheduler().run(ArmorStandEditorPlugin.plugin(), ignored -> this.applyEquipmentsIfModified(armorStand), null);
     }
 
     public void renderItems(@NotNull EntityEquipment equipment) {
@@ -157,7 +163,7 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
 
     public void closeMenu() {
         this.blockModifying.set(true);
-        TaskScheduler.scheduleEntityTasks(() -> List.copyOf(this.inventory.getViewers()), HumanEntity::closeInventory);
+        this.inventory.getViewers().forEach(viewer -> viewer.getScheduler().run(ArmorStandEditorPlugin.plugin(), ignored -> viewer.closeInventory(), null));
     }
 
     private void renderItemsIfArmorStandExist(@Nullable ArmorStand armorStand) {
