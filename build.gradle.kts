@@ -17,6 +17,10 @@ jcommon {
     }
 }
 
+repositories {
+    mavenCentral()
+}
+
 bundler {
     replacePluginVersionForBukkit(version)
 }
