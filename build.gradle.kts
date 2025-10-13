@@ -11,7 +11,7 @@ jcommon {
 
     commonDependencies {
         implementation(libs.configapi.yaml)
-        implementation(libs.translationloader)
+        implementation(libs.mcmsgdef)
 
         compileOnly(libs.platform.paper)
     }

@@ -1,7 +1,7 @@
 [versions]
 # libraries
 configapi = "4.6.4"
-translationloader = "2.0.2"
+mcmsgdef = "1.0.0"
 paper = "1.21.10-R0.1-SNAPSHOT"
 
 # gradle plugins
@@ -10,7 +10,7 @@ gradle-plugins = "1.6.0"
 
 [libraries]
 configapi-yaml = { module = "com.github.siroshun09.configapi:configapi-yaml", version.ref = "configapi" }
-translationloader = { module = "com.github.siroshun09.translationloader:translationloader", version.ref = "translationloader" }
+mcmsgdef = { module = "dev.siroshun.mcmsgdef:mcmsgdef", version.ref = "mcmsgdef" }
 platform-paper = { module = "io.papermc.paper:paper-api", version.ref = "paper" }
 
 [plugins]

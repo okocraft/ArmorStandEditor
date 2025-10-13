@@ -1,18 +1,10 @@
 package net.okocraft.armorstandeditor.lang;
 
+import dev.siroshun.mcmsgdef.MessageKey;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TranslatableComponent;
+import net.kyori.adventure.text.minimessage.translation.Argument;
 import net.okocraft.armorstandeditor.editor.EditMode;
 import net.okocraft.armorstandeditor.editor.PlayerEditor;
-
-import java.util.function.Function;
-
-import static net.kyori.adventure.text.format.NamedTextColor.GRAY;
-import static net.kyori.adventure.text.format.NamedTextColor.RED;
-import static net.kyori.adventure.text.format.NamedTextColor.YELLOW;
-import static net.okocraft.armorstandeditor.lang.Components.AXIS_NAME;
-import static net.okocraft.armorstandeditor.lang.Components.KEY_PREFIX;
-import static net.okocraft.armorstandeditor.lang.Components.MODE_NAME;
 
 public final class Messages {
 
@@ -20,102 +12,81 @@ public final class Messages {
         throw new UnsupportedOperationException();
     }
 
-    public static final Component EDIT_NO_PERMISSION =
-            Components.PREFIX.append(Component.translatable(KEY_PREFIX + "edit.no-permission", RED));
+    public static final MessageKey EDIT_NO_PERMISSION = MessageKey.key("armorstandeditor.edit.no-permission");
 
-    public static final Component EDIT_MODE_NO_PERMISSION =
-            Components.PREFIX.append(Component.translatable(KEY_PREFIX + "edit.mode-no-permission", RED));
+    public static final MessageKey EDIT_MODE_NO_PERMISSION = MessageKey.key("armorstandeditor.edit.mode-no-permission");
 
-    public static final Component RENAME_NO_PERMISSION =
-            Components.PREFIX.append(Component.translatable(KEY_PREFIX + "rename.no-permission", RED));
+    public static final MessageKey RENAME_NO_PERMISSION = MessageKey.key("armorstandeditor.rename.no-permission");
 
-    public static final Component COMMAND_ARGUMENT_NOT_ENOUGH =
-            Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.argument-not-enough", RED));
+    public static final MessageKey COMMAND_ARGUMENT_NOT_ENOUGH = MessageKey.key("armorstandeditor.command.argument-not-enough");
 
-    public static final Component COMMAND_EQUIPMENT_ARMOR_STAND_NOT_FOUND =
-            Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.equipment.armor-stand-not-found", RED));
+    public static final MessageKey COMMAND_EQUIPMENT_ARMOR_STAND_NOT_FOUND = MessageKey.key("armorstandeditor.command.equipment.armor-stand-not-found");
 
-    public static final Component COMMAND_RELOAD_SUCCESS =
-            Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.reload.success", GRAY));
+    public static final MessageKey COMMAND_RELOAD_SUCCESS = MessageKey.key("armorstandeditor.command.reload.success");
 
-    public static final Component COMMAND_RELOAD_FAILURE =
-            Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.reload.failure", RED));
+    public static final MessageKey COMMAND_RELOAD_FAILURE = MessageKey.key("armorstandeditor.command.reload.failure");
 
-    public static final TranslatableComponent COMMAND_AXIS_INVALID_ARGUMENT =
-            Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.axis.invalid-argument", RED));
+    public static final MessageKey.Arg1<String> COMMAND_AXIS_INVALID_ARGUMENT = MessageKey.arg1("armorstandeditor.command.axis.invalid-argument", axis -> Argument.string("axis", axis));
 
-    public static final Function<PlayerEditor.Axis, Component> COMMAND_AXIS_TOOLTIP =
-            axis -> Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.axis.tooltip", GRAY).arguments(AXIS_NAME.apply(axis)));
+    public static final MessageKey.Arg1<PlayerEditor.Axis> COMMAND_AXIS_TOOLTIP = MessageKey.arg1("armorstandeditor.command.axis.tooltip", Placeholders.AXIS_PLACEHOLDER);
 
-    public static final TranslatableComponent COMMAND_AXIS_CHANGE =
-            Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.axis.change", GRAY));
+    public static final MessageKey.Arg1<PlayerEditor.Axis> COMMAND_AXIS_CHANGE = MessageKey.arg1("armorstandeditor.command.axis.change", Placeholders.AXIS_PLACEHOLDER);
 
-    public static final TranslatableComponent COMMAND_MODE_INVALID_ARGUMENT =
-            Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.mode.invalid-argument", RED));
+    public static final MessageKey.Arg1<String> COMMAND_MODE_INVALID_ARGUMENT = MessageKey.arg1("armorstandeditor.command.mode.invalid-argument", mode -> Argument.string("mode", mode));
 
-    public static final Function<EditMode, Component> COMMAND_MODE_TOOLTIP =
-            mode -> Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.mode.tooltip", GRAY).arguments(MODE_NAME.apply(mode)));
+    public static final MessageKey.Arg1<EditMode> COMMAND_MODE_TOOLTIP = MessageKey.arg1("armorstandeditor.command.mode.tooltip", Placeholders.EDIT_MODE_PLACEHOLDER);
 
-    public static final TranslatableComponent COMMAND_MODE_CHANGE =
-            Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.mode.change", GRAY));
+    public static final MessageKey.Arg1<EditMode> COMMAND_MODE_CHANGE = MessageKey.arg1("armorstandeditor.command.mode.change", Placeholders.EDIT_MODE_PLACEHOLDER);
 
-    public static final Component COMMAND_MODE_NO_PERMISSION =
-            Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.mode.no-permission", GRAY));
+    public static final MessageKey COMMAND_MODE_NO_PERMISSION = MessageKey.key("armorstandeditor.command.mode.no-permission");
 
-    public static final Component COMMAND_ITEM_SUCCESS =
-            Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.item.success", GRAY));
+    public static final MessageKey COMMAND_ITEM_SUCCESS = MessageKey.key("armorstandeditor.command.item.success");
 
-    public static final Component COMMAND_ITEM_FAILURE =
-            Components.PREFIX.append(Component.translatable(KEY_PREFIX + "command.item.failure", RED));
+    public static final MessageKey COMMAND_ITEM_FAILURE = MessageKey.key("armorstandeditor.command.item.failure");
 
-    public static final Component EDIT_ARMS_ON = Component.translatable(KEY_PREFIX + "edit.arms.on", YELLOW);
+    public static final MessageKey EDIT_ARMS_ON = MessageKey.key("armorstandeditor.edit.arms.on");
 
-    public static final Component EDIT_ARMS_OFF = Component.translatable(KEY_PREFIX + "edit.arms.off", YELLOW);
+    public static final MessageKey EDIT_ARMS_OFF = MessageKey.key("armorstandeditor.edit.arms.off");
 
-    public static final Component EDIT_BASE_PLATE_ON = Component.translatable(KEY_PREFIX + "edit.base-plate.on", YELLOW);
+    public static final MessageKey EDIT_BASE_PLATE_ON = MessageKey.key("armorstandeditor.edit.base-plate.on");
 
-    public static final Component EDIT_BASE_PLATE_OFF = Component.translatable(KEY_PREFIX + "edit.base-plate.off", YELLOW);
+    public static final MessageKey EDIT_BASE_PLATE_OFF = MessageKey.key("armorstandeditor.edit.base-plate.off");
 
-    public static final TranslatableComponent EDIT_COPY = Component.translatable(KEY_PREFIX + "edit.copy", YELLOW);
+    public static final MessageKey.Arg1<Integer> EDIT_COPY = MessageKey.arg1("armorstandeditor.edit.copy", Placeholders.SLOT_PLACEHOLDER);
 
-    public static final Component EDIT_GRAVITY_ON = Component.translatable(KEY_PREFIX + "edit.gravity.on", YELLOW);
+    public static final MessageKey EDIT_GRAVITY_ON = MessageKey.key("armorstandeditor.edit.gravity.on");
 
-    public static final Component EDIT_LOCK = Component.translatable(KEY_PREFIX + "edit.lock.locked", YELLOW);
+    public static final MessageKey EDIT_LOCK = MessageKey.key("armorstandeditor.edit.lock.locked");
 
-    public static final Component EDIT_UNLOCK = Component.translatable(KEY_PREFIX + "edit.lock.unlocked", YELLOW);
+    public static final MessageKey EDIT_UNLOCK = MessageKey.key("armorstandeditor.edit.lock.unlocked");
 
-    public static final Component EDIT_GRAVITY_OFF = Component.translatable(KEY_PREFIX + "edit.gravity.off", YELLOW);
+    public static final MessageKey EDIT_GRAVITY_OFF = MessageKey.key("armorstandeditor.edit.gravity.off");
 
-    public static final TranslatableComponent EDIT_PASTE = Component.translatable(KEY_PREFIX + "edit.paste", YELLOW);
+    public static final  MessageKey.Arg1<Integer> EDIT_PASTE = MessageKey.arg1("armorstandeditor.edit.paste", Placeholders.SLOT_PLACEHOLDER);
 
-    public static final Component EDIT_REMOVAL = Component.translatable(KEY_PREFIX + "edit.removal", YELLOW);
+    public static final MessageKey EDIT_REMOVAL = MessageKey.key("armorstandeditor.edit.removal");
 
-    public static final Component EDIT_RESET_POSE = Component.translatable(KEY_PREFIX + "edit.reset-pose", YELLOW);
+    public static final MessageKey EDIT_RESET_POSE = MessageKey.key("armorstandeditor.edit.reset-pose");
 
-    public static final Component EDIT_SIZE_SMALL = Component.translatable(KEY_PREFIX + "edit.size.small", YELLOW);
+    public static final MessageKey EDIT_SIZE_SMALL = MessageKey.key("armorstandeditor.edit.size.small");
 
-    public static final Component EDIT_SIZE_NORMAL = Component.translatable(KEY_PREFIX + "edit.size.normal", YELLOW);
+    public static final MessageKey EDIT_SIZE_NORMAL = MessageKey.key("armorstandeditor.edit.size.normal");
 
-    public static final Component EDIT_VISIBLE_ON = Component.translatable(KEY_PREFIX + "edit.visible.on", YELLOW);
+    public static final MessageKey EDIT_VISIBLE_ON = MessageKey.key("armorstandeditor.edit.visible.on");
 
-    public static final Component EDIT_VISIBLE_OFF = Component.translatable(KEY_PREFIX + "edit.visible.off", YELLOW);
+    public static final MessageKey EDIT_VISIBLE_OFF = MessageKey.key("armorstandeditor.edit.visible.off");
 
-    public static final Component EDIT_CUSTOM_NAME_VISIBLE_ON = Component.translatable(KEY_PREFIX + "edit.custom-name-visible.on", YELLOW);
+    public static final MessageKey EDIT_CUSTOM_NAME_VISIBLE_ON = MessageKey.key("armorstandeditor.edit.custom-name-visible.on");
 
-    public static final Component EDIT_CUSTOM_NAME_VISIBLE_OFF = Component.translatable(KEY_PREFIX + "edit.custom-name-visible.off", YELLOW);
+    public static final MessageKey EDIT_CUSTOM_NAME_VISIBLE_OFF = MessageKey.key("armorstandeditor.edit.custom-name-visible.off");
 
-    public static final TranslatableComponent MENU_CHANGE_AXIS =
-            Component.translatable(KEY_PREFIX + "menu.selection.change.axis", YELLOW);
+    public static final MessageKey.Arg1<PlayerEditor.Axis> MENU_CHANGE_AXIS =MessageKey.arg1("armorstandeditor.menu.selection.change.axis", Placeholders.AXIS_PLACEHOLDER);
 
-    public static final TranslatableComponent MENU_CHANGE_ADJUSTMENT_MODE =
-            Component.translatable(KEY_PREFIX + "menu.selection.change.adjustment-mode", YELLOW);
+    public static final MessageKey.Arg1<Component> MENU_CHANGE_ADJUSTMENT_MODE = MessageKey.arg1("armorstandeditor.menu.selection.change.adjustment-mode", component -> Argument.component("mode", component));
 
-    public static final TranslatableComponent MENU_CHANGE_COPY_SLOT =
-            Component.translatable(KEY_PREFIX + "menu.selection.change.copy-slot", YELLOW);
+    public static final MessageKey.Arg1<Integer> MENU_CHANGE_COPY_SLOT =MessageKey.arg1("armorstandeditor.menu.selection.change.copy-slot", Placeholders.SLOT_PLACEHOLDER);
 
-    public static final TranslatableComponent MENU_CHANGE_MODE =
-            Component.translatable(KEY_PREFIX + "menu.selection.change.mode", YELLOW);
+    public static final MessageKey.Arg1<EditMode> MENU_CHANGE_MODE =MessageKey.arg1("armorstandeditor.menu.selection.change.mode", Placeholders.EDIT_MODE_PLACEHOLDER);
 
-    public static final TranslatableComponent MENU_HELP =
-            Components.PREFIX.append(Component.translatable(KEY_PREFIX + "menu.selection.help", GRAY));
+    public static final MessageKey MENU_HELP =MessageKey.key("armorstandeditor.menu.selection.help");
 }

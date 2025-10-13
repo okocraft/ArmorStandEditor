@@ -12,25 +12,16 @@ import io.papermc.paper.command.brigadier.MessageComponentSerializer;
 import io.papermc.paper.command.brigadier.argument.CustomArgumentType;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
-@SuppressWarnings("UnstableApiUsage")
-public final class ConstantsArgumentType<T> implements CustomArgumentType<T, String> {
-
-    private final Function<String, Component> messageForInvalidInput;
-    private final Function<T, Component> tooltipFunction;
-    private final List<String> names;
-    private final Function<String, T> finder;
-
-    public ConstantsArgumentType(@NotNull List<String> names, @NotNull Function<String, T> finder, @NotNull Function<String, Component> messageForInvalidInput, @NotNull Function<T, Component> tooltipFunction) {
-        this.names = names;
-        this.finder = finder;
-        this.messageForInvalidInput = messageForInvalidInput;
-        this.tooltipFunction = tooltipFunction;
-    }
+public record ConstantsArgumentType<T>(List<String> names,
+                                       Function<String, @Nullable T> finder,
+                                       Function<String, Component> messageForInvalidInput,
+                                       Function<T, Component> tooltipFunction) implements CustomArgumentType<T, String> {
 
     @Override
     public @NotNull ArgumentType<String> getNativeType() {

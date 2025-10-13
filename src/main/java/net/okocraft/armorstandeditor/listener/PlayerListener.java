@@ -4,7 +4,6 @@ import net.okocraft.armorstandeditor.ArmorStandEditorPlugin;
 import net.okocraft.armorstandeditor.editor.EditMode;
 import net.okocraft.armorstandeditor.editor.PlayerEditor;
 import net.okocraft.armorstandeditor.editor.PlayerEditorProvider;
-import net.okocraft.armorstandeditor.lang.Components;
 import net.okocraft.armorstandeditor.lang.Messages;
 import net.okocraft.armorstandeditor.menu.SelectionMenu;
 import org.bukkit.entity.ArmorStand;
@@ -81,7 +80,7 @@ public class PlayerListener implements Listener {
                 case Y -> editor.setAxis(PlayerEditor.Axis.Z);
                 case Z -> editor.setAxis(PlayerEditor.Axis.X);
             }
-            player.sendActionBar(Messages.MENU_CHANGE_AXIS.args(Components.AXIS_NAME.apply(editor.getAxis())));
+            player.sendActionBar(Messages.MENU_CHANGE_AXIS.apply(editor.getAxis()));
             return;
         }
 
@@ -91,7 +90,7 @@ public class PlayerListener implements Listener {
                 case Y -> editor.setAxis(PlayerEditor.Axis.X);
                 case Z -> editor.setAxis(PlayerEditor.Axis.Y);
             }
-            player.sendActionBar(Messages.MENU_CHANGE_AXIS.args(Components.AXIS_NAME.apply(editor.getAxis())));
+            player.sendActionBar(Messages.MENU_CHANGE_AXIS.apply(editor.getAxis()));
         }
     }
 }

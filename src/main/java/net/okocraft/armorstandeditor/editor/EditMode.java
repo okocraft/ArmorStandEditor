@@ -1,7 +1,6 @@
 package net.okocraft.armorstandeditor.editor;
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.ComponentLike;
 import net.okocraft.armorstandeditor.lang.Messages;
 import net.okocraft.armorstandeditor.menu.EquipmentMenuProvider;
 import net.okocraft.armorstandeditor.menu.SelectionMenu;
@@ -45,7 +44,7 @@ public final class EditMode {
 
     public static final EditMode COPY = create("copy", (editor, armorStand, reverse) -> {
         editor.copy(armorStand);
-        editor.getPlayer().sendActionBar(Messages.EDIT_COPY.args(Component.text(String.valueOf(editor.getSelectedCopySlot()), NamedTextColor.AQUA)));
+        editor.getPlayer().sendActionBar(Messages.EDIT_COPY.apply(editor.getSelectedCopySlot()));
     });
 
     public static final EditMode CUSTOM_NAME_VISIBLE = toggleBooleanState("custom-name-visible", ArmorStand::isCustomNameVisible, ArmorStand::setCustomNameVisible, Messages.EDIT_CUSTOM_NAME_VISIBLE_ON, Messages.EDIT_CUSTOM_NAME_VISIBLE_OFF);
@@ -64,7 +63,7 @@ public final class EditMode {
     public static final EditMode LEFT_LEG_POSE = changePose("left-leg", ArmorStand::getLeftLegPose, ArmorStand::setLeftLegPose);
 
     public static final EditMode LOCK = create("lock", (editor, armorStand, reverse) -> {
-        Component message;
+        ComponentLike message;
 
         if (editor.isLocked(armorStand)) {
             editor.unlock(armorStand);
@@ -100,7 +99,7 @@ public final class EditMode {
         }
 
         data.apply(armorStand, editor.getPlayer().getGameMode() == GameMode.CREATIVE);
-        editor.getPlayer().sendActionBar(Messages.EDIT_PASTE.args(Component.text(String.valueOf(editor.getSelectedCopySlot()), NamedTextColor.AQUA)));
+        editor.getPlayer().sendActionBar(Messages.EDIT_PASTE.apply(editor.getSelectedCopySlot()));
     });
 
     public static final EditMode REMOVAL = create("removal", ArmorStandRemover::remove);
@@ -138,7 +137,7 @@ public final class EditMode {
         return new EditMode(name, editor);
     }
 
-    private static @NotNull EditMode toggleBooleanState(@NotNull String name, @NotNull Function<ArmorStand, Boolean> getter, @NotNull BiConsumer<ArmorStand, Boolean> setter, @NotNull Component on, @NotNull Component off) {
+    private static @NotNull EditMode toggleBooleanState(@NotNull String name, @NotNull Function<ArmorStand, Boolean> getter, @NotNull BiConsumer<ArmorStand, Boolean> setter, @NotNull ComponentLike on, @NotNull ComponentLike off) {
         return create(name, (editor, armorStand, reverse) -> {
             boolean currentOn = getter.apply(armorStand);
             setter.accept(armorStand, !currentOn);

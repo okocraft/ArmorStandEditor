@@ -4,14 +4,11 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.okocraft.armorstandeditor.ArmorStandEditorPlugin;
 import net.okocraft.armorstandeditor.editor.EditMode;
 import net.okocraft.armorstandeditor.editor.PlayerEditor;
 import net.okocraft.armorstandeditor.editor.PlayerEditorProvider;
 import net.okocraft.armorstandeditor.item.EditToolItem;
-import net.okocraft.armorstandeditor.lang.Components;
 import net.okocraft.armorstandeditor.lang.Messages;
 import net.okocraft.armorstandeditor.menu.EquipmentMenuProvider;
 import net.okocraft.armorstandeditor.permission.Permissions;
@@ -24,7 +21,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-@SuppressWarnings("UnstableApiUsage")
 public final class ArmorStandEditorCommand {
 
     public static void register(Commands commands, ArmorStandEditorPlugin plugin) {
@@ -65,17 +61,13 @@ public final class ArmorStandEditorCommand {
                                                 return null;
                                             }
                                         },
-                                        argument -> Messages.COMMAND_AXIS_INVALID_ARGUMENT.append(Component.text(argument, NamedTextColor.AQUA)),
-                                        Messages.COMMAND_AXIS_TOOLTIP
+                                    Messages.COMMAND_AXIS_INVALID_ARGUMENT::apply,
+                                    Messages.COMMAND_AXIS_TOOLTIP::apply
                                 )
                         ).executes(context -> {
-                            var axis = context.getArgument("axis", PlayerEditor.Axis.class);
+                            PlayerEditor.Axis axis = context.getArgument("axis", PlayerEditor.Axis.class);
                             PlayerEditorProvider.getEditor((Player) context.getSource().getSender()).setAxis(axis);
-
-                            context.getSource().getSender().sendMessage(
-                                    Messages.COMMAND_AXIS_CHANGE.append(Components.AXIS_NAME.apply(axis))
-                            );
-
+                            context.getSource().getSender().sendMessage(Messages.COMMAND_AXIS_CHANGE.apply(axis));
                             return Command.SINGLE_SUCCESS;
                         })
                 );
@@ -132,8 +124,8 @@ public final class ArmorStandEditorCommand {
                                 new ConstantsArgumentType<>(
                                         EditMode.names().toList(),
                                         EditMode::byName,
-                                        argument -> Messages.COMMAND_MODE_INVALID_ARGUMENT.append(Component.text(argument, NamedTextColor.AQUA)),
-                                        Messages.COMMAND_MODE_TOOLTIP
+                                        Messages.COMMAND_MODE_INVALID_ARGUMENT::apply,
+                                        Messages.COMMAND_MODE_TOOLTIP::apply
                                 )
                         ).executes(context -> {
                             var player = (Player) context.getSource().getSender();
@@ -141,7 +133,7 @@ public final class ArmorStandEditorCommand {
 
                             if (player.hasPermission(mode.getPermission())) {
                                 PlayerEditorProvider.getEditor(player).setMode(mode);
-                                player.sendMessage(Messages.COMMAND_MODE_CHANGE.append(Components.MODE_NAME.apply(mode)));
+                                player.sendMessage(Messages.COMMAND_MODE_CHANGE.apply(mode));
                             } else {
                                 player.sendMessage(Messages.COMMAND_MODE_NO_PERMISSION);
                             }
@@ -156,7 +148,7 @@ public final class ArmorStandEditorCommand {
                 .requires(source -> source.getSender().hasPermission(Permissions.COMMAND_RELOAD))
                 .executes(context -> {
                     try {
-                        plugin.getTranslationDirectory().load();
+                        plugin.loadMessages();
                     } catch (IOException e) {
                         context.getSource().getSender().sendMessage(Messages.COMMAND_RELOAD_FAILURE);
                         return Command.SINGLE_SUCCESS;

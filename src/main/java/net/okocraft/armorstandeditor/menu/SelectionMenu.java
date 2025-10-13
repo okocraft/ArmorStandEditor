@@ -45,9 +45,7 @@ public class SelectionMenu implements ArmorStandEditorMenu {
                 e -> {
                     e.setAngleChangeQuantity(20);
                     e.setMovingDistance(1);
-                    e.getPlayer().sendActionBar(
-                        Messages.MENU_CHANGE_ADJUSTMENT_MODE.args(Components.ADJUSTMENT_MODE_COARSE)
-                    );
+                    e.getPlayer().sendActionBar(Messages.MENU_CHANGE_ADJUSTMENT_MODE.apply(Components.ADJUSTMENT_MODE_COARSE));
                 }
             )
         );
@@ -59,9 +57,7 @@ public class SelectionMenu implements ArmorStandEditorMenu {
                 e -> {
                     e.setAngleChangeQuantity(2);
                     e.setMovingDistance(0.1);
-                    e.getPlayer().sendActionBar(
-                        Messages.MENU_CHANGE_ADJUSTMENT_MODE.args(Components.ADJUSTMENT_MODE_FINE)
-                    );
+                    e.getPlayer().sendActionBar(Messages.MENU_CHANGE_ADJUSTMENT_MODE.apply(Components.ADJUSTMENT_MODE_FINE));
                 }
             )
         );
@@ -95,7 +91,7 @@ public class SelectionMenu implements ArmorStandEditorMenu {
             new Icon(
                 Material.NETHER_STAR,
                 "help",
-                editor -> editor.getPlayer().sendMessage(Messages.MENU_HELP.args(Components.WIKI_LINK))
+                editor -> editor.getPlayer().sendMessage(Messages.MENU_HELP)
             )
         );
 
@@ -144,23 +140,17 @@ public class SelectionMenu implements ArmorStandEditorMenu {
 
     private static void changeAxis(@NotNull PlayerEditor editor, @NotNull PlayerEditor.Axis axis) {
         editor.setAxis(axis);
-        editor.getPlayer().sendActionBar(
-            Messages.MENU_CHANGE_AXIS.args(Components.AXIS_NAME.apply(axis))
-        );
+        editor.getPlayer().sendActionBar(Messages.MENU_CHANGE_AXIS.apply(axis));
     }
 
     private static void changeMode(@NotNull PlayerEditor editor, @NotNull EditMode mode) {
         editor.setMode(mode);
-        editor.getPlayer().sendActionBar(
-            Messages.MENU_CHANGE_MODE.args(Components.MODE_NAME.apply(mode))
-        );
+        editor.getPlayer().sendActionBar(Messages.MENU_CHANGE_MODE.apply(mode));
     }
 
     private static void changeCopySlot(@NotNull PlayerEditor editor, int slot) {
         editor.setSelectedCopySlot(slot);
-        editor.getPlayer().sendActionBar(
-            Messages.MENU_CHANGE_COPY_SLOT.args(Component.text(String.valueOf(slot), NamedTextColor.AQUA))
-        );
+        editor.getPlayer().sendActionBar(Messages.MENU_CHANGE_COPY_SLOT.apply(slot));
     }
 
     @Override
