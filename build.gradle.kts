@@ -21,6 +21,7 @@ repositories {
 
 bundler {
     replacePluginVersionForBukkit(version)
+    copyToRootBuildDirectory("ArmorStandEditor-${project.version}.jar")
 }
 
 tasks {
