@@ -31,5 +31,8 @@ tasks {
         minimize {
             exclude("net.okocraft.armorstandeditor.ArmorStandEditorPlugin")
         }
+        manifest {
+            attributes("paperweight-mappings-namespace" to "mojang")
+        }
     }
 }
