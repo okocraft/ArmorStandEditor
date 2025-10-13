@@ -5,7 +5,7 @@ translationloader = "2.0.2"
 paper = "1.21.6-R0.1-SNAPSHOT"
 
 # gradle plugins
-run-task = "2.3.1"
+run-task = "3.0.2"
 gradle-plugins = "1.6.0"
 
 [libraries]
