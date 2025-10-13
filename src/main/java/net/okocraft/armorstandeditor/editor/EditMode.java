@@ -9,7 +9,6 @@ import net.okocraft.armorstandeditor.util.AngleCalculator;
 import net.okocraft.armorstandeditor.util.ArmorStandRemover;
 import net.okocraft.armorstandeditor.util.FoliaSyncTeleporter;
 import net.okocraft.armorstandeditor.util.LocationCalculator;
-import net.okocraft.armorstandeditor.util.TaskScheduler;
 import org.bukkit.GameMode;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.util.EulerAngle;
@@ -50,8 +49,8 @@ public final class EditMode {
     public static final EditMode CUSTOM_NAME_VISIBLE = toggleBooleanState("custom-name-visible", ArmorStand::isCustomNameVisible, ArmorStand::setCustomNameVisible, Messages.EDIT_CUSTOM_NAME_VISIBLE_ON, Messages.EDIT_CUSTOM_NAME_VISIBLE_OFF);
 
     public static final EditMode EQUIPMENT = create(
-            "equipment",
-            (editor, armorStand, reverse) -> editor.getPlayer().openInventory(EquipmentMenuProvider.getMenu(armorStand).getInventory())
+        "equipment",
+        (editor, armorStand, reverse) -> editor.getPlayer().openInventory(EquipmentMenuProvider.getMenu(armorStand).getInventory())
     );
 
     public static final EditMode GRAVITY = toggleBooleanState("gravity", ArmorStand::hasGravity, ArmorStand::setGravity, Messages.EDIT_GRAVITY_ON, Messages.EDIT_GRAVITY_OFF);
@@ -78,13 +77,13 @@ public final class EditMode {
 
     public static final EditMode MOVEMENT = create("movement", (editor, armorStand, reverse) -> {
         var location = LocationCalculator.calculate(
-                armorStand.getLocation(),
-                editor.getMovingDistance(),
-                editor.getAxis(),
-                reverse
+            armorStand.getLocation(),
+            editor.getMovingDistance(),
+            editor.getAxis(),
+            reverse
         );
 
-        if (TaskScheduler.FOLIA) {
+        if (FoliaSyncTeleporter.isFolia()) {
             FoliaSyncTeleporter.teleport(armorStand, location);
         } else {
             armorStand.teleport(location);

@@ -11,9 +11,28 @@ import java.lang.reflect.Method;
 
 public final class FoliaSyncTeleporter {
 
+    public static final boolean FOLIA;
+
+    static {
+        boolean isFolia;
+
+        try {
+            Class.forName("io.papermc.paper.threadedregions.RegionizedServer");
+            isFolia = true;
+        } catch (ClassNotFoundException e) {
+            isFolia = false;
+        }
+
+        FOLIA = isFolia;
+    }
+
+    public static boolean isFolia() {
+        return FOLIA;
+    }
+
     private static volatile boolean initialized = false;
-    private static Method toVec3D;
-    private static Object vec3DZero;
+    private static Method toVec3;
+    private static Object vec3Zero;
     private static Method getHandle;
     private static Method teleportSyncSameRegion;
 
@@ -35,7 +54,7 @@ public final class FoliaSyncTeleporter {
         if (teleportSyncSameRegion != null) {
             try {
                 var handle = getHandle.invoke(entity);
-                teleportSyncSameRegion.invoke(handle, toVec3D.invoke(null, loc), null, null, vec3DZero);
+                teleportSyncSameRegion.invoke(handle, toVec3.invoke(null, loc), null, null, vec3Zero);
             } catch (Exception e) {
                 logError("Could not invoke methods", e);
             }
@@ -45,10 +64,10 @@ public final class FoliaSyncTeleporter {
     }
 
     private static void init(@NotNull Entity entity) throws Exception {
-        // CraftLocation#toVec3D
+        // CraftLocation#toVec3
         var craftLocation = Class.forName(Bukkit.getServer().getClass().getPackage().getName() + ".util.CraftLocation");
-        toVec3D = craftLocation.getDeclaredMethod("toVec3D", Location.class);
-        vec3DZero = toVec3D.invoke(null, new Location(null, 0, 0, 0));
+        toVec3 = craftLocation.getDeclaredMethod("toVec3", Location.class);
+        vec3Zero = toVec3.invoke(null, new Location(null, 0, 0, 0));
 
         // CraftEntity#getHandle
         getHandle = entity.getClass().getMethod("getHandle");
@@ -57,7 +76,7 @@ public final class FoliaSyncTeleporter {
         var entityClass = getHandle.invoke(entity).getClass().getSuperclass().getSuperclass(); // ArmorStand -> LivingEntity -> Entity
 
         // Entity#teleportSyncSameRegion(Vec3 pos, Float yaw, Float pitch, Vec3 speedDirectionUpdate)
-        teleportSyncSameRegion = entityClass.getDeclaredMethod("teleportSyncSameRegion", vec3DZero.getClass(), Float.class, Float.class, vec3DZero.getClass());
+        teleportSyncSameRegion = entityClass.getDeclaredMethod("teleportSyncSameRegion", vec3Zero.getClass(), Float.class, Float.class, vec3Zero.getClass());
         teleportSyncSameRegion.setAccessible(true);
     }
 
