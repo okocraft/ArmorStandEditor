@@ -1,6 +1,7 @@
 package net.okocraft.armorstandeditor.editor;
 
 import net.okocraft.armorstandeditor.data.ArmorStandData;
+import org.bukkit.Axis;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -91,21 +92,5 @@ public class PlayerEditor {
 
     public boolean isLocked(@NotNull ArmorStand armorStand) {
         return this.lockedArmorStand.contains(armorStand.getUniqueId());
-    }
-
-    public enum Axis {
-        X("x"),
-        Y("y"),
-        Z("z");
-
-        private final String name;
-
-        Axis(@NotNull String name) {
-            this.name = name;
-        }
-
-        public @NotNull String getName() {
-            return this.name;
-        }
     }
 }

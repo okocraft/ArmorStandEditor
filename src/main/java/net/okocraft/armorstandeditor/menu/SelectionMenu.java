@@ -11,6 +11,7 @@ import net.okocraft.armorstandeditor.editor.PlayerEditorProvider;
 import net.okocraft.armorstandeditor.lang.Components;
 import net.okocraft.armorstandeditor.lang.Messages;
 import net.okocraft.armorstandeditor.permission.Permissions;
+import org.bukkit.Axis;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -34,9 +35,9 @@ public class SelectionMenu implements ArmorStandEditorMenu {
     static {
         var map = new HashMap<Integer, Icon>();
 
-        map.put(0, new Icon(Material.RED_WOOL, "x-axis", editor -> changeAxis(editor, PlayerEditor.Axis.X)));
-        map.put(1, new Icon(Material.GREEN_WOOL, "y-axis", editor -> changeAxis(editor, PlayerEditor.Axis.Y)));
-        map.put(2, new Icon(Material.BLUE_WOOL, "z-axis", editor -> changeAxis(editor, PlayerEditor.Axis.Z)));
+        map.put(0, new Icon(Material.RED_WOOL, "x-axis", editor -> changeAxis(editor, Axis.X)));
+        map.put(1, new Icon(Material.GREEN_WOOL, "y-axis", editor -> changeAxis(editor, Axis.Y)));
+        map.put(2, new Icon(Material.BLUE_WOOL, "z-axis", editor -> changeAxis(editor, Axis.Z)));
 
         map.put(4,
             new Icon(
@@ -138,7 +139,7 @@ public class SelectionMenu implements ArmorStandEditorMenu {
         }
     }
 
-    private static void changeAxis(@NotNull PlayerEditor editor, @NotNull PlayerEditor.Axis axis) {
+    private static void changeAxis(@NotNull PlayerEditor editor, @NotNull Axis axis) {
         editor.setAxis(axis);
         editor.getPlayer().sendActionBar(Messages.MENU_CHANGE_AXIS.apply(axis));
     }

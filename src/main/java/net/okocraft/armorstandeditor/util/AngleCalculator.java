@@ -1,6 +1,6 @@
 package net.okocraft.armorstandeditor.util;
 
-import net.okocraft.armorstandeditor.editor.PlayerEditor;
+import org.bukkit.Axis;
 import org.bukkit.util.EulerAngle;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,14 +14,14 @@ public final class AngleCalculator {
     }
 
     public static @NotNull EulerAngle calculate(@NotNull EulerAngle original, double angleChangeQuantity,
-                                                @NotNull PlayerEditor.Axis axis, boolean reverse) {
+                                                @NotNull Axis axis, boolean reverse) {
         return !reverse ?
             add(original, angleChangeQuantity, axis) :
             subtract(original, angleChangeQuantity, axis);
     }
 
     private static @NotNull EulerAngle add(@NotNull EulerAngle original,
-                                           double angleChangeQuantity, @NotNull PlayerEditor.Axis axis) {
+                                           double angleChangeQuantity, @NotNull Axis axis) {
         var rad = angleChangeQuantity * RADIAN;
 
         return switch (axis) {
@@ -32,7 +32,7 @@ public final class AngleCalculator {
     }
 
     private static @NotNull EulerAngle subtract(@NotNull EulerAngle original,
-                                                double angleChangeQuantity, @NotNull PlayerEditor.Axis axis) {
+                                                double angleChangeQuantity, @NotNull Axis axis) {
         var rad = angleChangeQuantity * RADIAN;
 
         return switch (axis) {

@@ -2,10 +2,10 @@ package net.okocraft.armorstandeditor.listener;
 
 import net.okocraft.armorstandeditor.ArmorStandEditorPlugin;
 import net.okocraft.armorstandeditor.editor.EditMode;
-import net.okocraft.armorstandeditor.editor.PlayerEditor;
 import net.okocraft.armorstandeditor.editor.PlayerEditorProvider;
 import net.okocraft.armorstandeditor.lang.Messages;
 import net.okocraft.armorstandeditor.menu.SelectionMenu;
+import org.bukkit.Axis;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -76,9 +76,9 @@ public class PlayerListener implements Listener {
 
         if (newSlot == previousSlot + 1 || (newSlot == 0 && previousSlot == 8)) {
             switch (editor.getAxis()) {
-                case X -> editor.setAxis(PlayerEditor.Axis.Y);
-                case Y -> editor.setAxis(PlayerEditor.Axis.Z);
-                case Z -> editor.setAxis(PlayerEditor.Axis.X);
+                case X -> editor.setAxis(Axis.Y);
+                case Y -> editor.setAxis(Axis.Z);
+                case Z -> editor.setAxis(Axis.X);
             }
             player.sendActionBar(Messages.MENU_CHANGE_AXIS.apply(editor.getAxis()));
             return;
@@ -86,9 +86,9 @@ public class PlayerListener implements Listener {
 
         if (e.getNewSlot() == e.getPreviousSlot() - 1 || (newSlot == 8 && previousSlot == 0)) {
             switch (editor.getAxis()) {
-                case X -> editor.setAxis(PlayerEditor.Axis.Z);
-                case Y -> editor.setAxis(PlayerEditor.Axis.X);
-                case Z -> editor.setAxis(PlayerEditor.Axis.Y);
+                case X -> editor.setAxis(Axis.Z);
+                case Y -> editor.setAxis(Axis.X);
+                case Z -> editor.setAxis(Axis.Y);
             }
             player.sendActionBar(Messages.MENU_CHANGE_AXIS.apply(editor.getAxis()));
         }

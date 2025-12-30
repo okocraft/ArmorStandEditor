@@ -1,6 +1,6 @@
 package net.okocraft.armorstandeditor.util;
 
-import net.okocraft.armorstandeditor.editor.PlayerEditor;
+import org.bukkit.Axis;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,14 +11,14 @@ public final class LocationCalculator {
     }
 
     public static Location calculate(@NotNull Location original, double distance,
-                                     @NotNull PlayerEditor.Axis axis, boolean reverse) {
+                                     @NotNull Axis axis, boolean reverse) {
         return !reverse ?
             add(original, distance, axis) :
             subtract(original, distance, axis);
     }
 
     private static @NotNull Location add(@NotNull Location original, double distance,
-                                         @NotNull PlayerEditor.Axis axis) {
+                                         @NotNull Axis axis) {
         return switch (axis) {
             case X -> original.add(distance, 0, 0);
             case Y -> original.add(0, distance, 0);
@@ -27,7 +27,7 @@ public final class LocationCalculator {
     }
 
     private static @NotNull Location subtract(@NotNull Location original, double distance,
-                                              @NotNull PlayerEditor.Axis axis) {
+                                              @NotNull Axis axis) {
         return switch (axis) {
             case X -> original.subtract(distance, 0, 0);
             case Y -> original.subtract(0, distance, 0);

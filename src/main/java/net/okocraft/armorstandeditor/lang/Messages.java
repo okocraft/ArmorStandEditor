@@ -4,7 +4,7 @@ import dev.siroshun.mcmsgdef.MessageKey;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.translation.Argument;
 import net.okocraft.armorstandeditor.editor.EditMode;
-import net.okocraft.armorstandeditor.editor.PlayerEditor;
+import org.bukkit.Axis;
 
 public final class Messages {
 
@@ -28,9 +28,9 @@ public final class Messages {
 
     public static final MessageKey.Arg1<String> COMMAND_AXIS_INVALID_ARGUMENT = MessageKey.arg1("armorstandeditor.command.axis.invalid-argument", axis -> Argument.string("axis", axis));
 
-    public static final MessageKey.Arg1<PlayerEditor.Axis> COMMAND_AXIS_TOOLTIP = MessageKey.arg1("armorstandeditor.command.axis.tooltip", Placeholders.AXIS_PLACEHOLDER);
+    public static final MessageKey.Arg1<Axis> COMMAND_AXIS_TOOLTIP = MessageKey.arg1("armorstandeditor.command.axis.tooltip", Placeholders.AXIS_PLACEHOLDER);
 
-    public static final MessageKey.Arg1<PlayerEditor.Axis> COMMAND_AXIS_CHANGE = MessageKey.arg1("armorstandeditor.command.axis.change", Placeholders.AXIS_PLACEHOLDER);
+    public static final MessageKey.Arg1<Axis> COMMAND_AXIS_CHANGE = MessageKey.arg1("armorstandeditor.command.axis.change", Placeholders.AXIS_PLACEHOLDER);
 
     public static final MessageKey.Arg1<String> COMMAND_MODE_INVALID_ARGUMENT = MessageKey.arg1("armorstandeditor.command.mode.invalid-argument", mode -> Argument.string("mode", mode));
 
@@ -80,7 +80,7 @@ public final class Messages {
 
     public static final MessageKey EDIT_CUSTOM_NAME_VISIBLE_OFF = MessageKey.key("armorstandeditor.edit.custom-name-visible.off");
 
-    public static final MessageKey.Arg1<PlayerEditor.Axis> MENU_CHANGE_AXIS =MessageKey.arg1("armorstandeditor.menu.selection.change.axis", Placeholders.AXIS_PLACEHOLDER);
+    public static final MessageKey.Arg1<Axis> MENU_CHANGE_AXIS = MessageKey.arg1("armorstandeditor.menu.selection.change.axis", Placeholders.AXIS_PLACEHOLDER);
 
     public static final MessageKey.Arg1<Component> MENU_CHANGE_ADJUSTMENT_MODE = MessageKey.arg1("armorstandeditor.menu.selection.change.adjustment-mode", component -> Argument.component("mode", component));
 

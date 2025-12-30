@@ -6,12 +6,12 @@ import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import net.okocraft.armorstandeditor.ArmorStandEditorPlugin;
 import net.okocraft.armorstandeditor.editor.EditMode;
-import net.okocraft.armorstandeditor.editor.PlayerEditor;
 import net.okocraft.armorstandeditor.editor.PlayerEditorProvider;
 import net.okocraft.armorstandeditor.item.EditToolItem;
 import net.okocraft.armorstandeditor.lang.Messages;
 import net.okocraft.armorstandeditor.menu.EquipmentMenuProvider;
 import net.okocraft.armorstandeditor.permission.Permissions;
+import org.bukkit.Axis;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -53,10 +53,10 @@ public final class ArmorStandEditorCommand {
                         Commands.argument(
                                 "axis",
                                 new ConstantsArgumentType<>(
-                                        Arrays.stream(PlayerEditor.Axis.values()).map(Enum::name).map(name -> name.toLowerCase(Locale.ENGLISH)).toList(),
+                                        Arrays.stream(Axis.values()).map(Enum::name).map(name -> name.toLowerCase(Locale.ENGLISH)).toList(),
                                         name -> {
                                             try {
-                                                return PlayerEditor.Axis.valueOf(name.toUpperCase(Locale.ENGLISH));
+                                                return Axis.valueOf(name.toUpperCase(Locale.ENGLISH));
                                             } catch (IllegalArgumentException ignored) {
                                                 return null;
                                             }
@@ -65,7 +65,7 @@ public final class ArmorStandEditorCommand {
                                     Messages.COMMAND_AXIS_TOOLTIP::apply
                                 )
                         ).executes(context -> {
-                            PlayerEditor.Axis axis = context.getArgument("axis", PlayerEditor.Axis.class);
+                            Axis axis = context.getArgument("axis", Axis.class);
                             PlayerEditorProvider.getEditor((Player) context.getSource().getSender()).setAxis(axis);
                             context.getSource().getSender().sendMessage(Messages.COMMAND_AXIS_CHANGE.apply(axis));
                             return Command.SINGLE_SUCCESS;

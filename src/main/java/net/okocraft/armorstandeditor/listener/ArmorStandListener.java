@@ -134,11 +134,11 @@ public class ArmorStandListener implements Listener {
                 return;
             }
 
-            this.rename(player, entity, meta.displayName());
+            this.rename(entity, meta.displayName());
         }
     }
 
-    private void rename(@NotNull Player player, @NotNull Entity entity, @Nullable Component name) {
+    private void rename(@NotNull Entity entity, @Nullable Component name) {
         if (name != null) {
             entity.customName(name);
             entity.setCustomNameVisible(true);
