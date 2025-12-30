@@ -11,7 +11,7 @@ import java.lang.reflect.Method;
 
 public final class FoliaSyncTeleporter {
 
-    public static final boolean FOLIA;
+    private static final boolean FOLIA;
 
     static {
         boolean isFolia;
