@@ -5,7 +5,7 @@ paper = "1.21.11-R0.1-SNAPSHOT"
 
 # gradle plugins
 run-task = "3.0.2"
-gradle-plugins = "1.6.1"
+gradle-plugins = "1.7.0"
 
 [libraries]
 mcmsgdef = { module = "dev.siroshun.mcmsgdef:mcmsgdef", version.ref = "mcmsgdef" }
