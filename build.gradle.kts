@@ -5,7 +5,7 @@ plugins {
 }
 
 jcommon {
-    javaVersion = JavaVersion.VERSION_21
+    javaVersion = JavaVersion.VERSION_25
 
     setupPaperRepository()
 
