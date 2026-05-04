@@ -1,5 +1,9 @@
 package net.okocraft.armorstandeditor.menu;
 
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.ItemLore;
+import io.papermc.paper.datacomponent.item.PotionContents;
+import io.papermc.paper.datacomponent.item.TooltipDisplay;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -18,14 +22,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 
 public class SelectionMenu implements ArmorStandEditorMenu {
@@ -164,7 +169,6 @@ public class SelectionMenu implements ArmorStandEditorMenu {
         private static final String KEY_PREFIX = "armorstandeditor.menu.selection.icon.";
         private static final String DISPLAY_NAME_SUFFIX = ".name";
         private static final String LORE_SUFFIX = ".description";
-        // private static final String VISIBLE = "visible";
         private static final ItemStack AIR = new ItemStack(Material.AIR);
 
         private final String permission;
@@ -198,28 +202,22 @@ public class SelectionMenu implements ArmorStandEditorMenu {
                 return AIR;
             }
 
-            var item = new ItemStack(this.material);
-            var meta = item.getItemMeta();
+            ItemStack item = ItemStack.of(this.material);
 
-            if (meta != null) {
-                var translatedName = GlobalTranslator.render(this.name, player.locale()).decoration(TextDecoration.ITALIC, false);
+            Component translatedName = GlobalTranslator.render(this.name, player.locale()).decoration(TextDecoration.ITALIC, false);
+            item.setData(DataComponentTypes.CUSTOM_NAME, translatedName);
 
-
-                meta.displayName(translatedName);
-
-                if (this.lore.size() == 1) {
-                    var translatedLore = GlobalTranslator.render(this.lore.getFirst(), player.locale()).decoration(TextDecoration.ITALIC, false);
-                    meta.lore(List.of(translatedLore));
-                } else {
-                    meta.lore(this.lore.stream().map(line -> GlobalTranslator.render(line, player.locale()).decoration(TextDecoration.ITALIC, false)).toList());
-                }
-
-                if (meta instanceof PotionMeta potionMeta) {
-                    potionMeta.addCustomEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 1, 0), false);
-                }
+            List<Component> translatedLore = new ArrayList<>(this.lore.size());
+            for (TranslatableComponent line : this.lore) {
+                translatedLore.add(GlobalTranslator.render(line, player.locale()).decoration(TextDecoration.ITALIC, false));
             }
+            item.setData(DataComponentTypes.LORE, ItemLore.lore(translatedLore));
 
-            item.setItemMeta(meta);
+            if (this.material == Material.POTION) {
+                PotionEffect effect = new PotionEffect(PotionEffectType.INVISIBILITY, 1, 0);
+                item.setData(DataComponentTypes.POTION_CONTENTS, PotionContents.potionContents().addCustomEffect(effect).build());
+                item.setData(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay().hiddenComponents(Set.of(DataComponentTypes.POTION_CONTENTS)).build());
+            }
 
             return item;
         }
