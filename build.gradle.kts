@@ -26,14 +26,11 @@ bundler {
 
 tasks {
     runServer {
-        minecraftVersion(libs.versions.paper.get().removeSuffix("-R0.1-SNAPSHOT"))
+        minecraftVersion(libs.versions.paper.get().replaceAfter(".build", "").removeSuffix(".build"))
     }
     shadowJar {
         minimize {
             exclude("net.okocraft.armorstandeditor.ArmorStandEditorPlugin")
-        }
-        manifest {
-            attributes("paperweight-mappings-namespace" to "mojang")
         }
     }
 }
