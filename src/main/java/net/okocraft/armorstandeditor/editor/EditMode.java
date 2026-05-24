@@ -2,6 +2,7 @@ package net.okocraft.armorstandeditor.editor;
 
 import net.kyori.adventure.text.ComponentLike;
 import net.okocraft.armorstandeditor.lang.Messages;
+import net.okocraft.armorstandeditor.menu.EquipmentMenu;
 import net.okocraft.armorstandeditor.menu.EquipmentMenuProvider;
 import net.okocraft.armorstandeditor.menu.SelectionMenu;
 import net.okocraft.armorstandeditor.permission.Permissions;
@@ -101,7 +102,14 @@ public final class EditMode {
         editor.getPlayer().sendActionBar(Messages.EDIT_PASTE.apply(editor.getSelectedCopySlot()));
     });
 
-    public static final EditMode REMOVAL = create("removal", ArmorStandRemover::remove);
+    public static final EditMode REMOVAL = create("removal", (editor, armorStand, reverse) -> {
+        EquipmentMenu menu = EquipmentMenuProvider.removeMenu(armorStand);
+        if (menu != null) {
+            menu.closeMenu();
+        }
+
+        ArmorStandRemover.remove(editor, armorStand, reverse);
+    });
 
     public static final EditMode RESET_POSE = create("reset-pose", (editor, armorStand, reverse) -> {
         armorStand.setHeadPose(INITIAL_ANGLE);
