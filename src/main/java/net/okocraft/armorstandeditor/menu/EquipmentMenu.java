@@ -91,31 +91,32 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
     }
 
     public void handleManipulateEvent(@NotNull PlayerArmorStandManipulateEvent event) {
-        if (this.blockModifying.compareAndSet(false, true)) {
-            ArmorStand armorStand = this.getArmorStand();
-            if (armorStand != null) {
-                armorStand.getScheduler().run(ArmorStandEditorPlugin.plugin(), ignored -> this.renderItemsIfArmorStandExist(armorStand), null);
-                return;
-            }
+        if (this.shouldCancelExternalModification()) {
+            event.setCancelled(true);
         }
-
-        event.setCancelled(true);
     }
 
     public void handleDispenseArmorEvent(@NotNull BlockDispenseArmorEvent event) {
+        if (this.shouldCancelExternalModification()) {
+            event.setCancelled(true);
+        }
+    }
+
+    private boolean shouldCancelExternalModification() {
         if (this.blockModifying.compareAndSet(false, true)) {
             ArmorStand armorStand = this.getArmorStand();
             if (armorStand != null) {
                 armorStand.getScheduler().run(ArmorStandEditorPlugin.plugin(), ignored -> this.renderItemsIfArmorStandExist(armorStand), null);
-                return;
+                return false;
             }
+            this.blockModifying.set(false);
         }
 
-        event.setCancelled(true);
+        return true;
     }
 
     private void processEvent(@NotNull Cancellable event) {
-        if (this.blockModifying.get()) {
+        if (!this.blockModifying.compareAndSet(false, true)) {
             event.setCancelled(true);
             return;
         }
@@ -124,11 +125,10 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
 
         if (armorStand == null || armorStand.isDead()) {
             event.setCancelled(true);
+            this.blockModifying.set(false);
             this.closeMenu();
             return;
         }
-
-        this.blockModifying.set(true);
 
         var equipment = armorStand.getEquipment();
 
@@ -166,6 +166,7 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
 
     private void applyEquipmentsIfModified(@Nullable ArmorStand armorStand) {
         if (armorStand == null || armorStand.isDead()) { // If this happens, duplicate/lost items may occur. However, there is nothing we can do.
+            this.blockModifying.set(false);
             return;
         }
 
