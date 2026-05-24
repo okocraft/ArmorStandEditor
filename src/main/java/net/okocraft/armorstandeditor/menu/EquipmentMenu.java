@@ -1,5 +1,6 @@
 package net.okocraft.armorstandeditor.menu;
 
+import io.papermc.paper.datacomponent.DataComponentTypes;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -19,7 +20,7 @@ import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.ItemType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -37,23 +38,13 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
     private static final int[] MENU_EQUIPMENT_SLOT_INDEXES = Arrays.stream(EQUIPMENT_SLOTS).mapToInt(EquipmentMenu::toMenuIndex).toArray();
     private static final IntSet MODIFIABLE_SLOTS = IntSet.of(MENU_EQUIPMENT_SLOT_INDEXES);
     private static final ItemStack AIR = new ItemStack(Material.AIR);
-    private static final ItemStack HELMET = new ItemStack(Material.LEATHER_HELMET);
-    private static final ItemStack CHEST_PLATE = new ItemStack(Material.LEATHER_CHESTPLATE);
-    private static final ItemStack LEGGINGS = new ItemStack(Material.LEATHER_LEGGINGS);
-    private static final ItemStack BOOTS = new ItemStack(Material.LEATHER_BOOTS);
-    private static final ItemStack RIGHT_HAND = new ItemStack(Material.WOODEN_SWORD);
-    private static final ItemStack LEFT_HAND = new ItemStack(Material.SHIELD);
-    private static final ItemStack DISABLED = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
-
-    static {
-        setItemName(HELMET, "Helmet");
-        setItemName(CHEST_PLATE, "Chest-plate");
-        setItemName(LEGGINGS, "Leggings");
-        setItemName(BOOTS, "Boots");
-        setItemName(RIGHT_HAND, "Right-hand");
-        setItemName(LEFT_HAND, "Left-hand");
-        setItemName(DISABLED, "");
-    }
+    private static final ItemStack HELMET = createIcon(ItemType.LEATHER_HELMET, "Helmet");
+    private static final ItemStack CHEST_PLATE = createIcon(ItemType.LEATHER_CHESTPLATE, "Chest-plate");
+    private static final ItemStack LEGGINGS = createIcon(ItemType.LEATHER_LEGGINGS, "Leggings");
+    private static final ItemStack BOOTS = createIcon(ItemType.LEATHER_BOOTS, "Boots");
+    private static final ItemStack RIGHT_HAND = createIcon(ItemType.WOODEN_SWORD, "Right hand");
+    private static final ItemStack LEFT_HAND = createIcon(ItemType.SHIELD, "Left hand");
+    private static final ItemStack DISABLED = createIcon(ItemType.GRAY_STAINED_GLASS_PANE, "");
 
     private final Inventory inventory;
     private final UUID armorStandUuid;
@@ -243,23 +234,14 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
         inventory.setItem(17, DISABLED);
     }
 
-    private static void setItemName(@NotNull ItemStack item, @NotNull String name) {
-        ItemMeta meta = item.getItemMeta();
-
-        if (meta == null) {
-            return;
-        }
-
-        Component component;
-
-        if (name.isEmpty()) {
-            component = Component.empty();
-        } else {
-            component = Component.text(name).color(NamedTextColor.GOLD).decoration(TextDecoration.ITALIC, false);
-        }
-
-        meta.displayName(component);
-
-        item.setItemMeta(meta);
+    private static ItemStack createIcon(@NotNull ItemType type, @NotNull String name) {
+        ItemStack item = type.createItemStack();
+        item.setData(
+            DataComponentTypes.CUSTOM_NAME,
+            name.isEmpty() ?
+                Component.empty() :
+                Component.text(name).color(NamedTextColor.GOLD).decoration(TextDecoration.ITALIC, false)
+        );
+        return item;
     }
 }

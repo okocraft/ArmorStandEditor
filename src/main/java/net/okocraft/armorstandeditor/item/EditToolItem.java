@@ -1,5 +1,7 @@
 package net.okocraft.armorstandeditor.item;
 
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.ItemLore;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -22,17 +24,16 @@ public class EditToolItem {
         this.allowNormalFlint = allowNormalFlint;
 
         ItemStack item = ItemStack.of(Material.FLINT);
-        item.editMeta(meta -> {
-            meta.getPersistentDataContainer().set(EDIT_ITEM_KEY, PersistentDataType.BYTE, EDIT_ITEM_VALUE);
+        item.editPersistentDataContainer(container -> container.set(EDIT_ITEM_KEY, PersistentDataType.BYTE, EDIT_ITEM_VALUE));
 
-            if (displayName != null) {
-                meta.displayName(displayName);
-            }
+        if (displayName != null) {
+            item.setData(DataComponentTypes.CUSTOM_NAME, displayName);
+        }
 
-            if (!lore.isEmpty()) {
-                meta.lore(lore);
-            }
-        });
+        if (!lore.isEmpty()) {
+            item.setData(DataComponentTypes.LORE, ItemLore.lore(lore));
+        }
+
         this.item = item;
     }
 
