@@ -76,6 +76,7 @@ public final class ArmorStandEditorPlugin extends JavaPlugin {
     public void loadMessages() throws IOException {
         DirectorySource.propertiesFiles(this.getDataFolder().toPath().resolve("languages"))
             .defaultLocale(Locale.ENGLISH, Locale.JAPANESE)
+            .primaryLocale(Locale.ENGLISH)
             .messageProcessor(MessageProcessors.appendMissingMessagesToPropertiesFile(this::loadDefaultMessageMap))
             .loadAndRegister(Key.key("armorstandeditor", "language"));
     }

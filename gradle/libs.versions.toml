@@ -1,6 +1,6 @@
 [versions]
 # libraries
-mcmsgdef = "1.2.0"
+mcmsgdef = "1.3.0"
 paper = "26.1.2.build.69-stable"
 
 # gradle plugins
