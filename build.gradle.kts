@@ -29,8 +29,6 @@ tasks {
         minecraftVersion(libs.versions.paper.get().replaceAfter(".build", "").removeSuffix(".build"))
     }
     shadowJar {
-        minimize {
-            exclude("net.okocraft.armorstandeditor.ArmorStandEditorPlugin")
-        }
+        minimize()
     }
 }
