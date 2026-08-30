@@ -12,13 +12,13 @@ import net.okocraft.armorstandeditor.permission.Permissions;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.block.BlockDispenseArmorEvent;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.inventory.EntityEquipment;
@@ -30,7 +30,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
-import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class EquipmentMenu implements ArmorStandEditorMenu {
 
@@ -50,21 +50,32 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
     private static final ItemStack DISABLED = createIcon(ItemType.GRAY_STAINED_GLASS_PANE, "");
 
     private final Inventory inventory;
-    private final UUID armorStandUuid;
-    private final NamespacedKey worldKey;
+    private final ArmorStand armorStand;
+    private final AtomicReference<HumanEntity> activeViewer = new AtomicReference<>();
 
     public EquipmentMenu(@NotNull ArmorStand armorStand) {
         this.inventory = Bukkit.createInventory(this, 18, Components.EQUIPMENT_MENU_TITLE);
-        this.armorStandUuid = armorStand.getUniqueId();
-        this.worldKey = armorStand.getWorld().getKey();
-
+        this.armorStand = armorStand;
         initMenu(this.inventory);
-        this.renderItems(armorStand.getEquipment());
     }
 
     @Override
     public @NotNull Inventory getInventory() {
         return this.inventory;
+    }
+
+    public boolean open(@NotNull HumanEntity viewer) {
+        if (!Bukkit.isOwnedByCurrentRegion(viewer) || !Bukkit.isOwnedByCurrentRegion(this.armorStand) || this.armorStand.isDead()) {
+            return false;
+        }
+
+        if (!this.activeViewer.compareAndSet(null, viewer)) {
+            return false;
+        }
+
+        this.renderItems(this.armorStand.getEquipment());
+        viewer.openInventory(this.inventory);
+        return true;
     }
 
     @Override
@@ -113,32 +124,32 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
         }
     }
 
+    public void onClose(@NotNull InventoryCloseEvent event) {
+        this.activeViewer.compareAndSet(event.getPlayer(), null);
+    }
+
     public void handleManipulateEvent(@NotNull PlayerArmorStandManipulateEvent event) {
         this.refreshAfterExternalModification(event.getRightClicked());
     }
 
     public void handleDispenseArmorEvent(@NotNull BlockDispenseArmorEvent event) {
-        var armorStand = this.getArmorStand();
-        if (armorStand != null) {
-            this.refreshAfterExternalModification(armorStand);
-        }
+        this.refreshAfterExternalModification(this.armorStand);
     }
 
     private void processEquipmentClick(@NotNull InventoryClickEvent event) {
-        var armorStand = this.getArmorStand();
         var viewer = event.getWhoClicked();
 
-        if (armorStand == null) {
-            this.closeMenu();
-            return;
-        }
-
-        if (!Bukkit.isOwnedByCurrentRegion(viewer) || !Bukkit.isOwnedByCurrentRegion(armorStand)) {
+        if (this.activeViewer.get() != viewer) {
             this.closeMenuFor(viewer);
             return;
         }
 
-        if (armorStand.isDead()) {
+        if (!Bukkit.isOwnedByCurrentRegion(viewer) || !Bukkit.isOwnedByCurrentRegion(this.armorStand)) {
+            this.closeMenuFor(viewer);
+            return;
+        }
+
+        if (this.armorStand.isDead()) {
             this.closeMenu();
             return;
         }
@@ -148,7 +159,7 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
             return;
         }
 
-        var equipment = armorStand.getEquipment();
+        var equipment = this.armorStand.getEquipment();
         var equipmentItem = equipment.getItem(slot);
 
         if (!sameItem(event.getCurrentItem(), equipmentItem)) {
@@ -244,7 +255,7 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
         }
     }
 
-    public void renderItems(@NotNull EntityEquipment equipment) {
+    private void renderItems(@NotNull EntityEquipment equipment) {
         for (int i = 0; i < EQUIPMENT_SLOTS.length; i++) {
             var slot = EQUIPMENT_SLOTS[i];
             this.inventory.setItem(MENU_EQUIPMENT_SLOT_INDEXES[i], equipment.getItem(slot).clone());
@@ -252,11 +263,18 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
     }
 
     public void closeMenu() {
-        this.inventory.getViewers().forEach(this::closeMenuFor);
+        var viewer = this.activeViewer.get();
+        if (viewer != null) {
+            this.closeMenuFor(viewer);
+        }
     }
 
     private void closeMenuFor(@NotNull HumanEntity viewer) {
-        viewer.getScheduler().run(ArmorStandEditorPlugin.plugin(), ignored -> viewer.closeInventory(), null);
+        viewer.getScheduler().run(ArmorStandEditorPlugin.plugin(), ignored -> {
+            if (this.inventory.equals(viewer.getOpenInventory().getTopInventory())) {
+                viewer.closeInventory();
+            }
+        }, null);
     }
 
     private boolean isAuthorized(@NotNull HumanEntity viewer) {
@@ -270,20 +288,28 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
     private void refreshAfterExternalModification(@NotNull ArmorStand armorStand) {
         armorStand.getScheduler().run(
             ArmorStandEditorPlugin.plugin(),
-            ignored -> this.renderItemsIfArmorStandExist(armorStand),
+            ignored -> this.refresh(armorStand),
             null
         );
     }
 
-    private void renderItemsIfArmorStandExist(@Nullable ArmorStand armorStand) {
-        if (armorStand != null && !armorStand.isDead()) {
-            this.renderItems(armorStand.getEquipment());
+    private void refresh(@NotNull ArmorStand armorStand) {
+        if (armorStand.isDead()) {
+            this.closeMenu();
+            return;
         }
-    }
 
-    private @Nullable ArmorStand getArmorStand() {
-        var world = Bukkit.getWorld(this.worldKey);
-        return world != null && world.getEntity(this.armorStandUuid) instanceof ArmorStand armorStand ? armorStand : null;
+        var viewer = this.activeViewer.get();
+        if (viewer == null) {
+            return;
+        }
+
+        if (!Bukkit.isOwnedByCurrentRegion(viewer)) {
+            this.closeMenuFor(viewer);
+            return;
+        }
+
+        this.renderItems(armorStand.getEquipment());
     }
 
     private static boolean sameItem(@Nullable ItemStack first, @NotNull ItemStack second) {
