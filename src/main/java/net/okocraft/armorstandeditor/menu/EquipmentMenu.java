@@ -74,7 +74,10 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
         }
 
         this.renderItems(this.armorStand.getEquipment());
-        viewer.openInventory(this.inventory);
+        if (viewer.openInventory(this.inventory) == null) {
+            this.activeViewer.compareAndSet(viewer, null);
+            return false;
+        }
         return true;
     }
 
@@ -273,8 +276,10 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
         viewer.getScheduler().run(ArmorStandEditorPlugin.plugin(), ignored -> {
             if (this.inventory.equals(viewer.getOpenInventory().getTopInventory())) {
                 viewer.closeInventory();
+            } else {
+                this.activeViewer.compareAndSet(viewer, null);
             }
-        }, null);
+        }, () -> this.activeViewer.compareAndSet(viewer, null));
     }
 
     private boolean isAuthorized(@NotNull HumanEntity viewer) {
