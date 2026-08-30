@@ -49,18 +49,6 @@ public final class EquipmentMenuProvider {
         return false;
     }
 
-    public static void refreshMenu(@NotNull ArmorStand armorStand) {
-        if (!ACTIVE_VIEWERS.containsKey(armorStand.getUniqueId())) {
-            return;
-        }
-
-        armorStand.getScheduler().run(
-            ArmorStandEditorPlugin.plugin(),
-            ignored -> refresh(armorStand),
-            null
-        );
-    }
-
     public static void closeMenu(@NotNull ArmorStand armorStand) {
         var armorStandUuid = armorStand.getUniqueId();
         var viewerUuid = ACTIVE_VIEWERS.get(armorStandUuid);
@@ -121,37 +109,6 @@ public final class EquipmentMenuProvider {
             },
             () -> release(armorStandUuid, viewerUuid)
         );
-    }
-
-    private static void refresh(@NotNull ArmorStand armorStand) {
-        var armorStandUuid = armorStand.getUniqueId();
-        var viewerUuid = ACTIVE_VIEWERS.get(armorStandUuid);
-        if (viewerUuid == null) {
-            return;
-        }
-
-        if (armorStand.isDead()) {
-            closeMenu(armorStand);
-            return;
-        }
-
-        var viewer = Bukkit.getPlayer(viewerUuid);
-        if (viewer == null) {
-            release(armorStandUuid, viewerUuid);
-            return;
-        }
-
-        if (!Bukkit.isOwnedByCurrentRegion(viewer)) {
-            closeMenu(armorStandUuid, viewer);
-            return;
-        }
-
-        var menu = findOpenMenu(viewer, armorStandUuid);
-        if (menu == null) {
-            release(armorStandUuid, viewerUuid);
-        } else {
-            menu.renderItems(armorStand.getEquipment());
-        }
     }
 
     private static @Nullable EquipmentMenu findOpenMenu(@NotNull HumanEntity viewer, @NotNull UUID armorStandUuid) {
