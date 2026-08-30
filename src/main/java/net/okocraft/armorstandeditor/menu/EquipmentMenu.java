@@ -74,11 +74,16 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
             return false;
         }
 
-        if (!this.acquireViewer(viewer)) {
+        var viewerUuid = viewer.getUniqueId();
+        if (viewerUuid.equals(this.activeViewerUuid.get()) &&
+            this.inventory.equals(viewer.getOpenInventory().getTopInventory())) {
+            return true;
+        }
+
+        if (!this.acquireViewer(viewerUuid)) {
             return false;
         }
 
-        var viewerUuid = viewer.getUniqueId();
         this.renderItems(armorStand.getEquipment());
         if (viewer.openInventory(this.inventory) == null) {
             this.activeViewerUuid.compareAndSet(viewerUuid, null);
@@ -304,15 +309,10 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
         }, () -> this.activeViewerUuid.compareAndSet(viewerUuid, null));
     }
 
-    private boolean acquireViewer(@NotNull Player viewer) {
-        var viewerUuid = viewer.getUniqueId();
+    private boolean acquireViewer(@NotNull UUID viewerUuid) {
         var activeUuid = this.activeViewerUuid.get();
-
         if (activeUuid != null) {
             if (activeUuid.equals(viewerUuid)) {
-                if (this.inventory.equals(viewer.getOpenInventory().getTopInventory())) {
-                    return true;
-                }
                 this.activeViewerUuid.compareAndSet(activeUuid, null);
             } else if (!this.clearStaleViewerLock(activeUuid)) {
                 return false;
