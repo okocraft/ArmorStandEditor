@@ -74,31 +74,11 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
             return false;
         }
 
-        var viewerUuid = viewer.getUniqueId();
-
-        while (true) {
-            var activeUuid = this.activeViewerUuid.get();
-            if (activeUuid == null) {
-                if (this.activeViewerUuid.compareAndSet(null, viewerUuid)) {
-                    break;
-                }
-                continue;
-            }
-
-            if (activeUuid.equals(viewerUuid)) {
-                if (this.inventory.equals(viewer.getOpenInventory().getTopInventory())) {
-                    return true;
-                }
-                this.activeViewerUuid.compareAndSet(activeUuid, null);
-                continue;
-            }
-
-            if (this.clearStaleViewerLock(activeUuid)) {
-                continue;
-            }
+        if (!this.acquireViewer(viewer)) {
             return false;
         }
 
+        var viewerUuid = viewer.getUniqueId();
         this.renderItems(armorStand.getEquipment());
         if (viewer.openInventory(this.inventory) == null) {
             this.activeViewerUuid.compareAndSet(viewerUuid, null);
@@ -322,6 +302,24 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
             }
             this.activeViewerUuid.compareAndSet(viewerUuid, null);
         }, () -> this.activeViewerUuid.compareAndSet(viewerUuid, null));
+    }
+
+    private boolean acquireViewer(@NotNull Player viewer) {
+        var viewerUuid = viewer.getUniqueId();
+        var activeUuid = this.activeViewerUuid.get();
+
+        if (activeUuid != null) {
+            if (activeUuid.equals(viewerUuid)) {
+                if (this.inventory.equals(viewer.getOpenInventory().getTopInventory())) {
+                    return true;
+                }
+                this.activeViewerUuid.compareAndSet(activeUuid, null);
+            } else if (!this.clearStaleViewerLock(activeUuid)) {
+                return false;
+            }
+        }
+
+        return this.activeViewerUuid.compareAndSet(null, viewerUuid);
     }
 
     private boolean clearStaleViewerLock(@NotNull UUID activeUuid) {
