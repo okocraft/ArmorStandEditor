@@ -19,7 +19,7 @@ public final class EquipmentMenuProvider {
     }
 
     public static boolean openMenu(@NotNull ArmorStand armorStand, @NotNull Player viewer) {
-        return MENU_MAP.computeIfAbsent(armorStand.getUniqueId(), u -> new EquipmentMenu(armorStand)).open(viewer);
+        return MENU_MAP.computeIfAbsent(armorStand.getUniqueId(), u -> new EquipmentMenu(armorStand)).open(armorStand, viewer);
     }
 
     public static @Nullable EquipmentMenu getMenuOrNull(@NotNull ArmorStand armorStand) {
