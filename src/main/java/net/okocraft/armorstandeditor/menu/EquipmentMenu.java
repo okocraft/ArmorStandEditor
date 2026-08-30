@@ -89,8 +89,6 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
             return;
         }
 
-        // The menu is only a view of EntityEquipment. Never let a normal inventory
-        // transaction move the rendered clones into a player's real inventory.
         event.setCancelled(true);
 
         if (!MODIFIABLE_SLOTS.contains(event.getSlot())) {
@@ -109,8 +107,6 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
 
         for (var rawSlot : event.getNewItems().keySet()) {
             if (this.inventory.equals(event.getView().getInventory(rawSlot))) {
-                // Dragging into the ghost inventory would make the rendered copy
-                // temporarily authoritative, so keep drag operations player-only.
                 event.setCancelled(true);
                 return;
             }
@@ -137,8 +133,6 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
             return;
         }
 
-        // Inventory events are owned by the viewer. Only touch the armor stand directly
-        // when it is owned by the same ticking region as the current event.
         if (!Bukkit.isOwnedByCurrentRegion(viewer) || !Bukkit.isOwnedByCurrentRegion(armorStand)) {
             this.closeMenuFor(viewer);
             return;
@@ -157,8 +151,6 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
         var equipment = armorStand.getEquipment();
         var equipmentItem = equipment.getItem(slot);
 
-        // InventoryAction is calculated from the displayed menu state. Do not apply it
-        // if an external modification changed the real equipment before this click.
         if (!sameItem(event.getCurrentItem(), equipmentItem)) {
             this.renderItems(equipment);
             return;
@@ -184,8 +176,6 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
         @NotNull EntityEquipment equipment,
         @NotNull EquipmentSlot slot
     ) {
-        // Use exact click types. ClickType#isLeftClick also includes DOUBLE_CLICK and
-        // CREATIVE, neither of which is a direct cursor/equipment transaction.
         if (event.getClick() == ClickType.LEFT || event.getClick() == ClickType.RIGHT) {
             swapCursorAndEquipment(viewer, equipment, slot);
         }
@@ -212,8 +202,6 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
         var cursorItem = viewer.getItemOnCursor().clone();
         var equipmentItem = equipment.getItem(slot).clone();
 
-        // All expected failure conditions are validated before reaching this point.
-        // Do not pretend two independent setters can be made atomic with exception rollback.
         equipment.setItem(slot, cursorItem);
         viewer.setItemOnCursor(equipmentItem);
     }
