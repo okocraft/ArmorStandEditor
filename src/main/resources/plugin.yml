@@ -21,11 +21,15 @@ permissions:
     default: op
   armorstandeditor.command.reload:
     default: op
+  armorstandeditor.mode.none:
+    default: op
   armorstandeditor.mode.base-plate:
     default: op
   armorstandeditor.mode.body-pose:
     default: op
   armorstandeditor.mode.copy:
+    default: op
+  armorstandeditor.mode.custom-name-visible:
     default: op
   armorstandeditor.mode.equipment:
     default: op
@@ -36,6 +40,8 @@ permissions:
   armorstandeditor.mode.left-arm-pose:
     default: op
   armorstandeditor.mode.left-leg-pose:
+    default: op
+  armorstandeditor.mode.lock:
     default: op
   armorstandeditor.mode.movement:
     default: op
@@ -57,11 +63,31 @@ permissions:
     default: op
   armorstandeditor.mode.visible:
     default: op
+  armorstandeditor.menu.icon.x-axis:
+    default: op
+  armorstandeditor.menu.icon.y-axis:
+    default: op
+  armorstandeditor.menu.icon.z-axis:
+    default: op
+  armorstandeditor.menu.icon.coarse:
+    default: op
+  armorstandeditor.menu.icon.fine:
+    default: op
   armorstandeditor.menu.icon.base-plate:
     default: op
   armorstandeditor.menu.icon.body-pose:
     default: op
   armorstandeditor.menu.icon.copy:
+    default: op
+  armorstandeditor.menu.icon.copy-slot-1:
+    default: op
+  armorstandeditor.menu.icon.copy-slot-2:
+    default: op
+  armorstandeditor.menu.icon.copy-slot-3:
+    default: op
+  armorstandeditor.menu.icon.copy-slot-4:
+    default: op
+  armorstandeditor.menu.icon.custom-name-visible:
     default: op
   armorstandeditor.menu.icon.equipment:
     default: op
@@ -69,9 +95,13 @@ permissions:
     default: op
   armorstandeditor.menu.icon.head-pose:
     default: op
+  armorstandeditor.menu.icon.help:
+    default: op
   armorstandeditor.menu.icon.left-arm-pose:
     default: op
   armorstandeditor.menu.icon.left-leg-pose:
+    default: op
+  armorstandeditor.menu.icon.lock:
     default: op
   armorstandeditor.menu.icon.movement:
     default: op
