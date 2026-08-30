@@ -90,21 +90,30 @@ public final class EquipmentMenuProvider {
         }
 
         if (Bukkit.isOwnedByCurrentRegion(viewer)) {
-            if (findOpenMenu(viewer, armorStandUuid) == null) {
-                release(armorStandUuid, viewerUuid);
-            }
+            releaseIfInactiveNow(armorStandUuid, viewer);
             return;
         }
 
         viewer.getScheduler().run(
             ArmorStandEditorPlugin.plugin(),
-            ignored -> {
-                if (findOpenMenu(viewer, armorStandUuid) == null) {
-                    release(armorStandUuid, viewerUuid);
-                }
-            },
+            ignored -> releaseIfInactiveNow(armorStandUuid, viewer),
             () -> release(armorStandUuid, viewerUuid)
         );
+    }
+
+    private static void releaseIfInactiveNow(@NotNull UUID armorStandUuid, @NotNull HumanEntity viewer) {
+        var viewerUuid = viewer.getUniqueId();
+        var menu = findOpenMenu(viewer, armorStandUuid);
+
+        if (menu != null) {
+            var entity = Bukkit.getEntity(armorStandUuid);
+            if (entity instanceof ArmorStand armorStand && Bukkit.isOwnedByCurrentRegion(armorStand)) {
+                return;
+            }
+            viewer.closeInventory();
+        }
+
+        release(armorStandUuid, viewerUuid);
     }
 
     private static void release(@NotNull UUID armorStandUuid, @NotNull UUID viewerUuid) {
