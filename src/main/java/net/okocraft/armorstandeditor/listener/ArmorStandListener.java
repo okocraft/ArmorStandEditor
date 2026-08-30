@@ -122,6 +122,7 @@ public class ArmorStandListener implements Listener {
 
         if (itemInMainHand.getType().equals(Material.NAME_TAG)) {
             if (!player.hasPermission(Permissions.ARMOR_STAND_RENAME)) {
+                event.setCancelled(true);
                 player.sendMessage(Messages.RENAME_NO_PERMISSION);
                 return;
             }
