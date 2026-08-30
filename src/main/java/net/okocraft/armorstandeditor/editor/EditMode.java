@@ -51,7 +51,7 @@ public final class EditMode {
 
     public static final EditMode EQUIPMENT = create(
         "equipment",
-        (editor, armorStand, reverse) -> editor.getPlayer().openInventory(EquipmentMenuProvider.getMenu(armorStand).getInventory())
+        (editor, armorStand, reverse) -> EquipmentMenuProvider.openMenu(armorStand, editor.getPlayer())
     );
 
     public static final EditMode GRAVITY = toggleBooleanState("gravity", ArmorStand::hasGravity, ArmorStand::setGravity, Messages.EDIT_GRAVITY_ON, Messages.EDIT_GRAVITY_OFF);
