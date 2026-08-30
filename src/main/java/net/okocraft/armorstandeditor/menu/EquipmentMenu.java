@@ -6,11 +6,14 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.okocraft.armorstandeditor.ArmorStandEditorPlugin;
+import net.okocraft.armorstandeditor.editor.EditMode;
 import net.okocraft.armorstandeditor.lang.Components;
+import net.okocraft.armorstandeditor.permission.Permissions;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.block.BlockDispenseArmorEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -68,6 +71,12 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
 
     @Override
     public void onClick(@NotNull InventoryClickEvent event) {
+        if (!this.isAuthorized(event.getWhoClicked())) {
+            event.setCancelled(true);
+            this.closeMenuFor(event.getWhoClicked());
+            return;
+        }
+
         if (this.inventory.equals(event.getClickedInventory()) && !MODIFIABLE_SLOTS.contains(event.getSlot())) {
             event.setCancelled(true);
         }
@@ -76,6 +85,12 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
     }
 
     public void onDrag(@NotNull InventoryDragEvent event) {
+        if (!this.isAuthorized(event.getWhoClicked())) {
+            event.setCancelled(true);
+            this.closeMenuFor(event.getWhoClicked());
+            return;
+        }
+
         for (var rawSlot : event.getNewItems().keySet()) {
             if (!this.inventory.equals(event.getView().getInventory(rawSlot))) {
                 continue;
@@ -154,7 +169,19 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
 
     public void closeMenu() {
         this.blockModifying.set(true);
-        this.inventory.getViewers().forEach(viewer -> viewer.getScheduler().run(ArmorStandEditorPlugin.plugin(), ignored -> viewer.closeInventory(), null));
+        this.inventory.getViewers().forEach(this::closeMenuFor);
+    }
+
+    private void closeMenuFor(@NotNull HumanEntity viewer) {
+        viewer.getScheduler().run(ArmorStandEditorPlugin.plugin(), ignored -> viewer.closeInventory(), null);
+    }
+
+    private boolean isAuthorized(@NotNull HumanEntity viewer) {
+        boolean commandAccess = viewer.hasPermission(Permissions.COMMAND) &&
+            viewer.hasPermission(Permissions.COMMAND_EQUIPMENT);
+        boolean editModeAccess = viewer.hasPermission(Permissions.ARMOR_STAND_EDIT) &&
+            viewer.hasPermission(EditMode.EQUIPMENT.getPermission());
+        return commandAccess || editModeAccess;
     }
 
     private void renderItemsIfArmorStandExist(@Nullable ArmorStand armorStand) {
