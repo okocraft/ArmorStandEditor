@@ -130,12 +130,17 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
         var viewer = event.getWhoClicked();
         var entity = Bukkit.getEntity(this.armorStandUuid);
 
-        if (!(entity instanceof ArmorStand armorStand) || armorStand.isDead()) {
+        if (!(entity instanceof ArmorStand armorStand)) {
             this.close(viewer);
             return;
         }
 
         if (!Bukkit.isOwnedByCurrentRegion(viewer) || !Bukkit.isOwnedByCurrentRegion(armorStand)) {
+            this.close(viewer);
+            return;
+        }
+
+        if (armorStand.isDead()) {
             this.close(viewer);
             return;
         }
