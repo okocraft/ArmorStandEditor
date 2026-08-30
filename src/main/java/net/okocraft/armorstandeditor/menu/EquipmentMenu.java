@@ -4,6 +4,7 @@ import io.papermc.paper.datacomponent.DataComponentTypes;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.okocraft.armorstandeditor.ArmorStandEditorPlugin;
 import net.okocraft.armorstandeditor.editor.EditMode;
 import net.okocraft.armorstandeditor.lang.Components;
 import net.okocraft.armorstandeditor.permission.Permissions;
@@ -16,7 +17,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
@@ -57,6 +57,10 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
         return this.inventory;
     }
 
+    public @NotNull UUID getArmorStandUuid() {
+        return this.armorStandUuid;
+    }
+
     boolean open(@NotNull ArmorStand armorStand, @NotNull Player viewer) {
         if (!this.isFor(armorStand.getUniqueId())) {
             return false;
@@ -73,9 +77,9 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
     @Override
     public void onClick(@NotNull InventoryClickEvent event) {
         var viewer = event.getWhoClicked();
-        if (!this.canUse(viewer)) {
+        if (!this.isAuthorized(viewer)) {
             event.setCancelled(true);
-            EquipmentMenuProvider.closeMenu(this.armorStandUuid, viewer);
+            this.close(viewer);
             return;
         }
 
@@ -102,9 +106,9 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
 
     public void onDrag(@NotNull InventoryDragEvent event) {
         var viewer = event.getWhoClicked();
-        if (!this.canUse(viewer)) {
+        if (!this.isAuthorized(viewer)) {
             event.setCancelled(true);
-            EquipmentMenuProvider.closeMenu(this.armorStandUuid, viewer);
+            this.close(viewer);
             return;
         }
 
@@ -114,10 +118,6 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
                 return;
             }
         }
-    }
-
-    public void onClose(@NotNull InventoryCloseEvent event) {
-        EquipmentMenuProvider.release(this.armorStandUuid, event.getPlayer().getUniqueId());
     }
 
     void renderItems(@NotNull EntityEquipment equipment) {
@@ -131,12 +131,12 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
         var entity = Bukkit.getEntity(this.armorStandUuid);
 
         if (!(entity instanceof ArmorStand armorStand) || armorStand.isDead()) {
-            EquipmentMenuProvider.closeMenu(this.armorStandUuid, viewer);
+            this.close(viewer);
             return;
         }
 
         if (!Bukkit.isOwnedByCurrentRegion(viewer) || !Bukkit.isOwnedByCurrentRegion(armorStand)) {
-            EquipmentMenuProvider.closeMenu(this.armorStandUuid, viewer);
+            this.close(viewer);
             return;
         }
 
@@ -186,8 +186,16 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
         }
     }
 
-    private boolean canUse(@NotNull HumanEntity viewer) {
-        return EquipmentMenuProvider.isViewer(this.armorStandUuid, viewer) && this.isAuthorized(viewer);
+    private void close(@NotNull HumanEntity viewer) {
+        viewer.getScheduler().run(
+            ArmorStandEditorPlugin.plugin(),
+            ignored -> {
+                if (this.inventory.equals(viewer.getOpenInventory().getTopInventory())) {
+                    viewer.closeInventory();
+                }
+            },
+            null
+        );
     }
 
     private boolean isAuthorized(@NotNull HumanEntity viewer) {
