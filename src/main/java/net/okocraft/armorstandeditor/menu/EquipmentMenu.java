@@ -1,7 +1,6 @@
 package net.okocraft.armorstandeditor.menu;
 
 import io.papermc.paper.datacomponent.DataComponentTypes;
-import it.unimi.dsi.fastutil.ints.IntSet;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -10,15 +9,15 @@ import net.okocraft.armorstandeditor.editor.EditMode;
 import net.okocraft.armorstandeditor.lang.Components;
 import net.okocraft.armorstandeditor.permission.Permissions;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.HumanEntity;
-import org.bukkit.event.Cancellable;
-import org.bukkit.event.block.BlockDispenseArmorEvent;
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
@@ -27,10 +26,7 @@ import org.bukkit.inventory.ItemType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.Objects;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class EquipmentMenu implements ArmorStandEditorMenu {
 
@@ -38,8 +34,6 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
         EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET,
         EquipmentSlot.HAND, EquipmentSlot.OFF_HAND
     };
-    private static final int[] MENU_EQUIPMENT_SLOT_INDEXES = Arrays.stream(EQUIPMENT_SLOTS).mapToInt(EquipmentMenu::toMenuIndex).toArray();
-    private static final IntSet MODIFIABLE_SLOTS = IntSet.of(MENU_EQUIPMENT_SLOT_INDEXES);
     private static final ItemStack AIR = new ItemStack(Material.AIR);
     private static final ItemStack HELMET = createIcon(ItemType.LEATHER_HELMET, "Helmet");
     private static final ItemStack CHEST_PLATE = createIcon(ItemType.LEATHER_CHESTPLATE, "Chest-plate");
@@ -51,17 +45,11 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
 
     private final Inventory inventory;
     private final UUID armorStandUuid;
-    private final NamespacedKey worldKey;
-    private final ItemStack[] knownEquipments = new ItemStack[EQUIPMENT_SLOTS.length];
-    private final AtomicBoolean blockModifying = new AtomicBoolean();
 
-    public EquipmentMenu(@NotNull ArmorStand armorStand) {
+    EquipmentMenu(@NotNull UUID armorStandUuid) {
         this.inventory = Bukkit.createInventory(this, 18, Components.EQUIPMENT_MENU_TITLE);
-        this.armorStandUuid = armorStand.getUniqueId();
-        this.worldKey = armorStand.getWorld().getKey();
-
+        this.armorStandUuid = armorStandUuid;
         initMenu(this.inventory);
-        this.renderItems(armorStand.getEquipment());
     }
 
     @Override
@@ -69,111 +57,150 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
         return this.inventory;
     }
 
+    public @NotNull UUID getArmorStandUuid() {
+        return this.armorStandUuid;
+    }
+
+    boolean open(@NotNull ArmorStand armorStand, @NotNull Player viewer) {
+        if (!this.isFor(armorStand.getUniqueId())) {
+            return false;
+        }
+
+        this.renderItems(armorStand.getEquipment());
+        return viewer.openInventory(this.inventory) != null;
+    }
+
+    boolean isFor(@NotNull UUID armorStandUuid) {
+        return this.armorStandUuid.equals(armorStandUuid);
+    }
+
     @Override
     public void onClick(@NotNull InventoryClickEvent event) {
-        if (!this.isAuthorized(event.getWhoClicked())) {
+        var viewer = event.getWhoClicked();
+        if (!this.isAuthorized(viewer)) {
             event.setCancelled(true);
-            this.closeMenuFor(event.getWhoClicked());
+            this.close(viewer);
             return;
         }
 
-        if (this.inventory.equals(event.getClickedInventory()) && !MODIFIABLE_SLOTS.contains(event.getSlot())) {
-            event.setCancelled(true);
+        var clickedInventory = event.getClickedInventory();
+        if (clickedInventory == null) {
+            return;
         }
 
-        this.processEvent(event);
+        if (!this.inventory.equals(clickedInventory)) {
+            if (event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY ||
+                event.getAction() == InventoryAction.COLLECT_TO_CURSOR) {
+                event.setCancelled(true);
+            }
+            return;
+        }
+
+        event.setCancelled(true);
+
+        var slot = toEquipmentSlot(event.getSlot());
+        if (slot != null) {
+            this.processEquipmentClick(event, slot);
+        }
     }
 
     public void onDrag(@NotNull InventoryDragEvent event) {
-        if (!this.isAuthorized(event.getWhoClicked())) {
+        var viewer = event.getWhoClicked();
+        if (!this.isAuthorized(viewer)) {
             event.setCancelled(true);
-            this.closeMenuFor(event.getWhoClicked());
+            this.close(viewer);
             return;
         }
 
         for (var rawSlot : event.getNewItems().keySet()) {
-            if (!this.inventory.equals(event.getView().getInventory(rawSlot))) {
-                continue;
-            }
-
-            if (!MODIFIABLE_SLOTS.contains(event.getView().convertSlot(rawSlot))) {
+            if (this.inventory.equals(event.getView().getInventory(rawSlot))) {
                 event.setCancelled(true);
                 return;
             }
         }
-
-        this.processEvent(event);
     }
 
-    public void handleManipulateEvent(@NotNull PlayerArmorStandManipulateEvent event) {
-        if (this.shouldCancelExternalModification()) {
-            event.setCancelled(true);
+    void renderItems(@NotNull EntityEquipment equipment) {
+        for (var slot : EQUIPMENT_SLOTS) {
+            this.inventory.setItem(toMenuIndex(slot), equipment.getItem(slot).clone());
         }
     }
 
-    public void handleDispenseArmorEvent(@NotNull BlockDispenseArmorEvent event) {
-        if (this.shouldCancelExternalModification()) {
-            event.setCancelled(true);
-        }
-    }
+    private void processEquipmentClick(@NotNull InventoryClickEvent event, @NotNull EquipmentSlot slot) {
+        var viewer = event.getWhoClicked();
+        var entity = Bukkit.getEntity(this.armorStandUuid);
 
-    private boolean shouldCancelExternalModification() {
-        if (this.blockModifying.compareAndSet(false, true)) {
-            ArmorStand armorStand = this.getArmorStand();
-            if (armorStand != null) {
-                armorStand.getScheduler().run(ArmorStandEditorPlugin.plugin(), ignored -> this.renderItemsIfArmorStandExist(armorStand), null);
-                return false;
-            }
-            this.blockModifying.set(false);
-        }
-
-        return true;
-    }
-
-    private void processEvent(@NotNull Cancellable event) {
-        if (!this.blockModifying.compareAndSet(false, true)) {
-            event.setCancelled(true);
+        if (!(entity instanceof ArmorStand armorStand)) {
+            this.close(viewer);
             return;
         }
 
-        var armorStand = this.getArmorStand();
+        if (!Bukkit.isOwnedByCurrentRegion(viewer) || !Bukkit.isOwnedByCurrentRegion(armorStand)) {
+            this.close(viewer);
+            return;
+        }
 
-        if (armorStand == null || armorStand.isDead()) {
-            event.setCancelled(true);
-            this.blockModifying.set(false);
-            this.closeMenu();
+        if (armorStand.isDead()) {
+            this.close(viewer);
             return;
         }
 
         var equipment = armorStand.getEquipment();
+        var equipmentItem = equipment.getItem(slot);
 
-        if (this.hasUnknownEquipment(equipment)) {
-            event.setCancelled(true);
+        if (!sameItem(event.getCurrentItem(), equipmentItem)) {
             this.renderItems(equipment);
-            this.blockModifying.set(false);
             return;
         }
 
-        armorStand.getScheduler().run(ArmorStandEditorPlugin.plugin(), ignored -> this.applyEquipmentsIfModified(armorStand), null);
+        if (viewer.getGameMode() == GameMode.SPECTATOR) {
+            this.renderItems(equipment);
+            return;
+        }
+
+        if (viewer.getGameMode() == GameMode.CREATIVE) {
+            this.handleCreativeClick(event, viewer, equipment, slot);
+        } else {
+            this.handleTransactionalClick(event, viewer, equipment, slot);
+        }
+
+        this.renderItems(equipment);
     }
 
-    public void renderItems(@NotNull EntityEquipment equipment) {
-        for (int i = 0; i < EQUIPMENT_SLOTS.length; i++) {
-            var slot = EQUIPMENT_SLOTS[i];
-            var item = equipment.getItem(slot).clone();
-
-            this.knownEquipments[i] = item;
-            this.inventory.setItem(MENU_EQUIPMENT_SLOT_INDEXES[i], item);
+    private void handleTransactionalClick(
+        @NotNull InventoryClickEvent event,
+        @NotNull HumanEntity viewer,
+        @NotNull EntityEquipment equipment,
+        @NotNull EquipmentSlot slot
+    ) {
+        if (event.getClick() == ClickType.LEFT || event.getClick() == ClickType.RIGHT) {
+            swapCursorAndEquipment(viewer, equipment, slot);
         }
     }
 
-    public void closeMenu() {
-        this.blockModifying.set(true);
-        this.inventory.getViewers().forEach(this::closeMenuFor);
+    private void handleCreativeClick(
+        @NotNull InventoryClickEvent event,
+        @NotNull HumanEntity viewer,
+        @NotNull EntityEquipment equipment,
+        @NotNull EquipmentSlot slot
+    ) {
+        switch (event.getAction()) {
+            case HOTBAR_SWAP -> swapHotbarAndEquipment(event, viewer, equipment, slot);
+            case CLONE_STACK -> cloneEquipmentToCursor(viewer, equipment, slot);
+            default -> this.handleTransactionalClick(event, viewer, equipment, slot);
+        }
     }
 
-    private void closeMenuFor(@NotNull HumanEntity viewer) {
-        viewer.getScheduler().run(ArmorStandEditorPlugin.plugin(), ignored -> viewer.closeInventory(), null);
+    private void close(@NotNull HumanEntity viewer) {
+        viewer.getScheduler().run(
+            ArmorStandEditorPlugin.plugin(),
+            ignored -> {
+                if (this.inventory.equals(viewer.getOpenInventory().getTopInventory())) {
+                    viewer.closeInventory();
+                }
+            },
+            null
+        );
     }
 
     private boolean isAuthorized(@NotNull HumanEntity viewer) {
@@ -184,55 +211,71 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
         return commandAccess || editModeAccess;
     }
 
-    private void renderItemsIfArmorStandExist(@Nullable ArmorStand armorStand) {
-        if (armorStand != null && !armorStand.isDead()) {
-            this.renderItems(armorStand.getEquipment());
-            this.blockModifying.set(false);
-        }
+    private static void swapCursorAndEquipment(
+        @NotNull HumanEntity viewer,
+        @NotNull EntityEquipment equipment,
+        @NotNull EquipmentSlot slot
+    ) {
+        var cursorItem = viewer.getItemOnCursor().clone();
+        var equipmentItem = equipment.getItem(slot).clone();
+
+        equipment.setItem(slot, cursorItem);
+        viewer.setItemOnCursor(equipmentItem);
     }
 
-    private void applyEquipmentsIfModified(@Nullable ArmorStand armorStand) {
-        if (armorStand == null || armorStand.isDead()) { // If this happens, duplicate/lost items may occur. However, there is nothing we can do.
-            this.blockModifying.set(false);
+    private static void swapHotbarAndEquipment(
+        @NotNull InventoryClickEvent event,
+        @NotNull HumanEntity viewer,
+        @NotNull EntityEquipment equipment,
+        @NotNull EquipmentSlot slot
+    ) {
+        var playerInventory = viewer.getInventory();
+        var equipmentItem = equipment.getItem(slot).clone();
+        int hotbarButton = event.getHotbarButton();
+
+        if (hotbarButton >= 0 && hotbarButton <= 8) {
+            var hotbarItem = playerInventory.getItem(hotbarButton);
+            equipment.setItem(slot, hotbarItem != null ? hotbarItem.clone() : AIR);
+            playerInventory.setItem(hotbarButton, equipmentItem);
             return;
         }
 
-        var equipment = armorStand.getEquipment();
-
-        for (int i = 0; i < EQUIPMENT_SLOTS.length; i++) {
-            var inventoryItem = this.getInventoryItem(i).clone();
-            var knownEquipment = this.getKnownEquipment(i);
-
-            if (!inventoryItem.equals(knownEquipment)) {
-                this.knownEquipments[i] = inventoryItem;
-                equipment.setItem(EQUIPMENT_SLOTS[i], inventoryItem);
-            }
+        if (event.getClick() == ClickType.SWAP_OFFHAND) {
+            var offHandItem = playerInventory.getItemInOffHand().clone();
+            equipment.setItem(slot, offHandItem);
+            playerInventory.setItemInOffHand(equipmentItem);
         }
-
-        this.blockModifying.set(false);
     }
 
-    private @Nullable ArmorStand getArmorStand() {
-        var world = Bukkit.getWorld(this.worldKey);
-        return world != null && world.getEntity(this.armorStandUuid) instanceof ArmorStand armorStand ? armorStand : null;
-    }
-
-    private boolean hasUnknownEquipment(@NotNull EntityEquipment equipment) {
-        for (int i = 0; i < EQUIPMENT_SLOTS.length; i++) {
-            if (!equipment.getItem(EQUIPMENT_SLOTS[i]).equals(this.getKnownEquipment(i))) {
-                return true;
-            }
+    private static void cloneEquipmentToCursor(
+        @NotNull HumanEntity viewer,
+        @NotNull EntityEquipment equipment,
+        @NotNull EquipmentSlot slot
+    ) {
+        var item = equipment.getItem(slot).clone();
+        if (!item.getType().isAir()) {
+            item.setAmount(item.getMaxStackSize());
+            viewer.setItemOnCursor(item);
         }
-
-        return false;
     }
 
-    private @NotNull ItemStack getKnownEquipment(int i) {
-        return Objects.requireNonNullElse(this.knownEquipments[i], AIR);
+    private static boolean sameItem(@Nullable ItemStack first, @NotNull ItemStack second) {
+        if (first == null || first.getType().isAir()) {
+            return second.getType().isAir();
+        }
+        return first.equals(second);
     }
 
-    private @NotNull ItemStack getInventoryItem(int i) {
-        return Objects.requireNonNullElse(this.inventory.getItem(MENU_EQUIPMENT_SLOT_INDEXES[i]), AIR);
+    private static @Nullable EquipmentSlot toEquipmentSlot(int menuIndex) {
+        return switch (menuIndex) {
+            case 9 -> EquipmentSlot.HEAD;
+            case 10 -> EquipmentSlot.CHEST;
+            case 11 -> EquipmentSlot.LEGS;
+            case 12 -> EquipmentSlot.FEET;
+            case 15 -> EquipmentSlot.HAND;
+            case 16 -> EquipmentSlot.OFF_HAND;
+            default -> null;
+        };
     }
 
     private static int toMenuIndex(@NotNull EquipmentSlot slot) {

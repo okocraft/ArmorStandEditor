@@ -2,7 +2,6 @@ package net.okocraft.armorstandeditor.editor;
 
 import net.kyori.adventure.text.ComponentLike;
 import net.okocraft.armorstandeditor.lang.Messages;
-import net.okocraft.armorstandeditor.menu.EquipmentMenu;
 import net.okocraft.armorstandeditor.menu.EquipmentMenuProvider;
 import net.okocraft.armorstandeditor.menu.SelectionMenu;
 import net.okocraft.armorstandeditor.permission.Permissions;
@@ -51,7 +50,7 @@ public final class EditMode {
 
     public static final EditMode EQUIPMENT = create(
         "equipment",
-        (editor, armorStand, reverse) -> editor.getPlayer().openInventory(EquipmentMenuProvider.getMenu(armorStand).getInventory())
+        (editor, armorStand, reverse) -> EquipmentMenuProvider.openMenu(armorStand, editor.getPlayer())
     );
 
     public static final EditMode GRAVITY = toggleBooleanState("gravity", ArmorStand::hasGravity, ArmorStand::setGravity, Messages.EDIT_GRAVITY_ON, Messages.EDIT_GRAVITY_OFF);
@@ -103,11 +102,7 @@ public final class EditMode {
     });
 
     public static final EditMode REMOVAL = create("removal", (editor, armorStand, reverse) -> {
-        EquipmentMenu menu = EquipmentMenuProvider.removeMenu(armorStand);
-        if (menu != null) {
-            menu.closeMenu();
-        }
-
+        EquipmentMenuProvider.closeMenu(armorStand);
         ArmorStandRemover.remove(editor, armorStand, reverse);
     });
 
