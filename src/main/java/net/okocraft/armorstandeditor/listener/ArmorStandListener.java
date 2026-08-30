@@ -31,33 +31,20 @@ public class ArmorStandListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onManipulate(@NotNull PlayerArmorStandManipulateEvent event) {
-        var armorStand = event.getRightClicked();
-        var menu = EquipmentMenuProvider.getMenuOrNull(armorStand);
-
-        if (menu != null) {
-            menu.handleManipulateEvent(event);
-        }
+        EquipmentMenuProvider.refreshMenu(event.getRightClicked());
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onDispenseArmor(@NotNull BlockDispenseArmorEvent event) {
         if (event.getTargetEntity() instanceof ArmorStand armorStand) {
-            var menu = EquipmentMenuProvider.getMenuOrNull(armorStand);
-
-            if (menu != null) {
-                menu.handleDispenseArmorEvent(event);
-            }
+            EquipmentMenuProvider.refreshMenu(armorStand);
         }
     }
 
     @EventHandler
     public void onRemove(@NotNull EntityRemoveFromWorldEvent event) {
         if (event.getEntity() instanceof ArmorStand armorStand) {
-            var menu = EquipmentMenuProvider.removeMenu(armorStand);
-
-            if (menu != null) {
-                menu.closeMenu();
-            }
+            EquipmentMenuProvider.closeMenu(armorStand);
         }
     }
 
