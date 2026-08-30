@@ -141,7 +141,7 @@ public final class EditMode {
     private static @NotNull EditMode create(@NotNull String name, @NotNull Editor editor) {
         var mode = new EditMode(name, editor);
         BY_NAME.put(mode.getName(), mode);
-        return new EditMode(name, editor);
+        return mode;
     }
 
     private static @NotNull EditMode toggleBooleanState(@NotNull String name, @NotNull Function<ArmorStand, Boolean> getter, @NotNull BiConsumer<ArmorStand, Boolean> setter, @NotNull ComponentLike on, @NotNull ComponentLike off) {
