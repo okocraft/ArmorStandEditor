@@ -84,7 +84,7 @@ public final class ArmorStandEditorCommand {
                     var target = player.getTargetEntity(3);
 
                     if (target instanceof ArmorStand armorStand) {
-                        player.openInventory(EquipmentMenuProvider.getMenu(armorStand).getInventory());
+                        EquipmentMenuProvider.openMenu(armorStand, player);
                     } else {
                         player.sendMessage(Messages.COMMAND_EQUIPMENT_ARMOR_STAND_NOT_FOUND);
                     }
