@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentMap;
 
 public final class EquipmentMenuProvider {
 
-    private static final ConcurrentMap<UUID, UUID> VIEWER_MAP = new ConcurrentHashMap<>();
+    private static final ConcurrentMap<UUID, UUID> ACTIVE_VIEWERS = new ConcurrentHashMap<>();
 
     private EquipmentMenuProvider() {
         throw new UnsupportedOperationException();
@@ -29,18 +29,14 @@ public final class EquipmentMenuProvider {
 
         var armorStandUuid = armorStand.getUniqueId();
         var viewerUuid = viewer.getUniqueId();
-        var currentViewerUuid = VIEWER_MAP.get(armorStandUuid);
 
-        if (currentViewerUuid != null) {
-            if (currentViewerUuid.equals(viewerUuid) && getOpenMenu(viewer, armorStandUuid) != null) {
-                return true;
-            }
-            if (!releaseIfInactive(armorStandUuid, currentViewerUuid)) {
-                return false;
-            }
+        if (isViewer(armorStandUuid, viewer) && findOpenMenu(viewer, armorStandUuid) != null) {
+            return true;
         }
 
-        if (VIEWER_MAP.putIfAbsent(armorStandUuid, viewerUuid) != null) {
+        var currentViewerUuid = ACTIVE_VIEWERS.putIfAbsent(armorStandUuid, viewerUuid);
+        if (currentViewerUuid != null) {
+            releaseIfInactive(armorStandUuid, currentViewerUuid);
             return false;
         }
 
@@ -54,87 +50,82 @@ public final class EquipmentMenuProvider {
     }
 
     public static void refreshMenu(@NotNull ArmorStand armorStand) {
-        var armorStandUuid = armorStand.getUniqueId();
-        if (!VIEWER_MAP.containsKey(armorStandUuid)) {
+        if (!ACTIVE_VIEWERS.containsKey(armorStand.getUniqueId())) {
             return;
         }
 
         armorStand.getScheduler().run(
             ArmorStandEditorPlugin.plugin(),
-            ignored -> refreshMenuNow(armorStand),
+            ignored -> refresh(armorStand),
             null
         );
     }
 
     public static void closeMenu(@NotNull ArmorStand armorStand) {
-        var viewerUuid = VIEWER_MAP.get(armorStand.getUniqueId());
+        var armorStandUuid = armorStand.getUniqueId();
+        var viewerUuid = ACTIVE_VIEWERS.get(armorStandUuid);
         if (viewerUuid == null) {
             return;
         }
 
         var viewer = Bukkit.getPlayer(viewerUuid);
         if (viewer == null) {
-            release(armorStand.getUniqueId(), viewerUuid);
-            return;
+            release(armorStandUuid, viewerUuid);
+        } else {
+            closeMenu(armorStandUuid, viewer);
         }
-
-        closeMenu(armorStand.getUniqueId(), viewer);
     }
 
     static boolean isViewer(@NotNull UUID armorStandUuid, @NotNull HumanEntity viewer) {
-        return viewer.getUniqueId().equals(VIEWER_MAP.get(armorStandUuid));
+        return viewer.getUniqueId().equals(ACTIVE_VIEWERS.get(armorStandUuid));
     }
 
     static void closeMenu(@NotNull UUID armorStandUuid, @NotNull HumanEntity viewer) {
         var viewerUuid = viewer.getUniqueId();
-        boolean owner = viewerUuid.equals(VIEWER_MAP.get(armorStandUuid));
-
         viewer.getScheduler().run(
             ArmorStandEditorPlugin.plugin(),
             ignored -> {
-                if (getOpenMenu(viewer, armorStandUuid) != null) {
+                if (findOpenMenu(viewer, armorStandUuid) != null) {
                     viewer.closeInventory();
                 }
-                if (owner) {
-                    release(armorStandUuid, viewerUuid);
-                }
+                release(armorStandUuid, viewerUuid);
             },
-            owner ? () -> release(armorStandUuid, viewerUuid) : null
+            () -> release(armorStandUuid, viewerUuid)
         );
     }
 
     static void release(@NotNull UUID armorStandUuid, @NotNull UUID viewerUuid) {
-        VIEWER_MAP.remove(armorStandUuid, viewerUuid);
+        ACTIVE_VIEWERS.remove(armorStandUuid, viewerUuid);
     }
 
-    private static boolean releaseIfInactive(@NotNull UUID armorStandUuid, @NotNull UUID viewerUuid) {
+    private static void releaseIfInactive(@NotNull UUID armorStandUuid, @NotNull UUID viewerUuid) {
         var viewer = Bukkit.getPlayer(viewerUuid);
         if (viewer == null) {
-            return VIEWER_MAP.remove(armorStandUuid, viewerUuid);
+            release(armorStandUuid, viewerUuid);
+            return;
         }
 
         if (Bukkit.isOwnedByCurrentRegion(viewer)) {
-            if (getOpenMenu(viewer, armorStandUuid) != null) {
-                return false;
+            if (findOpenMenu(viewer, armorStandUuid) == null) {
+                release(armorStandUuid, viewerUuid);
             }
-            return VIEWER_MAP.remove(armorStandUuid, viewerUuid);
+            return;
         }
 
         viewer.getScheduler().run(
             ArmorStandEditorPlugin.plugin(),
             ignored -> {
-                if (getOpenMenu(viewer, armorStandUuid) == null) {
+                if (findOpenMenu(viewer, armorStandUuid) == null) {
                     release(armorStandUuid, viewerUuid);
                 }
             },
             () -> release(armorStandUuid, viewerUuid)
         );
-        return false;
     }
 
-    private static void refreshMenuNow(@NotNull ArmorStand armorStand) {
+    private static void refresh(@NotNull ArmorStand armorStand) {
         var armorStandUuid = armorStand.getUniqueId();
-        var viewerUuid = VIEWER_MAP.get(armorStandUuid);
+        var viewerUuid = ACTIVE_VIEWERS.get(armorStandUuid);
         if (viewerUuid == null) {
             return;
         }
@@ -155,16 +146,15 @@ public final class EquipmentMenuProvider {
             return;
         }
 
-        var menu = getOpenMenu(viewer, armorStandUuid);
+        var menu = findOpenMenu(viewer, armorStandUuid);
         if (menu == null) {
             release(armorStandUuid, viewerUuid);
-            return;
+        } else {
+            menu.renderItems(armorStand.getEquipment());
         }
-
-        menu.renderItems(armorStand.getEquipment());
     }
 
-    private static @Nullable EquipmentMenu getOpenMenu(@NotNull HumanEntity viewer, @NotNull UUID armorStandUuid) {
+    private static @Nullable EquipmentMenu findOpenMenu(@NotNull HumanEntity viewer, @NotNull UUID armorStandUuid) {
         var menu = ArmorStandEditorMenu.getMenuFromInventory(
             viewer.getOpenInventory().getTopInventory(),
             EquipmentMenu.class
