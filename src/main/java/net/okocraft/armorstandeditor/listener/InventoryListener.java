@@ -2,6 +2,7 @@ package net.okocraft.armorstandeditor.listener;
 
 import net.okocraft.armorstandeditor.menu.ArmorStandEditorMenu;
 import net.okocraft.armorstandeditor.menu.EquipmentMenu;
+import net.okocraft.armorstandeditor.menu.EquipmentMenuProvider;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -32,7 +33,7 @@ public class InventoryListener implements Listener {
     public void onClose(@NotNull InventoryCloseEvent event) {
         var menu = ArmorStandEditorMenu.getMenuFromInventory(event.getView().getTopInventory(), EquipmentMenu.class);
         if (menu != null) {
-            menu.onClose(event);
+            EquipmentMenuProvider.release(menu, event.getPlayer());
         }
     }
 }
