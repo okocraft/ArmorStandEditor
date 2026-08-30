@@ -130,8 +130,21 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
 
     private void processEquipmentClick(@NotNull InventoryClickEvent event) {
         var armorStand = this.getArmorStand();
+        var viewer = event.getWhoClicked();
 
-        if (armorStand == null || armorStand.isDead()) {
+        if (armorStand == null) {
+            this.closeMenu();
+            return;
+        }
+
+        // Inventory events are owned by the viewer. Only touch the armor stand directly
+        // when it is owned by the same ticking region as the current event.
+        if (!Bukkit.isOwnedByCurrentRegion(viewer) || !Bukkit.isOwnedByCurrentRegion(armorStand)) {
+            this.closeMenuFor(viewer);
+            return;
+        }
+
+        if (armorStand.isDead()) {
             this.closeMenu();
             return;
         }
@@ -142,7 +155,19 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
         }
 
         var equipment = armorStand.getEquipment();
-        var viewer = event.getWhoClicked();
+        var equipmentItem = equipment.getItem(slot);
+
+        // InventoryAction is calculated from the displayed menu state. Do not apply it
+        // if an external modification changed the real equipment before this click.
+        if (!sameItem(event.getCurrentItem(), equipmentItem)) {
+            this.renderItems(equipment);
+            return;
+        }
+
+        if (viewer.getGameMode() == GameMode.SPECTATOR) {
+            this.renderItems(equipment);
+            return;
+        }
 
         if (viewer.getGameMode() == GameMode.CREATIVE) {
             this.handleCreativeClick(event, viewer, equipment, slot);
@@ -159,7 +184,9 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
         @NotNull EntityEquipment equipment,
         @NotNull EquipmentSlot slot
     ) {
-        if (!event.isShiftClick() && (event.isLeftClick() || event.isRightClick())) {
+        // Use exact click types. ClickType#isLeftClick also includes DOUBLE_CLICK and
+        // CREATIVE, neither of which is a direct cursor/equipment transaction.
+        if (event.getClick() == ClickType.LEFT || event.getClick() == ClickType.RIGHT) {
             swapCursorAndEquipment(viewer, equipment, slot);
         }
     }
@@ -172,8 +199,7 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
     ) {
         switch (event.getAction()) {
             case HOTBAR_SWAP -> swapHotbarAndEquipment(event, viewer, equipment, slot);
-            case CLONE_STACK -> viewer.setItemOnCursor(equipment.getItem(slot).clone());
-            case DROP_ALL_SLOT, DROP_ONE_SLOT -> equipment.setItem(slot, AIR);
+            case CLONE_STACK -> cloneEquipmentToCursor(viewer, equipment, slot);
             default -> this.handleTransactionalClick(event, viewer, equipment, slot);
         }
     }
@@ -186,14 +212,10 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
         var cursorItem = viewer.getItemOnCursor().clone();
         var equipmentItem = equipment.getItem(slot).clone();
 
+        // All expected failure conditions are validated before reaching this point.
+        // Do not pretend two independent setters can be made atomic with exception rollback.
         equipment.setItem(slot, cursorItem);
-
-        try {
-            viewer.setItemOnCursor(equipmentItem);
-        } catch (RuntimeException e) {
-            equipment.setItem(slot, equipmentItem);
-            throw e;
-        }
+        viewer.setItemOnCursor(equipmentItem);
     }
 
     private static void swapHotbarAndEquipment(
@@ -206,31 +228,31 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
         var equipmentItem = equipment.getItem(slot).clone();
         int hotbarButton = event.getHotbarButton();
 
-        if (hotbarButton >= 0) {
+        if (hotbarButton >= 0 && hotbarButton <= 8) {
             var hotbarItem = playerInventory.getItem(hotbarButton);
             var replacement = hotbarItem != null ? hotbarItem.clone() : AIR;
 
             equipment.setItem(slot, replacement);
-
-            try {
-                playerInventory.setItem(hotbarButton, equipmentItem);
-            } catch (RuntimeException e) {
-                equipment.setItem(slot, equipmentItem);
-                throw e;
-            }
+            playerInventory.setItem(hotbarButton, equipmentItem);
             return;
         }
 
         if (event.getClick() == ClickType.SWAP_OFFHAND) {
             var offHandItem = playerInventory.getItemInOffHand().clone();
             equipment.setItem(slot, offHandItem);
+            playerInventory.setItemInOffHand(equipmentItem);
+        }
+    }
 
-            try {
-                playerInventory.setItemInOffHand(equipmentItem);
-            } catch (RuntimeException e) {
-                equipment.setItem(slot, equipmentItem);
-                throw e;
-            }
+    private static void cloneEquipmentToCursor(
+        @NotNull HumanEntity viewer,
+        @NotNull EntityEquipment equipment,
+        @NotNull EquipmentSlot slot
+    ) {
+        var item = equipment.getItem(slot).clone();
+        if (!item.getType().isAir()) {
+            item.setAmount(item.getMaxStackSize());
+            viewer.setItemOnCursor(item);
         }
     }
 
@@ -274,6 +296,13 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
     private @Nullable ArmorStand getArmorStand() {
         var world = Bukkit.getWorld(this.worldKey);
         return world != null && world.getEntity(this.armorStandUuid) instanceof ArmorStand armorStand ? armorStand : null;
+    }
+
+    private static boolean sameItem(@Nullable ItemStack first, @NotNull ItemStack second) {
+        if (first == null || first.getType().isAir()) {
+            return second.getType().isAir();
+        }
+        return first.equals(second);
     }
 
     private static @Nullable EquipmentSlot toEquipmentSlot(int menuIndex) {
