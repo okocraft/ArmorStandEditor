@@ -1,7 +1,7 @@
 package net.okocraft.armorstandeditor.menu;
 
 import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,7 +18,7 @@ public final class EquipmentMenuProvider {
         throw new UnsupportedOperationException();
     }
 
-    public static boolean openMenu(@NotNull ArmorStand armorStand, @NotNull HumanEntity viewer) {
+    public static boolean openMenu(@NotNull ArmorStand armorStand, @NotNull Player viewer) {
         return MENU_MAP.computeIfAbsent(armorStand.getUniqueId(), u -> new EquipmentMenu(armorStand)).open(viewer);
     }
 
