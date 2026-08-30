@@ -14,6 +14,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockDispenseArmorEvent;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
@@ -30,6 +31,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class EquipmentMenu implements ArmorStandEditorMenu {
@@ -51,7 +53,7 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
 
     private final Inventory inventory;
     private final ArmorStand armorStand;
-    private final AtomicReference<HumanEntity> activeViewer = new AtomicReference<>();
+    private final AtomicReference<UUID> activeViewerUuid = new AtomicReference<>();
 
     public EquipmentMenu(@NotNull ArmorStand armorStand) {
         this.inventory = Bukkit.createInventory(this, 18, Components.EQUIPMENT_MENU_TITLE);
@@ -64,18 +66,39 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
         return this.inventory;
     }
 
-    public boolean open(@NotNull HumanEntity viewer) {
+    public boolean open(@NotNull Player viewer) {
         if (!Bukkit.isOwnedByCurrentRegion(viewer) || !Bukkit.isOwnedByCurrentRegion(this.armorStand) || this.armorStand.isDead()) {
             return false;
         }
 
-        if (!this.activeViewer.compareAndSet(null, viewer)) {
+        var viewerUuid = viewer.getUniqueId();
+
+        while (true) {
+            var activeUuid = this.activeViewerUuid.get();
+            if (activeUuid == null) {
+                if (this.activeViewerUuid.compareAndSet(null, viewerUuid)) {
+                    break;
+                }
+                continue;
+            }
+
+            if (activeUuid.equals(viewerUuid)) {
+                if (this.inventory.equals(viewer.getOpenInventory().getTopInventory())) {
+                    return true;
+                }
+                this.activeViewerUuid.compareAndSet(activeUuid, null);
+                continue;
+            }
+
+            if (this.releaseIfStale(activeUuid)) {
+                continue;
+            }
             return false;
         }
 
         this.renderItems(this.armorStand.getEquipment());
         if (viewer.openInventory(this.inventory) == null) {
-            this.activeViewer.compareAndSet(viewer, null);
+            this.activeViewerUuid.compareAndSet(viewerUuid, null);
             return false;
         }
         return true;
@@ -128,7 +151,7 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
     }
 
     public void onClose(@NotNull InventoryCloseEvent event) {
-        this.activeViewer.compareAndSet(event.getPlayer(), null);
+        this.activeViewerUuid.compareAndSet(event.getPlayer().getUniqueId(), null);
     }
 
     public void handleManipulateEvent(@NotNull PlayerArmorStandManipulateEvent event) {
@@ -142,7 +165,7 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
     private void processEquipmentClick(@NotNull InventoryClickEvent event) {
         var viewer = event.getWhoClicked();
 
-        if (this.activeViewer.get() != viewer) {
+        if (!viewer.getUniqueId().equals(this.activeViewerUuid.get())) {
             this.closeMenuFor(viewer);
             return;
         }
@@ -266,20 +289,49 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
     }
 
     public void closeMenu() {
-        var viewer = this.activeViewer.get();
-        if (viewer != null) {
-            this.closeMenuFor(viewer);
+        var activeUuid = this.activeViewerUuid.get();
+        if (activeUuid == null) {
+            return;
         }
+
+        var viewer = Bukkit.getPlayer(activeUuid);
+        if (viewer == null) {
+            this.activeViewerUuid.compareAndSet(activeUuid, null);
+            return;
+        }
+
+        this.closeMenuFor(viewer);
     }
 
     private void closeMenuFor(@NotNull HumanEntity viewer) {
+        var viewerUuid = viewer.getUniqueId();
         viewer.getScheduler().run(ArmorStandEditorPlugin.plugin(), ignored -> {
             if (this.inventory.equals(viewer.getOpenInventory().getTopInventory())) {
                 viewer.closeInventory();
-            } else {
-                this.activeViewer.compareAndSet(viewer, null);
             }
-        }, () -> this.activeViewer.compareAndSet(viewer, null));
+            this.activeViewerUuid.compareAndSet(viewerUuid, null);
+        }, () -> this.activeViewerUuid.compareAndSet(viewerUuid, null));
+    }
+
+    private boolean releaseIfStale(@NotNull UUID activeUuid) {
+        var activeViewer = Bukkit.getPlayer(activeUuid);
+        if (activeViewer == null) {
+            return this.activeViewerUuid.compareAndSet(activeUuid, null);
+        }
+
+        if (Bukkit.isOwnedByCurrentRegion(activeViewer)) {
+            if (!this.inventory.equals(activeViewer.getOpenInventory().getTopInventory())) {
+                return this.activeViewerUuid.compareAndSet(activeUuid, null);
+            }
+            return false;
+        }
+
+        activeViewer.getScheduler().run(ArmorStandEditorPlugin.plugin(), ignored -> {
+            if (!this.inventory.equals(activeViewer.getOpenInventory().getTopInventory())) {
+                this.activeViewerUuid.compareAndSet(activeUuid, null);
+            }
+        }, () -> this.activeViewerUuid.compareAndSet(activeUuid, null));
+        return false;
     }
 
     private boolean isAuthorized(@NotNull HumanEntity viewer) {
@@ -304,8 +356,14 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
             return;
         }
 
-        var viewer = this.activeViewer.get();
+        var activeUuid = this.activeViewerUuid.get();
+        if (activeUuid == null) {
+            return;
+        }
+
+        var viewer = Bukkit.getPlayer(activeUuid);
         if (viewer == null) {
+            this.activeViewerUuid.compareAndSet(activeUuid, null);
             return;
         }
 
