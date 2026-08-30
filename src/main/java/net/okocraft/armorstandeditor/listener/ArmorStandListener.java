@@ -31,13 +31,13 @@ public class ArmorStandListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onManipulate(@NotNull PlayerArmorStandManipulateEvent event) {
-        EquipmentMenuProvider.refreshMenu(event.getRightClicked());
+        EquipmentMenuProvider.closeMenu(event.getRightClicked());
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onDispenseArmor(@NotNull BlockDispenseArmorEvent event) {
         if (event.getTargetEntity() instanceof ArmorStand armorStand) {
-            EquipmentMenuProvider.refreshMenu(armorStand);
+            EquipmentMenuProvider.closeMenu(armorStand);
         }
     }
 
