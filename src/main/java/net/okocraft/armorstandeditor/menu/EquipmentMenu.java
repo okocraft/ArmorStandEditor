@@ -52,12 +52,12 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
     private static final ItemStack DISABLED = createIcon(ItemType.GRAY_STAINED_GLASS_PANE, "");
 
     private final Inventory inventory;
-    private final ArmorStand armorStand;
+    private final UUID armorStandUuid;
     private final AtomicReference<UUID> activeViewerUuid = new AtomicReference<>();
 
     public EquipmentMenu(@NotNull ArmorStand armorStand) {
         this.inventory = Bukkit.createInventory(this, 18, Components.EQUIPMENT_MENU_TITLE);
-        this.armorStand = armorStand;
+        this.armorStandUuid = armorStand.getUniqueId();
         initMenu(this.inventory);
     }
 
@@ -66,8 +66,11 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
         return this.inventory;
     }
 
-    public boolean open(@NotNull Player viewer) {
-        if (!Bukkit.isOwnedByCurrentRegion(viewer) || !Bukkit.isOwnedByCurrentRegion(this.armorStand) || this.armorStand.isDead()) {
+    public boolean open(@NotNull ArmorStand armorStand, @NotNull Player viewer) {
+        if (!this.armorStandUuid.equals(armorStand.getUniqueId()) ||
+            !Bukkit.isOwnedByCurrentRegion(viewer) ||
+            !Bukkit.isOwnedByCurrentRegion(armorStand) ||
+            armorStand.isDead()) {
             return false;
         }
 
@@ -90,13 +93,13 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
                 continue;
             }
 
-            if (this.releaseIfStale(activeUuid)) {
+            if (this.clearStaleViewerLock(activeUuid)) {
                 continue;
             }
             return false;
         }
 
-        this.renderItems(this.armorStand.getEquipment());
+        this.renderItems(armorStand.getEquipment());
         if (viewer.openInventory(this.inventory) == null) {
             this.activeViewerUuid.compareAndSet(viewerUuid, null);
             return false;
@@ -159,7 +162,9 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
     }
 
     public void handleDispenseArmorEvent(@NotNull BlockDispenseArmorEvent event) {
-        this.refreshAfterExternalModification(this.armorStand);
+        if (event.getTargetEntity() instanceof ArmorStand armorStand) {
+            this.refreshAfterExternalModification(armorStand);
+        }
     }
 
     private void processEquipmentClick(@NotNull InventoryClickEvent event) {
@@ -170,12 +175,18 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
             return;
         }
 
-        if (!Bukkit.isOwnedByCurrentRegion(viewer) || !Bukkit.isOwnedByCurrentRegion(this.armorStand)) {
+        var entity = Bukkit.getEntity(this.armorStandUuid);
+        if (!(entity instanceof ArmorStand armorStand)) {
+            this.closeMenu();
+            return;
+        }
+
+        if (!Bukkit.isOwnedByCurrentRegion(viewer) || !Bukkit.isOwnedByCurrentRegion(armorStand)) {
             this.closeMenuFor(viewer);
             return;
         }
 
-        if (this.armorStand.isDead()) {
+        if (armorStand.isDead()) {
             this.closeMenu();
             return;
         }
@@ -185,7 +196,7 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
             return;
         }
 
-        var equipment = this.armorStand.getEquipment();
+        var equipment = armorStand.getEquipment();
         var equipmentItem = equipment.getItem(slot);
 
         if (!sameItem(event.getCurrentItem(), equipmentItem)) {
@@ -313,7 +324,7 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
         }, () -> this.activeViewerUuid.compareAndSet(viewerUuid, null));
     }
 
-    private boolean releaseIfStale(@NotNull UUID activeUuid) {
+    private boolean clearStaleViewerLock(@NotNull UUID activeUuid) {
         var activeViewer = Bukkit.getPlayer(activeUuid);
         if (activeViewer == null) {
             return this.activeViewerUuid.compareAndSet(activeUuid, null);
@@ -343,6 +354,10 @@ public class EquipmentMenu implements ArmorStandEditorMenu {
     }
 
     private void refreshAfterExternalModification(@NotNull ArmorStand armorStand) {
+        if (!this.armorStandUuid.equals(armorStand.getUniqueId())) {
+            return;
+        }
+
         armorStand.getScheduler().run(
             ArmorStandEditorPlugin.plugin(),
             ignored -> this.refresh(armorStand),
