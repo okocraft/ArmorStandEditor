@@ -30,7 +30,7 @@ public final class EquipmentMenuProvider {
         var armorStandUuid = armorStand.getUniqueId();
         var viewerUuid = viewer.getUniqueId();
 
-        if (isViewer(armorStandUuid, viewer) && findOpenMenu(viewer, armorStandUuid) != null) {
+        if (viewerUuid.equals(ACTIVE_VIEWERS.get(armorStandUuid)) && findOpenMenu(viewer, armorStandUuid) != null) {
             return true;
         }
 
@@ -64,11 +64,11 @@ public final class EquipmentMenuProvider {
         }
     }
 
-    static boolean isViewer(@NotNull UUID armorStandUuid, @NotNull HumanEntity viewer) {
-        return viewer.getUniqueId().equals(ACTIVE_VIEWERS.get(armorStandUuid));
+    public static void release(@NotNull EquipmentMenu menu, @NotNull HumanEntity viewer) {
+        release(menu.getArmorStandUuid(), viewer.getUniqueId());
     }
 
-    static void closeMenu(@NotNull UUID armorStandUuid, @NotNull HumanEntity viewer) {
+    private static void closeMenu(@NotNull UUID armorStandUuid, @NotNull HumanEntity viewer) {
         var viewerUuid = viewer.getUniqueId();
         viewer.getScheduler().run(
             ArmorStandEditorPlugin.plugin(),
@@ -80,10 +80,6 @@ public final class EquipmentMenuProvider {
             },
             () -> release(armorStandUuid, viewerUuid)
         );
-    }
-
-    static void release(@NotNull UUID armorStandUuid, @NotNull UUID viewerUuid) {
-        ACTIVE_VIEWERS.remove(armorStandUuid, viewerUuid);
     }
 
     private static void releaseIfInactive(@NotNull UUID armorStandUuid, @NotNull UUID viewerUuid) {
@@ -109,6 +105,10 @@ public final class EquipmentMenuProvider {
             },
             () -> release(armorStandUuid, viewerUuid)
         );
+    }
+
+    private static void release(@NotNull UUID armorStandUuid, @NotNull UUID viewerUuid) {
+        ACTIVE_VIEWERS.remove(armorStandUuid, viewerUuid);
     }
 
     private static @Nullable EquipmentMenu findOpenMenu(@NotNull HumanEntity viewer, @NotNull UUID armorStandUuid) {
