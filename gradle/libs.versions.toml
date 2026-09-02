@@ -1,7 +1,7 @@
 [versions]
 # libraries
 mcmsgdef = "1.3.0"
-paper = "26.2.build.117-stable"
+paper = "26.2.build.119-stable"
 
 # gradle plugins
 run-task = "3.1.0"
