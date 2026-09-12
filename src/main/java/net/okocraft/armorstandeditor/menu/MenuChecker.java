@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 final class MenuChecker {
 
-    private static Class<?> customInventoryClass;
+    private static volatile Class<?> customInventoryClass;
 
     static synchronized void initialize() {
         if (customInventoryClass == null) {
