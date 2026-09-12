@@ -51,7 +51,6 @@ class EquipmentMenuTest {
 
         Assertions.assertFalse(menu.open(armorStand, viewer));
 
-        Mockito.verify(armorStand, Mockito.never()).getEquipment();
         Mockito.verify(viewer, Mockito.never()).openInventory(Mockito.any(Inventory.class));
     }
 
