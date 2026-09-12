@@ -5,6 +5,7 @@ import net.okocraft.armorstandeditor.editor.EditMode;
 import net.okocraft.armorstandeditor.editor.PlayerEditorProvider;
 import net.okocraft.armorstandeditor.lang.Messages;
 import net.okocraft.armorstandeditor.menu.SelectionMenu;
+import net.okocraft.armorstandeditor.permission.Permissions;
 import org.bukkit.Axis;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.event.EventHandler;
@@ -41,16 +42,22 @@ public class PlayerListener implements Listener {
 
         var action = event.getAction();
 
-        if (CLICK_ACTIONS.contains(action) && this.plugin.getEditToolItem().check(event.getItem())) {
-            event.setCancelled(true);
+        if (!CLICK_ACTIONS.contains(action) || !this.plugin.getEditToolItem().check(event.getItem())) {
+            return;
+        }
 
-            var player = event.getPlayer();
-            var target = player.getTargetEntity(5);
+        var player = event.getPlayer();
+        if (!player.hasPermission(Permissions.ARMOR_STAND_EDIT)) {
+            return;
+        }
 
-            if (!(target instanceof ArmorStand)) {
-                var menu = new SelectionMenu(event.getPlayer());
-                player.openInventory(menu.getInventory());
-            }
+        event.setCancelled(true);
+
+        var target = player.getTargetEntity(5);
+
+        if (!(target instanceof ArmorStand)) {
+            var menu = new SelectionMenu(player);
+            player.openInventory(menu.getInventory());
         }
     }
 
