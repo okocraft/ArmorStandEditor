@@ -2,6 +2,7 @@ package net.okocraft.armorstandeditor.editor;
 
 import net.okocraft.armorstandeditor.lang.Messages;
 import net.okocraft.armorstandeditor.permission.Permissions;
+import net.okocraft.armorstandeditor.util.AngleCalculator;
 import org.bukkit.Axis;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
