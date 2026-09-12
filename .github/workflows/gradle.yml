@@ -7,3 +7,4 @@ jobs:
     with:
       java-version: '25'
       package-name: ArmorStandEditor-Build-${{ github.run_number }}
+      upload-test-results: true

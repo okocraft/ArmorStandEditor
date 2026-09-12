@@ -8,10 +8,15 @@ jcommon {
     javaVersion = JavaVersion.VERSION_25
 
     setupPaperRepository()
+    setupJUnit(libs.junit.bom)
+    setupMockito(libs.mockito)
 
     commonDependencies {
         implementation(libs.mcmsgdef)
         compileOnly(libs.platform.paper)
+
+        testImplementation(libs.junit.jupiter)
+        testImplementation(libs.platform.paper)
     }
 }
 
