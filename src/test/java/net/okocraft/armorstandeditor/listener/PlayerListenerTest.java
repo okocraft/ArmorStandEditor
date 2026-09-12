@@ -65,25 +65,36 @@ class PlayerListenerTest {
 
     @Test
     void testOffHandClickIsIgnored() {
+        ItemStack item = Mockito.mock(ItemStack.class);
         PlayerInteractEvent event = Mockito.mock(PlayerInteractEvent.class);
         Mockito.when(event.getHand()).thenReturn(EquipmentSlot.OFF_HAND);
+        Mockito.when(event.getAction()).thenReturn(Action.RIGHT_CLICK_AIR);
+        Mockito.when(event.getItem()).thenReturn(item);
+        Mockito.when(event.getPlayer()).thenReturn(this.player);
+        Mockito.when(this.editToolItem.check(item)).thenReturn(true);
+        Mockito.when(this.player.hasPermission(Permissions.ARMOR_STAND_EDIT)).thenReturn(true);
 
         this.listener.onClick(event);
 
-        Mockito.verify(event, Mockito.never()).getAction();
         Mockito.verify(event, Mockito.never()).setCancelled(true);
+        Mockito.verify(this.player, Mockito.never()).openInventory(Mockito.any(Inventory.class));
     }
 
     @Test
     void testNonClickActionIsIgnored() {
+        ItemStack item = Mockito.mock(ItemStack.class);
         PlayerInteractEvent event = Mockito.mock(PlayerInteractEvent.class);
         Mockito.when(event.getHand()).thenReturn(EquipmentSlot.HAND);
         Mockito.when(event.getAction()).thenReturn(Action.PHYSICAL);
+        Mockito.when(event.getItem()).thenReturn(item);
+        Mockito.when(event.getPlayer()).thenReturn(this.player);
+        Mockito.when(this.editToolItem.check(item)).thenReturn(true);
+        Mockito.when(this.player.hasPermission(Permissions.ARMOR_STAND_EDIT)).thenReturn(true);
 
         this.listener.onClick(event);
 
-        Mockito.verify(this.plugin, Mockito.never()).getEditToolItem();
         Mockito.verify(event, Mockito.never()).setCancelled(true);
+        Mockito.verify(this.player, Mockito.never()).openInventory(Mockito.any(Inventory.class));
     }
 
     @Test
@@ -93,11 +104,13 @@ class PlayerListenerTest {
         Mockito.when(event.getHand()).thenReturn(EquipmentSlot.HAND);
         Mockito.when(event.getAction()).thenReturn(Action.RIGHT_CLICK_AIR);
         Mockito.when(event.getItem()).thenReturn(item);
+        Mockito.when(event.getPlayer()).thenReturn(this.player);
+        Mockito.when(this.player.hasPermission(Permissions.ARMOR_STAND_EDIT)).thenReturn(true);
 
         this.listener.onClick(event);
 
-        Mockito.verify(this.editToolItem).check(item);
         Mockito.verify(event, Mockito.never()).setCancelled(true);
+        Mockito.verify(this.player, Mockito.never()).openInventory(Mockito.any(Inventory.class));
     }
 
     @Test
@@ -113,7 +126,7 @@ class PlayerListenerTest {
         this.listener.onClick(event);
 
         Mockito.verify(event, Mockito.never()).setCancelled(true);
-        Mockito.verify(this.player, Mockito.never()).getTargetEntity(Mockito.anyInt());
+        Mockito.verify(this.player, Mockito.never()).openInventory(Mockito.any(Inventory.class));
     }
 
     @Test
@@ -136,37 +149,46 @@ class PlayerListenerTest {
 
     @Test
     void testScrollWithoutSneakingIsIgnored() {
-        PlayerItemHeldEvent event = Mockito.mock(PlayerItemHeldEvent.class);
-        Mockito.when(event.getPlayer()).thenReturn(this.player);
-
-        this.listener.onScroll(event);
-
-        Mockito.verify(this.inventory, Mockito.never()).getItemInMainHand();
-        Mockito.verify(event, Mockito.never()).setCancelled(true);
-    }
-
-    @Test
-    void testScrollWithoutEditToolIsIgnored() {
         ItemStack item = Mockito.mock(ItemStack.class);
-        PlayerItemHeldEvent event = Mockito.mock(PlayerItemHeldEvent.class);
-        Mockito.when(event.getPlayer()).thenReturn(this.player);
-        Mockito.when(this.player.isSneaking()).thenReturn(true);
         Mockito.when(this.inventory.getItemInMainHand()).thenReturn(item);
-
-        this.listener.onScroll(event);
-
-        Mockito.verify(this.editToolItem).check(item);
-        Mockito.verify(event, Mockito.never()).setCancelled(true);
-    }
-
-    @Test
-    void testScrollInUnrelatedModeIsIgnored() {
-        configureScroll(EditMode.BASE_PLATE);
+        Mockito.when(this.editToolItem.check(item)).thenReturn(true);
+        PlayerEditor editor = PlayerEditorProvider.getEditor(this.player);
+        editor.setMode(EditMode.MOVEMENT);
+        editor.setAxis(Axis.X);
         PlayerItemHeldEvent event = scrollEvent(0, 1);
 
         this.listener.onScroll(event);
 
         Mockito.verify(event, Mockito.never()).setCancelled(true);
+        Assertions.assertEquals(Axis.X, editor.getAxis());
+    }
+
+    @Test
+    void testScrollWithoutEditToolIsIgnored() {
+        ItemStack item = Mockito.mock(ItemStack.class);
+        Mockito.when(this.player.isSneaking()).thenReturn(true);
+        Mockito.when(this.inventory.getItemInMainHand()).thenReturn(item);
+        PlayerEditor editor = PlayerEditorProvider.getEditor(this.player);
+        editor.setMode(EditMode.MOVEMENT);
+        editor.setAxis(Axis.X);
+        PlayerItemHeldEvent event = scrollEvent(0, 1);
+
+        this.listener.onScroll(event);
+
+        Mockito.verify(event, Mockito.never()).setCancelled(true);
+        Assertions.assertEquals(Axis.X, editor.getAxis());
+    }
+
+    @Test
+    void testScrollInUnrelatedModeIsIgnored() {
+        PlayerEditor editor = configureScroll(EditMode.BASE_PLATE);
+        editor.setAxis(Axis.X);
+        PlayerItemHeldEvent event = scrollEvent(0, 1);
+
+        this.listener.onScroll(event);
+
+        Mockito.verify(event, Mockito.never()).setCancelled(true);
+        Assertions.assertEquals(Axis.X, editor.getAxis());
     }
 
     @Test
@@ -223,12 +245,14 @@ class PlayerListenerTest {
 
     @Test
     void testResetPoseDoesNotUseScrollAxisSelection() {
-        configureScroll(EditMode.RESET_POSE);
+        PlayerEditor editor = configureScroll(EditMode.RESET_POSE);
+        editor.setAxis(Axis.X);
         PlayerItemHeldEvent event = scrollEvent(0, 1);
 
         this.listener.onScroll(event);
 
         Mockito.verify(event, Mockito.never()).setCancelled(true);
+        Assertions.assertEquals(Axis.X, editor.getAxis());
     }
 
     private PlayerEditor configureScroll(EditMode mode) {

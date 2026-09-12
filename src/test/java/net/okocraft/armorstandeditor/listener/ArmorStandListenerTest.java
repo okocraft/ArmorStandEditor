@@ -52,35 +52,46 @@ class ArmorStandListenerTest {
 
     @Test
     void testCancelledDamageIsIgnored() {
+        ArmorStand armorStand = Mockito.mock(ArmorStand.class);
+        ItemStack item = Mockito.mock(ItemStack.class);
         EntityDamageByEntityEvent event = Mockito.mock(EntityDamageByEntityEvent.class);
         Mockito.when(event.isCancelled()).thenReturn(true);
+        Mockito.when(event.getEntity()).thenReturn(armorStand);
+        Mockito.when(event.getDamager()).thenReturn(this.player);
+        Mockito.when(this.inventory.getItemInMainHand()).thenReturn(item);
+        Mockito.when(this.editToolItem.check(item)).thenReturn(true);
+        Mockito.when(this.player.hasPermission(Permissions.ARMOR_STAND_EDIT)).thenReturn(true);
+        Mockito.when(this.player.hasPermission(EditMode.BASE_PLATE.getPermission())).thenReturn(true);
+        PlayerEditorProvider.getEditor(this.player).setMode(EditMode.BASE_PLATE);
 
         this.listener.onLeftClick(event);
 
-        Mockito.verify(event, Mockito.never()).getEntity();
         Mockito.verify(event, Mockito.never()).setCancelled(true);
+        Mockito.verify(armorStand, Mockito.never()).setBasePlate(Mockito.anyBoolean());
     }
 
     @Test
     void testDamageToNonArmorStandIsIgnored() {
         EntityDamageByEntityEvent event = Mockito.mock(EntityDamageByEntityEvent.class);
         Mockito.when(event.getEntity()).thenReturn(Mockito.mock(Entity.class));
+        Mockito.when(event.getDamager()).thenReturn(this.player);
 
         this.listener.onLeftClick(event);
 
-        Mockito.verify(event, Mockito.never()).getDamager();
         Mockito.verify(event, Mockito.never()).setCancelled(true);
     }
 
     @Test
     void testDamageByNonPlayerIsIgnored() {
+        ArmorStand armorStand = Mockito.mock(ArmorStand.class);
         EntityDamageByEntityEvent event = Mockito.mock(EntityDamageByEntityEvent.class);
-        Mockito.when(event.getEntity()).thenReturn(Mockito.mock(ArmorStand.class));
+        Mockito.when(event.getEntity()).thenReturn(armorStand);
         Mockito.when(event.getDamager()).thenReturn(Mockito.mock(Entity.class));
 
         this.listener.onLeftClick(event);
 
         Mockito.verify(event, Mockito.never()).setCancelled(true);
+        Mockito.verify(armorStand, Mockito.never()).setBasePlate(Mockito.anyBoolean());
     }
 
     @Test
@@ -91,11 +102,14 @@ class ArmorStandListenerTest {
         Mockito.when(event.getEntity()).thenReturn(armorStand);
         Mockito.when(event.getDamager()).thenReturn(this.player);
         Mockito.when(this.inventory.getItemInMainHand()).thenReturn(item);
+        Mockito.when(this.player.hasPermission(Permissions.ARMOR_STAND_EDIT)).thenReturn(true);
+        Mockito.when(this.player.hasPermission(EditMode.BASE_PLATE.getPermission())).thenReturn(true);
+        PlayerEditorProvider.getEditor(this.player).setMode(EditMode.BASE_PLATE);
 
         this.listener.onLeftClick(event);
 
-        Mockito.verify(this.editToolItem).check(item);
         Mockito.verify(event, Mockito.never()).setCancelled(true);
+        Mockito.verify(armorStand, Mockito.never()).setBasePlate(Mockito.anyBoolean());
     }
 
     @Test
@@ -107,11 +121,14 @@ class ArmorStandListenerTest {
         Mockito.when(event.getDamager()).thenReturn(this.player);
         Mockito.when(this.inventory.getItemInMainHand()).thenReturn(item);
         Mockito.when(this.editToolItem.check(item)).thenReturn(true);
+        Mockito.when(this.player.hasPermission(EditMode.BASE_PLATE.getPermission())).thenReturn(true);
+        PlayerEditorProvider.getEditor(this.player).setMode(EditMode.BASE_PLATE);
 
         this.listener.onLeftClick(event);
 
         Mockito.verify(this.player).sendMessage(Messages.EDIT_NO_PERMISSION);
         Mockito.verify(event, Mockito.never()).setCancelled(true);
+        Mockito.verify(armorStand, Mockito.never()).setBasePlate(Mockito.anyBoolean());
     }
 
     @Test
@@ -136,23 +153,33 @@ class ArmorStandListenerTest {
 
     @Test
     void testCancelledInteractionIsIgnored() {
+        ArmorStand armorStand = Mockito.mock(ArmorStand.class);
+        ItemStack item = Mockito.mock(ItemStack.class);
         PlayerInteractAtEntityEvent event = Mockito.mock(PlayerInteractAtEntityEvent.class);
         Mockito.when(event.isCancelled()).thenReturn(true);
+        Mockito.when(event.getRightClicked()).thenReturn(armorStand);
+        Mockito.when(event.getPlayer()).thenReturn(this.player);
+        Mockito.when(event.getHand()).thenReturn(EquipmentSlot.HAND);
+        Mockito.when(this.inventory.getItemInMainHand()).thenReturn(item);
+        Mockito.when(this.editToolItem.check(item)).thenReturn(true);
+        Mockito.when(this.player.hasPermission(Permissions.ARMOR_STAND_EDIT)).thenReturn(true);
+        Mockito.when(this.player.hasPermission(EditMode.BASE_PLATE.getPermission())).thenReturn(true);
+        PlayerEditorProvider.getEditor(this.player).setMode(EditMode.BASE_PLATE);
 
         this.listener.onRightClick(event);
 
-        Mockito.verify(event, Mockito.never()).getRightClicked();
         Mockito.verify(event, Mockito.never()).setCancelled(true);
+        Mockito.verify(armorStand, Mockito.never()).setBasePlate(Mockito.anyBoolean());
     }
 
     @Test
     void testInteractionWithNonArmorStandIsIgnored() {
         PlayerInteractAtEntityEvent event = Mockito.mock(PlayerInteractAtEntityEvent.class);
         Mockito.when(event.getRightClicked()).thenReturn(Mockito.mock(Entity.class));
+        Mockito.when(event.getPlayer()).thenReturn(this.player);
 
         this.listener.onRightClick(event);
 
-        Mockito.verify(event, Mockito.never()).getPlayer();
         Mockito.verify(event, Mockito.never()).setCancelled(true);
     }
 
@@ -175,9 +202,6 @@ class ArmorStandListenerTest {
 
         this.listener.onRightClick(event);
 
-        Mockito.verify(this.inventory).getItemInOffHand();
-        Mockito.verify(this.inventory, Mockito.never()).getItemInMainHand();
-        Mockito.verify(this.editToolItem).check(offHand);
         Mockito.verify(event).setCancelled(true);
         Mockito.verify(armorStand).setBasePlate(true);
     }
@@ -192,11 +216,14 @@ class ArmorStandListenerTest {
         Mockito.when(event.getHand()).thenReturn(EquipmentSlot.HAND);
         Mockito.when(this.inventory.getItemInMainHand()).thenReturn(item);
         Mockito.when(this.editToolItem.check(item)).thenReturn(true);
+        Mockito.when(this.player.hasPermission(EditMode.BASE_PLATE.getPermission())).thenReturn(true);
+        PlayerEditorProvider.getEditor(this.player).setMode(EditMode.BASE_PLATE);
 
         this.listener.onRightClick(event);
 
         Mockito.verify(this.player).sendMessage(Messages.EDIT_NO_PERMISSION);
         Mockito.verify(event, Mockito.never()).setCancelled(true);
+        Mockito.verify(armorStand, Mockito.never()).setBasePlate(Mockito.anyBoolean());
     }
 
     @Test
@@ -258,6 +285,7 @@ class ArmorStandListenerTest {
 
         Mockito.verify(event).setCancelled(true);
         Mockito.verify(this.player).sendMessage(Messages.RENAME_NO_PERMISSION);
-        Mockito.verify(nameTag, Mockito.never()).getItemMeta();
+        Mockito.verify(armorStand, Mockito.never()).customName(Mockito.any(Component.class));
+        Mockito.verify(armorStand, Mockito.never()).setCustomNameVisible(Mockito.anyBoolean());
     }
 }
