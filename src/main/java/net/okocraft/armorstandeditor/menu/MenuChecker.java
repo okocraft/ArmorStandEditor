@@ -7,14 +7,17 @@ import org.jetbrains.annotations.Nullable;
 
 final class MenuChecker {
 
-    private static final Class<?> CUSTOM_INVENTORY_CLASS;
+    private static Class<?> customInventoryClass;
 
-    static {
-        CUSTOM_INVENTORY_CLASS = Bukkit.createInventory(null, 54, Component.empty()).getClass();
+    static synchronized void initialize() {
+        if (customInventoryClass == null) {
+            customInventoryClass = Bukkit.createInventory(null, 54, Component.empty()).getClass();
+        }
     }
 
     static <T> @Nullable T fromInventory(Inventory inventory, Class<T> expectedMenuClass) {
-        if (!CUSTOM_INVENTORY_CLASS.isInstance(inventory)) {
+        var customInventoryClass = MenuChecker.customInventoryClass;
+        if (customInventoryClass == null || !customInventoryClass.isInstance(inventory)) {
             return null;
         }
 
