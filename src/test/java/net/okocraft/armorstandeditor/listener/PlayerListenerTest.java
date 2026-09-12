@@ -15,6 +15,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.junit.jupiter.api.AfterEach;
@@ -130,7 +131,7 @@ class PlayerListenerTest {
         this.listener.onClick(event);
 
         Mockito.verify(event).setCancelled(true);
-        Mockito.verify(this.player, Mockito.never()).openInventory(Mockito.any());
+        Mockito.verify(this.player, Mockito.never()).openInventory(Mockito.any(Inventory.class));
     }
 
     @Test
