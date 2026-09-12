@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.jcommon)
     alias(libs.plugins.bundler)
+    alias(libs.plugins.paperweight.userdev)
     alias(libs.plugins.run.paper)
 }
 
@@ -17,7 +18,13 @@ jcommon {
 
         testImplementation(libs.junit.jupiter)
         testImplementation(libs.platform.paper)
+        testImplementation(libs.slf4j.api)
+        testRuntimeOnly(libs.slf4j.simple)
     }
+}
+
+dependencies {
+    paperweight.paperDevBundle(libs.versions.paper.get())
 }
 
 repositories {
@@ -30,6 +37,10 @@ bundler {
 }
 
 tasks {
+    test {
+        systemProperty("org.slf4j.simpleLogger.cacheOutputStream", "true")
+        systemProperty("junit.jupiter.extensions.autodetection.enabled", "true")
+    }
     runServer {
         minecraftVersion(libs.versions.paper.get().replaceAfter(".build", "").removeSuffix(".build"))
     }
