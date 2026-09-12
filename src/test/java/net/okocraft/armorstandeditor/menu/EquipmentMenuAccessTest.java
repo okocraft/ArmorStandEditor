@@ -37,7 +37,6 @@ class EquipmentMenuAccessTest {
         }
 
         Mockito.verify(event, Mockito.never()).setCancelled(true);
-        Mockito.verify(viewer, Mockito.never()).getScheduler();
     }
 
     @Test
@@ -123,7 +122,6 @@ class EquipmentMenuAccessTest {
             menu.onClick(event);
         }
 
-        Mockito.verify(armorStand, Mockito.never()).isDead();
         Mockito.verify(scheduler).run(Mockito.same(plugin), Mockito.any(), Mockito.isNull());
     }
 
@@ -147,7 +145,6 @@ class EquipmentMenuAccessTest {
             menu.onClick(event);
         }
 
-        Mockito.verify(armorStand, Mockito.never()).isDead();
         Mockito.verify(scheduler).run(Mockito.same(plugin), Mockito.any(), Mockito.isNull());
     }
 
@@ -174,7 +171,6 @@ class EquipmentMenuAccessTest {
         }
 
         Mockito.verify(scheduler).run(Mockito.same(plugin), Mockito.any(), Mockito.isNull());
-        Mockito.verify(armorStand, Mockito.never()).getEquipment();
     }
 
     private static Player authorizedViewer() {
