@@ -60,8 +60,8 @@ class EditToolItemTest {
         EditToolItem editToolItem = EditToolItem.createFromConfig(config);
         ItemStack generatedItem = editToolItem.getItem();
 
-        assertFalse(generatedItem.hasData(DataComponentTypes.CUSTOM_NAME));
-        assertFalse(generatedItem.hasData(DataComponentTypes.LORE));
+        assertFalse(generatedItem.isDataOverridden(DataComponentTypes.CUSTOM_NAME));
+        assertFalse(generatedItem.isDataOverridden(DataComponentTypes.LORE));
         assertFalse(editToolItem.check(ItemStack.of(Material.FLINT)));
     }
 
