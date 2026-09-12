@@ -61,7 +61,7 @@ public final class ArmorStandEditorPlugin extends JavaPlugin {
         manager.registerEvents(new InventoryListener(), this);
         manager.registerEvents(new PlayerListener(this), this);
 
-        this.editToolItem = EditToolItemFactory.create(this.getConfig());
+        this.editToolItem = EditToolItem.createFromConfig(this.getConfig());
         this.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, event -> ArmorStandEditorCommand.register(event.registrar(), this));
     }
 
