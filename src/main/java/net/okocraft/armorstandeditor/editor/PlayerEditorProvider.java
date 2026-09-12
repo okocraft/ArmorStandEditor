@@ -28,7 +28,10 @@ public final class PlayerEditorProvider {
             return getEditor(player);
         }
 
-        return getOrCreateEditor(humanEntity.getUniqueId());
+        return EDITOR_MAP.computeIfAbsent(humanEntity.getUniqueId(), ignored -> {
+            var player = Bukkit.getPlayer(humanEntity.getUniqueId());
+            return new PlayerEditor(Objects.requireNonNull(player));
+        });
     }
 
     public static void unload(@NotNull Player player) {
@@ -37,12 +40,5 @@ public final class PlayerEditorProvider {
 
     public static void unloadAll() {
         EDITOR_MAP.clear();
-    }
-
-    private static @NotNull PlayerEditor getOrCreateEditor(@NotNull UUID uuid) {
-        return EDITOR_MAP.computeIfAbsent(uuid, ignored -> {
-            var player = Bukkit.getPlayer(uuid);
-            return new PlayerEditor(Objects.requireNonNull(player));
-        });
     }
 }
