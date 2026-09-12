@@ -23,6 +23,11 @@ class ConstantsArgumentTypeTest {
         );
     }
 
+    @SuppressWarnings("unchecked")
+    private static CommandContext<Object> commandContext() {
+        return Mockito.mock(CommandContext.class);
+    }
+
     @Test
     void testParseReturnsMatchingValue() throws CommandSyntaxException {
         Assertions.assertEquals("beta", argumentType().parse(new StringReader("beta")));
@@ -39,7 +44,7 @@ class ConstantsArgumentTypeTest {
     @Test
     void testSuggestionsReturnAllNamesForEmptyInput() {
         var suggestions = argumentType().listSuggestions(
-            Mockito.mock(CommandContext.class),
+            commandContext(),
             new SuggestionsBuilder("", 0)
         ).join();
 
@@ -52,7 +57,7 @@ class ConstantsArgumentTypeTest {
     @Test
     void testSuggestionsFilterByPrefixCaseInsensitively() {
         var suggestions = argumentType().listSuggestions(
-            Mockito.mock(CommandContext.class),
+            commandContext(),
             new SuggestionsBuilder("B", 0)
         ).join();
 
@@ -65,7 +70,7 @@ class ConstantsArgumentTypeTest {
     @Test
     void testSuggestionsReturnNothingForUnknownPrefix() {
         var suggestions = argumentType().listSuggestions(
-            Mockito.mock(CommandContext.class),
+            commandContext(),
             new SuggestionsBuilder("z", 0)
         ).join();
 
