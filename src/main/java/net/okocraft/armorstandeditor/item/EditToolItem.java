@@ -25,8 +25,8 @@ public class EditToolItem {
         String displayName = config.getString("tool.display-name");
 
         var serializer = LegacyComponentSerializer.legacyAmpersand();
-        var lore = config.getStringList("tool.lore").stream()
-            .map(serializer::deserialize)
+        List<Component> lore = config.getStringList("tool.lore").stream()
+            .<Component>map(serializer::deserialize)
             .collect(Collectors.toUnmodifiableList());
 
         return new EditToolItem(
