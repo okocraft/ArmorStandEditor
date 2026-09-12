@@ -8,6 +8,10 @@ import org.jetbrains.annotations.Nullable;
 
 public interface ArmorStandEditorMenu extends InventoryHolder {
 
+    static void initialize() {
+        MenuChecker.initialize();
+    }
+
     static <T> @Nullable T getMenuFromInventory(Inventory inventory, Class<T> expectedMenuClass) {
         return MenuChecker.fromInventory(inventory, expectedMenuClass);
     }
