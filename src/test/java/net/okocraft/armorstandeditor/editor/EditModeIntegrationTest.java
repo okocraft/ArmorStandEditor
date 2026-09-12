@@ -66,7 +66,7 @@ class EditModeIntegrationTest {
             EditMode.MOVEMENT.edit(editor, armorStand, false);
         }
 
-        Mockito.verify(armorStand).teleport(Mockito.argThat(location ->
+        Mockito.verify(armorStand).teleport(Mockito.<Location>argThat(location ->
             location.getX() == 1.5 && location.getY() == 2 && location.getZ() == 3
         ));
     }
@@ -88,7 +88,7 @@ class EditModeIntegrationTest {
 
             teleporter.verify(() -> FoliaSyncTeleporter.teleport(
                 Mockito.same(armorStand),
-                Mockito.argThat(location -> location.getX() == 1 && location.getY() == 2 && location.getZ() == 2.75)
+                Mockito.<Location>argThat(location -> location.getX() == 1 && location.getY() == 2 && location.getZ() == 2.75)
             ));
         }
 
