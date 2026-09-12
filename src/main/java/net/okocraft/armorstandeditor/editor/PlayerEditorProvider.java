@@ -20,10 +20,14 @@ public final class PlayerEditorProvider {
     }
 
     public static @NotNull PlayerEditor getEditor(@NotNull Player player) {
-        return getOrCreateEditor(player.getUniqueId());
+        return EDITOR_MAP.computeIfAbsent(player.getUniqueId(), ignored -> new PlayerEditor(player));
     }
 
     public static @NotNull PlayerEditor getEditor(@NotNull HumanEntity humanEntity) {
+        if (humanEntity instanceof Player player) {
+            return getEditor(player);
+        }
+
         return getOrCreateEditor(humanEntity.getUniqueId());
     }
 
