@@ -36,6 +36,10 @@ bundler {
     copyToRootBuildDirectory("ArmorStandEditor-${project.version}.jar")
 }
 
+runPaper {
+    folia.registerTask()
+}
+
 tasks {
     test {
         systemProperty("org.slf4j.simpleLogger.cacheOutputStream", "true")
