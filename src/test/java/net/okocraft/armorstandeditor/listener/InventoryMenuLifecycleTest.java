@@ -45,7 +45,7 @@ class InventoryMenuLifecycleTest {
     void testDragOnOtherInventoryIsIgnored() {
         InventoryView view = Mockito.mock(InventoryView.class);
         InventoryDragEvent event = Mockito.mock(InventoryDragEvent.class);
-        Inventory inventory = Mockito.mock(Inventory.class, Mockito.withSettings().extraInterfaces(OtherInventoryMarker.class));
+        Inventory inventory = Mockito.mock(Inventory.class, Mockito.withSettings().extraInterfaces(Runnable.class));
         Mockito.when(view.getTopInventory()).thenReturn(inventory);
         Mockito.when(event.getView()).thenReturn(view);
 
@@ -70,8 +70,5 @@ class InventoryMenuLifecycleTest {
             new InventoryListener().onClose(event);
             provider.verify(() -> EquipmentMenuProvider.release(menu, viewer));
         }
-    }
-
-    private interface OtherInventoryMarker {
     }
 }
