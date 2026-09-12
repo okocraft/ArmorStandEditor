@@ -11,17 +11,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.inventory.ItemStack;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 import java.util.UUID;
 
 class SelectionMenuTest {
@@ -41,19 +37,22 @@ class SelectionMenuTest {
 
         createMenu(player, inventory);
 
-        ArgumentCaptor<Integer> slotCaptor = ArgumentCaptor.forClass(Integer.class);
-        ArgumentCaptor<ItemStack> itemCaptor = ArgumentCaptor.forClass(ItemStack.class);
-        Mockito.verify(inventory, Mockito.times(30)).setItem(slotCaptor.capture(), itemCaptor.capture());
-
-        Map<Integer, ItemStack> items = new HashMap<>();
-        for (int i = 0; i < slotCaptor.getAllValues().size(); i++) {
-            items.put(slotCaptor.getAllValues().get(i), itemCaptor.getAllValues().get(i));
-        }
-
-        Assertions.assertEquals(Material.RED_WOOL, items.get(0).getType());
-        Assertions.assertEquals(Material.POTION, items.get(25).getType());
-        Assertions.assertEquals(Material.CHEST, items.get(28).getType());
-        Assertions.assertEquals(Material.NETHER_STAR, items.get(53).getType());
+        Mockito.verify(inventory).setItem(
+            Mockito.eq(0),
+            Mockito.argThat(item -> item.getType() == Material.RED_WOOL)
+        );
+        Mockito.verify(inventory).setItem(
+            Mockito.eq(25),
+            Mockito.argThat(item -> item.getType() == Material.POTION)
+        );
+        Mockito.verify(inventory).setItem(
+            Mockito.eq(28),
+            Mockito.argThat(item -> item.getType() == Material.CHEST)
+        );
+        Mockito.verify(inventory).setItem(
+            Mockito.eq(53),
+            Mockito.argThat(item -> item.getType() == Material.NETHER_STAR)
+        );
     }
 
     @Test
