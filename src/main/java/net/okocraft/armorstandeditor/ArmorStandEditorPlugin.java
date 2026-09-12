@@ -55,6 +55,8 @@ public final class ArmorStandEditorPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        ArmorStandEditorMenu.initialize();
+
         var manager = this.getServer().getPluginManager();
 
         manager.registerEvents(new ArmorStandListener(this), this);
