@@ -1,6 +1,7 @@
 package net.okocraft.armorstandeditor.data;
 
 import net.kyori.adventure.text.Component;
+import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -38,25 +39,12 @@ class ArmorStandDataTest {
         Mockito.when(source.isCustomNameVisible()).thenReturn(true);
         Mockito.when(source.customName()).thenReturn(name);
 
-        ItemStack helmet = mockItem(source, EquipmentSlot.HEAD);
-        ItemStack chestplate = mockItem(source, EquipmentSlot.CHEST);
-        ItemStack leggings = mockItem(source, EquipmentSlot.LEGS);
-        ItemStack boots = mockItem(source, EquipmentSlot.FEET);
-        ItemStack mainHand = mockItem(source, EquipmentSlot.HAND);
-        ItemStack offHand = mockItem(source, EquipmentSlot.OFF_HAND);
-
-        ItemStack helmetCopy = Mockito.mock(ItemStack.class);
-        ItemStack chestplateCopy = Mockito.mock(ItemStack.class);
-        ItemStack leggingsCopy = Mockito.mock(ItemStack.class);
-        ItemStack bootsCopy = Mockito.mock(ItemStack.class);
-        ItemStack mainHandCopy = Mockito.mock(ItemStack.class);
-        ItemStack offHandCopy = Mockito.mock(ItemStack.class);
-        Mockito.when(helmet.clone()).thenReturn(helmetCopy);
-        Mockito.when(chestplate.clone()).thenReturn(chestplateCopy);
-        Mockito.when(leggings.clone()).thenReturn(leggingsCopy);
-        Mockito.when(boots.clone()).thenReturn(bootsCopy);
-        Mockito.when(mainHand.clone()).thenReturn(mainHandCopy);
-        Mockito.when(offHand.clone()).thenReturn(offHandCopy);
+        ItemStack helmet = stubItem(source, EquipmentSlot.HEAD, Material.DIAMOND_HELMET);
+        ItemStack chestplate = stubItem(source, EquipmentSlot.CHEST, Material.DIAMOND_CHESTPLATE);
+        ItemStack leggings = stubItem(source, EquipmentSlot.LEGS, Material.DIAMOND_LEGGINGS);
+        ItemStack boots = stubItem(source, EquipmentSlot.FEET, Material.DIAMOND_BOOTS);
+        ItemStack mainHand = stubItem(source, EquipmentSlot.HAND, Material.DIAMOND_SWORD);
+        ItemStack offHand = stubItem(source, EquipmentSlot.OFF_HAND, Material.SHIELD);
 
         ArmorStandData data = ArmorStandData.create(source);
 
@@ -74,12 +62,12 @@ class ArmorStandDataTest {
         Assertions.assertFalse(data.hasBasePlate());
         Assertions.assertTrue(data.customNameVisible());
         Assertions.assertSame(name, data.customName());
-        Assertions.assertSame(helmetCopy, data.helmet());
-        Assertions.assertSame(chestplateCopy, data.chestplate());
-        Assertions.assertSame(leggingsCopy, data.leggings());
-        Assertions.assertSame(bootsCopy, data.boots());
-        Assertions.assertSame(mainHandCopy, data.itemInMainHand());
-        Assertions.assertSame(offHandCopy, data.itemInOffHand());
+        assertCopiedItem(helmet, data.helmet());
+        assertCopiedItem(chestplate, data.chestplate());
+        assertCopiedItem(leggings, data.leggings());
+        assertCopiedItem(boots, data.boots());
+        assertCopiedItem(mainHand, data.itemInMainHand());
+        assertCopiedItem(offHand, data.itemInOffHand());
     }
 
     @Test
@@ -113,10 +101,15 @@ class ArmorStandDataTest {
         Mockito.verify(target).setItem(EquipmentSlot.OFF_HAND, data.itemInOffHand());
     }
 
-    private static ItemStack mockItem(ArmorStand source, EquipmentSlot slot) {
-        ItemStack item = Mockito.mock(ItemStack.class);
+    private static ItemStack stubItem(ArmorStand source, EquipmentSlot slot, Material material) {
+        ItemStack item = ItemStack.of(material);
         Mockito.when(source.getItem(slot)).thenReturn(item);
         return item;
+    }
+
+    private static void assertCopiedItem(ItemStack source, ItemStack copied) {
+        Assertions.assertEquals(source, copied);
+        Assertions.assertNotSame(source, copied);
     }
 
     private static ArmorStandData createData() {
@@ -135,12 +128,12 @@ class ArmorStandDataTest {
             false,
             true,
             Component.text("armor stand"),
-            Mockito.mock(ItemStack.class),
-            Mockito.mock(ItemStack.class),
-            Mockito.mock(ItemStack.class),
-            Mockito.mock(ItemStack.class),
-            Mockito.mock(ItemStack.class),
-            Mockito.mock(ItemStack.class)
+            ItemStack.of(Material.DIAMOND_HELMET),
+            ItemStack.of(Material.DIAMOND_CHESTPLATE),
+            ItemStack.of(Material.DIAMOND_LEGGINGS),
+            ItemStack.of(Material.DIAMOND_BOOTS),
+            ItemStack.of(Material.DIAMOND_SWORD),
+            ItemStack.of(Material.SHIELD)
         );
     }
 
