@@ -22,11 +22,13 @@ import org.mockito.Mockito;
 
 import java.util.UUID;
 
+import static net.okocraft.armorstandeditor.testsupport.TestIds.ARMOR_STAND_UUID;
+
 class EquipmentMenuTransactionTest {
 
     @Test
     void testSurvivalClickSwapsCursorAndEquipment() {
-        UUID armorStandUuid = UUID.randomUUID();
+        UUID armorStandUuid = ARMOR_STAND_UUID;
         Inventory inventory = Mockito.mock(Inventory.class);
         Player viewer = authorizedViewer(GameMode.SURVIVAL);
         ArmorStand armorStand = Mockito.mock(ArmorStand.class);
@@ -50,7 +52,7 @@ class EquipmentMenuTransactionTest {
 
     @Test
     void testSpectatorClickDoesNotChangeEquipment() {
-        UUID armorStandUuid = UUID.randomUUID();
+        UUID armorStandUuid = ARMOR_STAND_UUID;
         Inventory inventory = Mockito.mock(Inventory.class);
         Player viewer = authorizedViewer(GameMode.SPECTATOR);
         ArmorStand armorStand = Mockito.mock(ArmorStand.class);
@@ -72,7 +74,7 @@ class EquipmentMenuTransactionTest {
 
     @Test
     void testStaleDisplayedItemDoesNotChangeEquipment() {
-        UUID armorStandUuid = UUID.randomUUID();
+        UUID armorStandUuid = ARMOR_STAND_UUID;
         Inventory inventory = Mockito.mock(Inventory.class);
         Player viewer = authorizedViewer(GameMode.SURVIVAL);
         ArmorStand armorStand = Mockito.mock(ArmorStand.class);
@@ -94,7 +96,7 @@ class EquipmentMenuTransactionTest {
 
     @Test
     void testCreativeHotbarSwapExchangesItems() {
-        UUID armorStandUuid = UUID.randomUUID();
+        UUID armorStandUuid = ARMOR_STAND_UUID;
         Inventory inventory = Mockito.mock(Inventory.class);
         Player viewer = authorizedViewer(GameMode.CREATIVE);
         PlayerInventory playerInventory = Mockito.mock(PlayerInventory.class);
@@ -120,7 +122,7 @@ class EquipmentMenuTransactionTest {
 
     @Test
     void testCreativeOffhandSwapExchangesItems() {
-        UUID armorStandUuid = UUID.randomUUID();
+        UUID armorStandUuid = ARMOR_STAND_UUID;
         Inventory inventory = Mockito.mock(Inventory.class);
         Player viewer = authorizedViewer(GameMode.CREATIVE);
         PlayerInventory playerInventory = Mockito.mock(PlayerInventory.class);
@@ -147,7 +149,7 @@ class EquipmentMenuTransactionTest {
 
     @Test
     void testCreativeCloneFillsItemToMaximumStackSize() {
-        UUID armorStandUuid = UUID.randomUUID();
+        UUID armorStandUuid = ARMOR_STAND_UUID;
         Inventory inventory = Mockito.mock(Inventory.class);
         Player viewer = authorizedViewer(GameMode.CREATIVE);
         ArmorStand armorStand = Mockito.mock(ArmorStand.class);

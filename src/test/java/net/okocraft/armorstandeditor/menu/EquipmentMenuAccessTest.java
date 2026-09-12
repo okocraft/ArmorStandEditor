@@ -19,6 +19,8 @@ import org.mockito.Mockito;
 import java.util.Map;
 import java.util.UUID;
 
+import static net.okocraft.armorstandeditor.testsupport.TestIds.ARMOR_STAND_UUID;
+
 class EquipmentMenuAccessTest {
 
     @Test
@@ -32,7 +34,7 @@ class EquipmentMenuAccessTest {
         Mockito.when(event.getClickedInventory()).thenReturn(Mockito.mock(Inventory.class));
 
         try (MockedStatic<Bukkit> bukkit = Mockito.mockStatic(Bukkit.class)) {
-            EquipmentMenu menu = createMenu(bukkit, UUID.randomUUID(), inventory);
+            EquipmentMenu menu = createMenu(bukkit, ARMOR_STAND_UUID, inventory);
             menu.onClick(event);
         }
 
@@ -52,7 +54,7 @@ class EquipmentMenuAccessTest {
         try (MockedStatic<Bukkit> bukkit = Mockito.mockStatic(Bukkit.class);
              MockedStatic<ArmorStandEditorPlugin> pluginClass = Mockito.mockStatic(ArmorStandEditorPlugin.class)) {
             pluginClass.when(ArmorStandEditorPlugin::plugin).thenReturn(plugin);
-            EquipmentMenu menu = createMenu(bukkit, UUID.randomUUID(), inventory);
+            EquipmentMenu menu = createMenu(bukkit, ARMOR_STAND_UUID, inventory);
             menu.onClick(event);
         }
 
@@ -74,7 +76,7 @@ class EquipmentMenuAccessTest {
         try (MockedStatic<Bukkit> bukkit = Mockito.mockStatic(Bukkit.class);
              MockedStatic<ArmorStandEditorPlugin> pluginClass = Mockito.mockStatic(ArmorStandEditorPlugin.class)) {
             pluginClass.when(ArmorStandEditorPlugin::plugin).thenReturn(plugin);
-            EquipmentMenu menu = createMenu(bukkit, UUID.randomUUID(), inventory);
+            EquipmentMenu menu = createMenu(bukkit, ARMOR_STAND_UUID, inventory);
             menu.onDrag(event);
         }
 
@@ -84,7 +86,7 @@ class EquipmentMenuAccessTest {
 
     @Test
     void testMissingArmorStandSchedulesClose() {
-        UUID armorStandUuid = UUID.randomUUID();
+        UUID armorStandUuid = ARMOR_STAND_UUID;
         Player viewer = authorizedViewer();
         EntityScheduler scheduler = Mockito.mock(EntityScheduler.class);
         Inventory inventory = Mockito.mock(Inventory.class);
@@ -105,7 +107,7 @@ class EquipmentMenuAccessTest {
 
     @Test
     void testViewerOutsideCurrentRegionSchedulesClose() {
-        UUID armorStandUuid = UUID.randomUUID();
+        UUID armorStandUuid = ARMOR_STAND_UUID;
         Player viewer = authorizedViewer();
         EntityScheduler scheduler = Mockito.mock(EntityScheduler.class);
         ArmorStand armorStand = Mockito.mock(ArmorStand.class);
@@ -127,7 +129,7 @@ class EquipmentMenuAccessTest {
 
     @Test
     void testArmorStandOutsideCurrentRegionSchedulesClose() {
-        UUID armorStandUuid = UUID.randomUUID();
+        UUID armorStandUuid = ARMOR_STAND_UUID;
         Player viewer = authorizedViewer();
         EntityScheduler scheduler = Mockito.mock(EntityScheduler.class);
         ArmorStand armorStand = Mockito.mock(ArmorStand.class);
@@ -150,7 +152,7 @@ class EquipmentMenuAccessTest {
 
     @Test
     void testDeadArmorStandSchedulesClose() {
-        UUID armorStandUuid = UUID.randomUUID();
+        UUID armorStandUuid = ARMOR_STAND_UUID;
         Player viewer = authorizedViewer();
         EntityScheduler scheduler = Mockito.mock(EntityScheduler.class);
         ArmorStand armorStand = Mockito.mock(ArmorStand.class);

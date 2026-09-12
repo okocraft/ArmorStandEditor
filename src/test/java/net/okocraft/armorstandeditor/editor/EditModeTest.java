@@ -13,8 +13,9 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
 import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static net.okocraft.armorstandeditor.testsupport.TestIds.ARMOR_STAND_UUID;
 
 class EditModeTest {
 
@@ -55,7 +56,7 @@ class EditModeTest {
     void testLockedArmorStandIsNotEdited() {
         Player player = Mockito.mock(Player.class);
         ArmorStand armorStand = Mockito.mock(ArmorStand.class);
-        Mockito.when(armorStand.getUniqueId()).thenReturn(UUID.randomUUID());
+        Mockito.when(armorStand.getUniqueId()).thenReturn(ARMOR_STAND_UUID);
         Mockito.when(player.hasPermission(EditMode.BASE_PLATE.getPermission())).thenReturn(true);
         PlayerEditor editor = new PlayerEditor(player);
         editor.lock(armorStand);
@@ -69,7 +70,7 @@ class EditModeTest {
     void testLockModeCanUnlockLockedArmorStand() {
         Player player = Mockito.mock(Player.class);
         ArmorStand armorStand = Mockito.mock(ArmorStand.class);
-        Mockito.when(armorStand.getUniqueId()).thenReturn(UUID.randomUUID());
+        Mockito.when(armorStand.getUniqueId()).thenReturn(ARMOR_STAND_UUID);
         Mockito.when(player.hasPermission(EditMode.LOCK.getPermission())).thenReturn(true);
         PlayerEditor editor = new PlayerEditor(player);
         editor.lock(armorStand);

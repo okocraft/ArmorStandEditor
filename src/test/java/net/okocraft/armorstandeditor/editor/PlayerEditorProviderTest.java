@@ -11,6 +11,9 @@ import org.mockito.Mockito;
 
 import java.util.UUID;
 
+import static net.okocraft.armorstandeditor.testsupport.TestIds.OTHER_PLAYER_UUID;
+import static net.okocraft.armorstandeditor.testsupport.TestIds.PLAYER_UUID;
+
 class PlayerEditorProviderTest {
 
     @AfterEach
@@ -20,8 +23,7 @@ class PlayerEditorProviderTest {
 
     @Test
     void testSamePlayerReturnsSameEditor() {
-        UUID uuid = UUID.randomUUID();
-        Player player = player(uuid);
+        Player player = player(PLAYER_UUID);
 
         PlayerEditor first = PlayerEditorProvider.getEditor(player);
         PlayerEditor second = PlayerEditorProvider.getEditor(player);
@@ -32,9 +34,8 @@ class PlayerEditorProviderTest {
 
     @Test
     void testSameUuidKeepsOriginalPlayerInstance() {
-        UUID uuid = UUID.randomUUID();
-        Player firstPlayer = player(uuid);
-        Player secondPlayer = player(uuid);
+        Player firstPlayer = player(PLAYER_UUID);
+        Player secondPlayer = player(PLAYER_UUID);
 
         PlayerEditor first = PlayerEditorProvider.getEditor(firstPlayer);
         PlayerEditor second = PlayerEditorProvider.getEditor(secondPlayer);
@@ -45,7 +46,7 @@ class PlayerEditorProviderTest {
 
     @Test
     void testHumanEntityPlayerUsesPlayerPath() {
-        Player player = player(UUID.randomUUID());
+        Player player = player(PLAYER_UUID);
 
         PlayerEditor fromPlayer = PlayerEditorProvider.getEditor(player);
         PlayerEditor fromHumanEntity = PlayerEditorProvider.getEditor((HumanEntity) player);
@@ -55,24 +56,23 @@ class PlayerEditorProviderTest {
 
     @Test
     void testNonPlayerHumanEntityResolvesPlayerByUuid() {
-        UUID uuid = UUID.randomUUID();
         HumanEntity humanEntity = Mockito.mock(HumanEntity.class);
-        Player player = player(uuid);
-        Mockito.when(humanEntity.getUniqueId()).thenReturn(uuid);
+        Player player = player(PLAYER_UUID);
+        Mockito.when(humanEntity.getUniqueId()).thenReturn(PLAYER_UUID);
 
         try (MockedStatic<Bukkit> bukkit = Mockito.mockStatic(Bukkit.class)) {
-            bukkit.when(() -> Bukkit.getPlayer(uuid)).thenReturn(player);
+            bukkit.when(() -> Bukkit.getPlayer(PLAYER_UUID)).thenReturn(player);
 
             PlayerEditor editor = PlayerEditorProvider.getEditor(humanEntity);
 
             Assertions.assertSame(player, editor.getPlayer());
-            bukkit.verify(() -> Bukkit.getPlayer(uuid));
+            bukkit.verify(() -> Bukkit.getPlayer(PLAYER_UUID));
         }
     }
 
     @Test
     void testUnloadRemovesPlayerEditor() {
-        Player player = player(UUID.randomUUID());
+        Player player = player(PLAYER_UUID);
         PlayerEditor first = PlayerEditorProvider.getEditor(player);
 
         PlayerEditorProvider.unload(player);
@@ -83,8 +83,8 @@ class PlayerEditorProviderTest {
 
     @Test
     void testUnloadAllRemovesAllEditors() {
-        Player firstPlayer = player(UUID.randomUUID());
-        Player secondPlayer = player(UUID.randomUUID());
+        Player firstPlayer = player(PLAYER_UUID);
+        Player secondPlayer = player(OTHER_PLAYER_UUID);
         PlayerEditor first = PlayerEditorProvider.getEditor(firstPlayer);
         PlayerEditor second = PlayerEditorProvider.getEditor(secondPlayer);
 
