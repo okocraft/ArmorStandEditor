@@ -5,6 +5,7 @@ import net.okocraft.armorstandeditor.ArmorStandEditorPlugin;
 import net.okocraft.armorstandeditor.menu.EquipmentMenuProvider;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.block.BlockDispenseArmorEvent;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.junit.jupiter.api.Test;
@@ -40,7 +41,7 @@ class ArmorStandMenuLifecycleTest {
     @Test
     void testArmorDispenseForOtherEntityIsIgnored() {
         BlockDispenseArmorEvent event = Mockito.mock(BlockDispenseArmorEvent.class);
-        Mockito.when(event.getTargetEntity()).thenReturn(Mockito.mock(Entity.class));
+        Mockito.when(event.getTargetEntity()).thenReturn(Mockito.mock(LivingEntity.class));
 
         try (MockedStatic<EquipmentMenuProvider> provider = Mockito.mockStatic(EquipmentMenuProvider.class)) {
             listener().onDispenseArmor(event);
