@@ -54,6 +54,10 @@ public class ArmorStandListener implements Listener {
             return;
         }
 
+        if (!(event.getEntity() instanceof ArmorStand armorStand)) {
+            return;
+        }
+
         var damager = event.getDamager();
 
         if (!(damager instanceof Player player)) {
@@ -70,12 +74,8 @@ public class ArmorStandListener implements Listener {
         }
 
         event.setCancelled(true);
-        var entity = event.getEntity();
-
-        if (entity instanceof ArmorStand) {
-            var editor = PlayerEditorProvider.getEditor(player);
-            editor.getMode().edit(editor, (ArmorStand) entity, player.isSneaking());
-        }
+        var editor = PlayerEditorProvider.getEditor(player);
+        editor.getMode().edit(editor, armorStand, player.isSneaking());
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
