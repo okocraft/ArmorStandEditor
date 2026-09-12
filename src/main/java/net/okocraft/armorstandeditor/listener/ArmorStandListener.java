@@ -18,6 +18,7 @@ import org.bukkit.event.block.BlockDispenseArmorEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -91,10 +92,11 @@ public class ArmorStandListener implements Listener {
         }
 
         var player = event.getPlayer();
+        var itemInHand = event.getHand() == EquipmentSlot.HAND ?
+            player.getInventory().getItemInMainHand() :
+            player.getInventory().getItemInOffHand();
 
-        var itemInMainHand = player.getInventory().getItemInMainHand();
-
-        if (this.plugin.getEditToolItem().check(itemInMainHand)) {
+        if (this.plugin.getEditToolItem().check(itemInHand)) {
             if (!player.hasPermission(Permissions.ARMOR_STAND_EDIT)) {
                 player.sendMessage(Messages.EDIT_NO_PERMISSION);
                 return;
@@ -107,7 +109,7 @@ public class ArmorStandListener implements Listener {
             return;
         }
 
-        if (itemInMainHand.getType().equals(Material.NAME_TAG)) {
+        if (itemInHand.getType().equals(Material.NAME_TAG)) {
             if (!player.hasPermission(Permissions.ARMOR_STAND_RENAME)) {
                 event.setCancelled(true);
                 player.sendMessage(Messages.RENAME_NO_PERMISSION);
@@ -116,7 +118,7 @@ public class ArmorStandListener implements Listener {
 
             event.setCancelled(true);
 
-            var meta = itemInMainHand.getItemMeta();
+            var meta = itemInHand.getItemMeta();
 
             if (meta == null) {
                 return;
