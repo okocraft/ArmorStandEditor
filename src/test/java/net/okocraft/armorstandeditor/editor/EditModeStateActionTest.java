@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.util.UUID;
+import static net.okocraft.armorstandeditor.testsupport.TestIds.ARMOR_STAND_UUID;
 
 class EditModeStateActionTest {
 
@@ -75,8 +75,7 @@ class EditModeStateActionTest {
     void testLockModeLocksUnlockedArmorStand() {
         Player player = playerWithPermission(EditMode.LOCK);
         ArmorStand armorStand = Mockito.mock(ArmorStand.class);
-        UUID uuid = UUID.randomUUID();
-        Mockito.when(armorStand.getUniqueId()).thenReturn(uuid);
+        Mockito.when(armorStand.getUniqueId()).thenReturn(ARMOR_STAND_UUID);
         PlayerEditor editor = new PlayerEditor(player);
 
         EditMode.LOCK.edit(editor, armorStand, false);

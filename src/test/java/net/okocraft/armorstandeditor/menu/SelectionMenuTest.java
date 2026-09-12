@@ -18,7 +18,8 @@ import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
 import java.util.Locale;
-import java.util.UUID;
+
+import static net.okocraft.armorstandeditor.testsupport.TestIds.PLAYER_UUID;
 
 class SelectionMenuTest {
 
@@ -114,7 +115,7 @@ class SelectionMenuTest {
     @Test
     void testClickWithoutIconPermissionDoesNotApplyAction() {
         Player player = Mockito.mock(Player.class);
-        Mockito.when(player.getUniqueId()).thenReturn(UUID.randomUUID());
+        Mockito.when(player.getUniqueId()).thenReturn(PLAYER_UUID);
         Inventory inventory = Mockito.mock(Inventory.class);
         SelectionMenu menu = createMenu(player, inventory);
         var editor = PlayerEditorProvider.getEditor(player);
@@ -141,7 +142,7 @@ class SelectionMenuTest {
 
     private static Player playerWithPermission(String iconName) {
         Player player = Mockito.mock(Player.class);
-        Mockito.when(player.getUniqueId()).thenReturn(UUID.randomUUID());
+        Mockito.when(player.getUniqueId()).thenReturn(PLAYER_UUID);
         Mockito.when(player.hasPermission(Permissions.ICON_PREFIX + iconName)).thenReturn(true);
         return player;
     }

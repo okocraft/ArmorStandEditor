@@ -22,7 +22,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.util.UUID;
+import static net.okocraft.armorstandeditor.testsupport.TestIds.PLAYER_UUID;
 
 class ArmorStandListenerTest {
 
@@ -41,7 +41,7 @@ class ArmorStandListenerTest {
         this.inventory = Mockito.mock(PlayerInventory.class);
 
         Mockito.when(this.plugin.getEditToolItem()).thenReturn(this.editToolItem);
-        Mockito.when(this.player.getUniqueId()).thenReturn(UUID.randomUUID());
+        Mockito.when(this.player.getUniqueId()).thenReturn(PLAYER_UUID);
         Mockito.when(this.player.getInventory()).thenReturn(this.inventory);
     }
 

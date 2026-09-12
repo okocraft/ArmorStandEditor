@@ -23,13 +23,16 @@ import org.mockito.Mockito;
 import java.util.Map;
 import java.util.UUID;
 
+import static net.okocraft.armorstandeditor.testsupport.TestIds.ARMOR_STAND_UUID;
+import static net.okocraft.armorstandeditor.testsupport.TestIds.OTHER_ARMOR_STAND_UUID;
+
 class EquipmentMenuTest {
 
     @Test
     void testConstructorInitializesMenuIcons() {
         Inventory inventory = Mockito.mock(Inventory.class);
 
-        createMenu(UUID.randomUUID(), inventory);
+        createMenu(ARMOR_STAND_UUID, inventory);
 
         Mockito.verify(inventory).setItem(Mockito.eq(0), Mockito.argThat(item -> item.getType() == Material.LEATHER_HELMET));
         Mockito.verify(inventory).setItem(Mockito.eq(1), Mockito.argThat(item -> item.getType() == Material.LEATHER_CHESTPLATE));
@@ -42,12 +45,11 @@ class EquipmentMenuTest {
 
     @Test
     void testOpenRejectsDifferentArmorStand() {
-        UUID menuUuid = UUID.randomUUID();
         Inventory inventory = Mockito.mock(Inventory.class);
-        EquipmentMenu menu = createMenu(menuUuid, inventory);
+        EquipmentMenu menu = createMenu(ARMOR_STAND_UUID, inventory);
         ArmorStand armorStand = Mockito.mock(ArmorStand.class);
         Player viewer = Mockito.mock(Player.class);
-        Mockito.when(armorStand.getUniqueId()).thenReturn(UUID.randomUUID());
+        Mockito.when(armorStand.getUniqueId()).thenReturn(OTHER_ARMOR_STAND_UUID);
 
         Assertions.assertFalse(menu.open(armorStand, viewer));
 
@@ -56,7 +58,7 @@ class EquipmentMenuTest {
 
     @Test
     void testOpenRendersEquipmentAndOpensInventory() {
-        UUID armorStandUuid = UUID.randomUUID();
+        UUID armorStandUuid = ARMOR_STAND_UUID;
         Inventory inventory = Mockito.mock(Inventory.class);
         EquipmentMenu menu = createMenu(armorStandUuid, inventory);
         ArmorStand armorStand = Mockito.mock(ArmorStand.class);
@@ -82,7 +84,7 @@ class EquipmentMenuTest {
     void testUnsafeClickFromPlayerInventoryIsCancelled() {
         Player viewer = authorizedViewer();
         Inventory inventory = Mockito.mock(Inventory.class);
-        EquipmentMenu menu = createMenu(UUID.randomUUID(), inventory);
+        EquipmentMenu menu = createMenu(ARMOR_STAND_UUID, inventory);
         InventoryClickEvent event = Mockito.mock(InventoryClickEvent.class);
         Mockito.when(event.getWhoClicked()).thenReturn(viewer);
         Mockito.when(event.getClickedInventory()).thenReturn(Mockito.mock(Inventory.class));
@@ -97,7 +99,7 @@ class EquipmentMenuTest {
     void testRegularClickFromPlayerInventoryIsIgnored() {
         Player viewer = authorizedViewer();
         Inventory inventory = Mockito.mock(Inventory.class);
-        EquipmentMenu menu = createMenu(UUID.randomUUID(), inventory);
+        EquipmentMenu menu = createMenu(ARMOR_STAND_UUID, inventory);
         InventoryClickEvent event = Mockito.mock(InventoryClickEvent.class);
         Mockito.when(event.getWhoClicked()).thenReturn(viewer);
         Mockito.when(event.getClickedInventory()).thenReturn(Mockito.mock(Inventory.class));
@@ -112,7 +114,7 @@ class EquipmentMenuTest {
     void testClickOnNonEquipmentMenuSlotIsCancelledWithoutEditingEquipment() {
         Player viewer = authorizedViewer();
         Inventory inventory = Mockito.mock(Inventory.class);
-        EquipmentMenu menu = createMenu(UUID.randomUUID(), inventory);
+        EquipmentMenu menu = createMenu(ARMOR_STAND_UUID, inventory);
         InventoryClickEvent event = Mockito.mock(InventoryClickEvent.class);
         Mockito.when(event.getWhoClicked()).thenReturn(viewer);
         Mockito.when(event.getClickedInventory()).thenReturn(inventory);
@@ -127,7 +129,7 @@ class EquipmentMenuTest {
     void testDragIntoMenuIsCancelled() {
         Player viewer = authorizedViewer();
         Inventory inventory = Mockito.mock(Inventory.class);
-        EquipmentMenu menu = createMenu(UUID.randomUUID(), inventory);
+        EquipmentMenu menu = createMenu(ARMOR_STAND_UUID, inventory);
         InventoryDragEvent event = Mockito.mock(InventoryDragEvent.class);
         InventoryView view = Mockito.mock(InventoryView.class);
         Mockito.when(event.getWhoClicked()).thenReturn(viewer);
@@ -144,7 +146,7 @@ class EquipmentMenuTest {
     void testDragOutsideMenuIsAllowed() {
         Player viewer = authorizedViewer();
         Inventory inventory = Mockito.mock(Inventory.class);
-        EquipmentMenu menu = createMenu(UUID.randomUUID(), inventory);
+        EquipmentMenu menu = createMenu(ARMOR_STAND_UUID, inventory);
         InventoryDragEvent event = Mockito.mock(InventoryDragEvent.class);
         InventoryView view = Mockito.mock(InventoryView.class);
         Mockito.when(event.getWhoClicked()).thenReturn(viewer);

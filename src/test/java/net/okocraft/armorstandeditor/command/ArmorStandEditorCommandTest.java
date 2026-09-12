@@ -23,7 +23,8 @@ import org.mockito.Mockito;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
+
+import static net.okocraft.armorstandeditor.testsupport.TestIds.PLAYER_UUID;
 
 class ArmorStandEditorCommandTest {
 
@@ -140,7 +141,7 @@ class ArmorStandEditorCommandTest {
 
     private static Player playerWithPermission(String permission) {
         Player player = Mockito.mock(Player.class);
-        Mockito.when(player.getUniqueId()).thenReturn(UUID.randomUUID());
+        Mockito.when(player.getUniqueId()).thenReturn(PLAYER_UUID);
         Mockito.when(player.hasPermission(permission)).thenReturn(true);
         return player;
     }

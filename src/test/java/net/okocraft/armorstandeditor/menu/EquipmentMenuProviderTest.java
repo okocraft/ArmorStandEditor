@@ -19,6 +19,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static net.okocraft.armorstandeditor.testsupport.TestIds.ARMOR_STAND_UUID;
+import static net.okocraft.armorstandeditor.testsupport.TestIds.OTHER_PLAYER_UUID;
+import static net.okocraft.armorstandeditor.testsupport.TestIds.PLAYER_UUID;
+
 class EquipmentMenuProviderTest {
 
     @Test
@@ -40,10 +44,9 @@ class EquipmentMenuProviderTest {
 
     @Test
     void testReleasedMenuCanBeOpenedByAnotherViewer() {
-        UUID armorStandUuid = UUID.randomUUID();
-        ArmorStand armorStand = armorStand(armorStandUuid);
-        Player firstViewer = viewer(UUID.randomUUID());
-        Player secondViewer = viewer(UUID.randomUUID());
+        ArmorStand armorStand = armorStand(ARMOR_STAND_UUID);
+        Player firstViewer = viewer(PLAYER_UUID);
+        Player secondViewer = viewer(OTHER_PLAYER_UUID);
         List<EquipmentMenu> menus = new ArrayList<>();
 
         try (MockedStatic<Bukkit> bukkit = Mockito.mockStatic(Bukkit.class)) {
@@ -62,10 +65,9 @@ class EquipmentMenuProviderTest {
 
     @Test
     void testInactiveViewerReservationIsReleasedBeforeRetry() {
-        UUID armorStandUuid = UUID.randomUUID();
-        ArmorStand armorStand = armorStand(armorStandUuid);
-        Player firstViewer = viewer(UUID.randomUUID());
-        Player secondViewer = viewer(UUID.randomUUID());
+        ArmorStand armorStand = armorStand(ARMOR_STAND_UUID);
+        Player firstViewer = viewer(PLAYER_UUID);
+        Player secondViewer = viewer(OTHER_PLAYER_UUID);
         List<EquipmentMenu> menus = new ArrayList<>();
 
         try (MockedStatic<Bukkit> bukkit = Mockito.mockStatic(Bukkit.class)) {
@@ -82,10 +84,9 @@ class EquipmentMenuProviderTest {
 
     @Test
     void testCloseMenuReleasesReservationWhenViewerIsOffline() {
-        UUID armorStandUuid = UUID.randomUUID();
-        ArmorStand armorStand = armorStand(armorStandUuid);
-        Player firstViewer = viewer(UUID.randomUUID());
-        Player secondViewer = viewer(UUID.randomUUID());
+        ArmorStand armorStand = armorStand(ARMOR_STAND_UUID);
+        Player firstViewer = viewer(PLAYER_UUID);
+        Player secondViewer = viewer(OTHER_PLAYER_UUID);
         List<EquipmentMenu> menus = new ArrayList<>();
 
         try (MockedStatic<Bukkit> bukkit = Mockito.mockStatic(Bukkit.class)) {

@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.util.UUID;
+import static net.okocraft.armorstandeditor.testsupport.TestIds.ARMOR_STAND_UUID;
 
 class PlayerEditorTest {
 
@@ -49,7 +49,7 @@ class PlayerEditorTest {
     void testArmorStandCanBeLockedAndUnlocked() {
         PlayerEditor editor = new PlayerEditor(Mockito.mock(Player.class));
         ArmorStand armorStand = Mockito.mock(ArmorStand.class);
-        Mockito.when(armorStand.getUniqueId()).thenReturn(UUID.randomUUID());
+        Mockito.when(armorStand.getUniqueId()).thenReturn(ARMOR_STAND_UUID);
 
         Assertions.assertFalse(editor.isLocked(armorStand));
 
