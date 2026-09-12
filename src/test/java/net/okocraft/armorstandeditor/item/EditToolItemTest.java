@@ -1,7 +1,12 @@
 package net.okocraft.armorstandeditor.item;
 
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.ItemLore;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -49,6 +54,57 @@ class EditToolItemTest {
         new EditToolItem(false, null, List.of());
 
         Mockito.verify(this.generatedData).set(EDIT_ITEM_KEY, PersistentDataType.BYTE, (byte) 1);
+    }
+
+    @Test
+    void testCreateFromConfigAppliesPresentationAndAllowsNormalFlint() {
+        ConfigurationSection config = Mockito.mock(ConfigurationSection.class);
+        Mockito.when(config.getBoolean("tool.allow-normal-flint")).thenReturn(true);
+        Mockito.when(config.getString("tool.display-name")).thenReturn("&aEdit Tool");
+        Mockito.when(config.getStringList("tool.lore")).thenReturn(List.of("&7First line", "&bSecond line"));
+
+        EditToolItem editToolItem = EditToolItem.createFromConfig(config);
+
+        Mockito.verify(this.generatedItem).setData(
+            DataComponentTypes.CUSTOM_NAME,
+            Component.text("Edit Tool", NamedTextColor.GREEN)
+        );
+        Mockito.verify(this.generatedItem).setData(
+            DataComponentTypes.LORE,
+            ItemLore.lore(List.of(
+                Component.text("First line", NamedTextColor.GRAY),
+                Component.text("Second line", NamedTextColor.AQUA)
+            ))
+        );
+
+        ItemStack normalFlint = Mockito.mock(ItemStack.class);
+        Mockito.when(normalFlint.getType()).thenReturn(Material.FLINT);
+        assertTrue(editToolItem.check(normalFlint));
+    }
+
+    @Test
+    void testCreateFromConfigWithoutPresentationRequiresMarkedFlint() {
+        ConfigurationSection config = Mockito.mock(ConfigurationSection.class);
+        Mockito.when(config.getBoolean("tool.allow-normal-flint")).thenReturn(false);
+        Mockito.when(config.getString("tool.display-name")).thenReturn(null);
+        Mockito.when(config.getStringList("tool.lore")).thenReturn(List.of());
+
+        EditToolItem editToolItem = EditToolItem.createFromConfig(config);
+
+        Mockito.verify(this.generatedItem, Mockito.never()).setData(
+            Mockito.eq(DataComponentTypes.CUSTOM_NAME),
+            Mockito.any(Component.class)
+        );
+        Mockito.verify(this.generatedItem, Mockito.never()).setData(
+            Mockito.eq(DataComponentTypes.LORE),
+            Mockito.any(ItemLore.class)
+        );
+
+        ItemStack normalFlint = Mockito.mock(ItemStack.class);
+        PersistentDataContainer data = Mockito.mock(PersistentDataContainer.class);
+        Mockito.when(normalFlint.getType()).thenReturn(Material.FLINT);
+        Mockito.when(normalFlint.getPersistentDataContainer()).thenReturn(data);
+        assertFalse(editToolItem.check(normalFlint));
     }
 
     @Test

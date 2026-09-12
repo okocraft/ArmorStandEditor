@@ -5,7 +5,6 @@ import dev.siroshun.mcmsgdef.directory.MessageProcessors;
 import dev.siroshun.mcmsgdef.file.PropertiesFile;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import net.kyori.adventure.key.Key;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.okocraft.armorstandeditor.command.ArmorStandEditorCommand;
 import net.okocraft.armorstandeditor.item.EditToolItem;
 import net.okocraft.armorstandeditor.listener.ArmorStandListener;
@@ -25,7 +24,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Level;
-import java.util.stream.Collectors;
 
 public final class ArmorStandEditorPlugin extends JavaPlugin {
 
@@ -63,7 +61,7 @@ public final class ArmorStandEditorPlugin extends JavaPlugin {
         manager.registerEvents(new InventoryListener(), this);
         manager.registerEvents(new PlayerListener(this), this);
 
-        this.editToolItem = this.createEditToolItem();
+        this.editToolItem = EditToolItem.createFromConfig(this.getConfig());
         this.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, event -> ArmorStandEditorCommand.register(event.registrar(), this));
     }
 
@@ -91,16 +89,5 @@ public final class ArmorStandEditorPlugin extends JavaPlugin {
 
     public @NotNull EditToolItem getEditToolItem() {
         return this.editToolItem;
-    }
-
-    private @NotNull EditToolItem createEditToolItem() {
-        boolean allowNormalFlint = this.getConfig().getBoolean("tool.allow-normal-flint");
-        String displayName = this.getConfig().getString("tool.display-name");
-        List<String> lore = this.getConfig().getStringList("tool.lore");
-        return new EditToolItem(
-            allowNormalFlint,
-            displayName != null ? LegacyComponentSerializer.legacyAmpersand().deserialize(displayName) : null,
-            lore.stream().map(LegacyComponentSerializer.legacyAmpersand()::deserialize).collect(Collectors.toUnmodifiableList())
-        );
     }
 }
