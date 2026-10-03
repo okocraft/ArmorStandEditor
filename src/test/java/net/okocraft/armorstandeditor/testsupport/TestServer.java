@@ -64,12 +64,12 @@ public final class TestServer {
         RegistryAccess.Frozen loaded = RegistryDataLoader.load(
             resources,
             TagLoader.buildUpdatedLookups(RegistryLayer.STATIC_ACCESS, tags),
-            RegistryDataLoader.WORLDGEN_REGISTRIES,
+            RegistryDataLoader.WORLD_REGISTRIES,
             Runnable::run
         ).join();
 
         LayeredRegistryAccess<RegistryLayer> layers = RegistryLayer.createRegistryAccess()
-            .replaceFrom(RegistryLayer.WORLDGEN, loaded);
+            .replaceFrom(RegistryLayer.WORLD, loaded);
         return layers.compositeAccess().freeze();
     }
 
