@@ -5,6 +5,8 @@ import dev.siroshun.mcmsgdef.directory.MessageProcessors;
 import dev.siroshun.mcmsgdef.file.PropertiesFile;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.translation.GlobalTranslator;
+import net.kyori.adventure.translation.Translator;
 import net.okocraft.armorstandeditor.command.ArmorStandEditorCommand;
 import net.okocraft.armorstandeditor.item.EditToolItem;
 import net.okocraft.armorstandeditor.listener.ArmorStandListener;
@@ -38,6 +40,7 @@ public final class ArmorStandEditorPlugin extends JavaPlugin {
     }
 
     private EditToolItem editToolItem = new EditToolItem(true, null, List.of());
+    private @Nullable Translator registeredTranslator;
 
     @Override
     public void onLoad() {
@@ -74,11 +77,18 @@ public final class ArmorStandEditorPlugin extends JavaPlugin {
     }
 
     public void loadMessages() throws IOException {
-        DirectorySource.propertiesFiles(this.getDataFolder().toPath().resolve("languages"))
+        var store = DirectorySource.propertiesFiles(this.getDataFolder().toPath().resolve("languages"))
             .defaultLocale(Locale.ENGLISH, Locale.JAPANESE)
             .primaryLocale(Locale.ENGLISH)
             .messageProcessor(MessageProcessors.appendMissingMessagesToPropertiesFile(this::loadDefaultMessageMap))
-            .loadAndRegister(Key.key("armorstandeditor", "language"));
+            .loadAsMiniMessageTranslationStore(Key.key("armorstandeditor", "language"));
+
+        if (this.registeredTranslator != null) {
+            GlobalTranslator.translator().removeSource(this.registeredTranslator);
+        }
+
+        GlobalTranslator.translator().addSource(store);
+        this.registeredTranslator = store;
     }
 
     private @Nullable Map<String, String> loadDefaultMessageMap(@NotNull Locale locale) throws IOException {
