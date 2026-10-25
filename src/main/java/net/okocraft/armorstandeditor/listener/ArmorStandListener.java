@@ -1,6 +1,7 @@
 package net.okocraft.armorstandeditor.listener;
 
 import com.destroystokyo.paper.event.entity.EntityRemoveFromWorldEvent;
+import io.papermc.paper.event.player.PrePlayerAttackEntityEvent;
 import net.kyori.adventure.text.Component;
 import net.okocraft.armorstandeditor.ArmorStandEditorPlugin;
 import net.okocraft.armorstandeditor.editor.PlayerEditorProvider;
@@ -64,6 +65,32 @@ public class ArmorStandListener implements Listener {
         if (!(damager instanceof Player player)) {
             return;
         }
+
+        if (!this.plugin.getEditToolItem().check(player.getInventory().getItemInMainHand())) {
+            return;
+        }
+
+        if (!player.hasPermission(Permissions.ARMOR_STAND_EDIT)) {
+            player.sendMessage(Messages.EDIT_NO_PERMISSION);
+            return;
+        }
+
+        event.setCancelled(true);
+        var editor = PlayerEditorProvider.getEditor(player);
+        editor.getMode().edit(editor, armorStand, player.isSneaking());
+    }
+
+    /**
+     * The platform cancels the damage event of an invisible armor stand before {@link #onLeftClick} runs,
+     * so a left click with the tool is handled here, before the damage is calculated.
+     */
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onLeftClickInvisible(@NotNull PrePlayerAttackEntityEvent event) {
+        if (!(event.getAttacked() instanceof ArmorStand armorStand) || !armorStand.isInvisible()) {
+            return;
+        }
+
+        var player = event.getPlayer();
 
         if (!this.plugin.getEditToolItem().check(player.getInventory().getItemInMainHand())) {
             return;
