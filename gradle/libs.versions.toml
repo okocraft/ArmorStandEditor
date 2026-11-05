@@ -1,7 +1,7 @@
 [versions]
 # libraries
 mcmsgdef = "1.3.0"
-paper = "26.3.build.235-stable"
+paper = "26.3.build.237-stable"
 
 # testing tool
 junit = "6.1.3"
@@ -13,7 +13,7 @@ slf4j = "2.0.20"
 # gradle plugins
 paperweight-userdev = "2.0.0-beta.24"
 run-task = "3.1.0"
-gradle-plugins = "1.8.6"
+gradle-plugins = "1.9.0"
 
 [libraries]
 mcmsgdef = { module = "dev.siroshun.mcmsgdef:mcmsgdef", version.ref = "mcmsgdef" }
